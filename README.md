@@ -1,6 +1,6 @@
 # Endless Runner
 
-Endless Runner game developed in JavaScript
+Endless Runner game developed in JavaScript.
 
 ## Web
 
