@@ -370,7 +370,7 @@ function initGame() {
 
   renderer = new THREE.WebGLRenderer();
   renderer.setSize(containerWidth, containerHeight);
-  renderer.antialias = true;
+  renderer.antialias = false;
   renderer.setClearColor(0xFFFFFF, 1);
   renderer.shadowMap.enabled = true;
   renderer.shadowMapSoft = true;
