@@ -1,6 +1,6 @@
 # Endless Runner
 
-Endless Runner game developed in JavaScript using Three.js
+Endless Runner game developed in JavaScript
 
 ## Web
 
