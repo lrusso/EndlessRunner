@@ -380,6 +380,7 @@
 				renderer.setClearColor(0xFFFFFF, 0);
 				renderer.shadowMap.enabled = true;
 				renderer.shadowMapSoft = true;
+				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 				document.getElementById("container").appendChild(renderer.domElement);
 
@@ -462,13 +463,11 @@ function createSpotlights() {
     scene.add(target);
 
     spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
-    spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -200);
+    spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -350);
     spotLight.castShadow = true;
-    spotLight.shadow.camera.near = 10;
     spotLight.target = target;
-    spotLight.shadow.mapSize.width = 2048;
-    spotLight.shadow.mapSize.height = 2048;
-    spotLight.fov = 40;
+    spotLight.shadow.mapSize.width = 1024;
+    spotLight.shadow.mapSize.height = 1024;
 
     plane.add(spotLight);
   }
