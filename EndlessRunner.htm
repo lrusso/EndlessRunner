@@ -88,6 +88,9 @@
 				globalRenderID = requestAnimationFrame(render);
 				controls.update();
 
+				textureGrass.offset.y -= .05;
+				textureStone.offset.y -= .05;
+
 				powerups.forEach(function (element, index)
 					{
 					powerups[index].animate();
@@ -213,6 +216,8 @@
 				return hero;
 				}
 
+				var textureGrass;
+
 			function createLandscapeFloors()
 				{
 				var planeLeft = {};
@@ -221,7 +226,16 @@
 				var planeRight = {};
 
 				planeLeftGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-				planeLeftMaterial = new THREE.MeshLambertMaterial({ color: 0x8BC34A });
+
+				var loader = new THREE.TextureLoader();
+				textureGrass = loader.load( 'grass.jpg', function ( texture )
+					{
+					textureGrass.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					textureGrass.offset.set( 0, 0 );
+					textureGrass.repeat.set( 1, 20 );
+					});
+
+				planeLeftMaterial = new THREE.MeshPhongMaterial( { map: textureGrass } );
 
 				planeLeft = new THREE.Mesh(planeLeftGeometry, planeLeftMaterial);
 				planeLeft.receiveShadow = true;
@@ -390,7 +404,16 @@
 
 				/* FLOOR */
 				planeGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-				planeMaterial = new THREE.MeshLambertMaterial({ color: 0x78909C });
+
+				var loader = new THREE.TextureLoader();
+				textureStone = loader.load( 'stone.jpg', function ( texture )
+					{
+					textureStone.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					textureStone.offset.set( 0, 0 );
+					textureStone.repeat.set( 1, 20 );
+					});
+
+				planeMaterial = new THREE.MeshLambertMaterial({ map: textureStone });
 
 				plane = new THREE.Mesh(planeGeometry, planeMaterial);
 				plane.rotation.x = 1.570;
