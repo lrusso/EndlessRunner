@@ -9,8 +9,11 @@
 			canvas{position:fixed;left:0;top:0;right:0;bottom:0}
 			#score{position:fixed;right:10px;top:10px;padding:10px;background-color:rgba(0,0,0,0.75);border-radius:10px;font-family:Arial;font-size:30px;color:white;min-width:100px;text-align:right}
 			#overlay-gameover{position:fixed;left:0;top:0;right:0;bottom:0;text-align:center;background-color:rgba(0,0,0,0.875);display:none}
-			.message-container p{color:#ffffff;font-size:80px;margin-top:300px}
-			.message-container button{font-family:Arial;font-size:30px;color:#E91E63;border:2px solid #E91E63;border-radius:10px;cursor:pointer;margin-top:20px;padding:10px 40px}
+
+
+			.message-container{position:relative;top:50%;transform:translateY(-50%);text-align:center;color:white;margin-top:-50px}
+			.message-container p{color:#ffffff;font-size:60px}
+			.message-container button{font-family:Arial;font-size:30px;color:#E91E63;border:2px solid #E91E63;border-radius:10px;cursor:pointer;padding:10px 40px}
 			.message-container button:hover{color:#880E4F;border-color:#880E4F}
 			.message-container button:focus{outline:0}
 
@@ -26,13 +29,13 @@
 		<div id="score">0</div>
 		<div id="overlay-gameover">
 			<div class="message-container">
-				<p>Game Over!</p>
-				<button id="btn-restart">Play again</button>
+				<p id="label-gameover">Game Over!</p>
+				<button id="btn-restart"></button>
 			</div>
 		</div>
 		<script src="EndlessRunner.js"></script>
 		<script>
-			var PLANE_WIDTH = 30;
+			var PLANE_WIDTH = 20;
 			var PLANE_LENGTH = 1000;
 			var PADDING = PLANE_WIDTH / 5 * 2;
 			var POWERUP_COUNT = 10;
@@ -63,15 +66,21 @@
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_ABOUT = "";
+			var STRING_GAMEOVER = "";
+			var STRING_PLAYAGAIN = "";
 
 			// CHECKING THE USER LANGUAGE
 			if (userLanguage.substring(0,2)=="es")
 				{
 				STRING_ABOUT = "Dise&ntilde;ado por www.lrusso.com";
+				STRING_GAMEOVER = "¡Perdiste!";
+				STRING_PLAYAGAIN = "Jugar de nuevo";
 				}
 				else
 				{
 				STRING_ABOUT = "Designed by www.lrusso.com";
+				STRING_GAMEOVER = "Game Over!";
+				STRING_PLAYAGAIN = "Play again";
 				}
 
 			function render()
@@ -247,12 +256,12 @@
 
 					if (isEast === true)
 						{
-						object.position.x = PLANE_WIDTH * 2 + 40;
+						object.position.x = PLANE_WIDTH * 2 + 50;
 						object.position.z = i * PLANE_LENGTH / 27 - 1.5 * PLANE_LENGTH;
 						}
 					else
 						{
-						object.position.x = -PLANE_WIDTH * 2 - 40;
+						object.position.x = -PLANE_WIDTH * 2 - 50;
 						object.position.z = i * PLANE_LENGTH / 27 - PLANE_LENGTH / 2;
 						}
 
@@ -367,7 +376,7 @@
 
 				/* CAMERA */
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
-				camera.position.set(0, PLANE_LENGTH / 125, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
+				camera.position.set(0, PLANE_LENGTH / 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
 
 				/* CONTROLS */
 				controls = new THREE.OrbitControls(camera, document.getElementById("container"));
@@ -445,6 +454,11 @@
 				runGame();
 
 				// UPDATING THE ABOUT BOX TEXT
+				document.getElementById("label-gameover").innerHTML = STRING_GAMEOVER;
+
+				document.getElementById("btn-restart").innerHTML = STRING_PLAYAGAIN;
+
+				// UPDATING THE ABOUT BOX TEXT
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// SHOWING THE ABOUT BOX
@@ -462,6 +476,58 @@
 					document.getElementById("about").style.display = "none";
 					}, 4500);
 				});
+
+  document.getElementById("container").addEventListener("touchstart", startTouch, false);
+  document.getElementById("container").addEventListener("touchmove", moveTouch, false);
+
+  // Swipe Up / Down / Left / Right
+  var initialX = null;
+  var initialY = null;
+
+  function startTouch(e) {
+    initialX = e.touches[0].clientX;
+    initialY = e.touches[0].clientY;
+  };
+
+  function moveTouch(e) {
+    if (initialX === null) {
+      return;
+    }
+
+    if (initialY === null) {
+      return;
+    }
+
+    var currentX = e.touches[0].clientX;
+    var currentY = e.touches[0].clientY;
+
+    var diffX = initialX - currentX;
+    var diffY = initialY - currentY;
+
+    if (Math.abs(diffX) > Math.abs(diffY)) {
+      // sliding horizontally
+      if (diffX > 0) {
+        // swiped left
+        console.log("swiped left");
+        if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2){
+						hero.position.x -= (PLANE_WIDTH - PADDING) / 2;
+
+        }
+      } else {
+        // swiped right
+        console.log("swiped right");
+        if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2){
+						hero.position.x += (PLANE_WIDTH - PADDING) / 2;
+
+        }
+      }  
+    }
+
+    initialX = null;
+    initialY = null;
+
+    e.preventDefault();
+  };
 		</script>
 	</body>
 </html>
