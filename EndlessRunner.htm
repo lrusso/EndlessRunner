@@ -432,6 +432,7 @@
 					}
 
 				/* LIGHTS */
+				createSpotlights();
 				directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 				directionalLight.position.set(0, 99, 0);
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
@@ -446,6 +447,34 @@
 				/* SCENE */
 				scene.add(camera, directionalLight, hemisphereLight, plane, hero);
 				}
+
+
+function createSpotlights() {
+  var spotLight = {},
+  target = {},
+  targetGeometry = {},
+  targetMaterial = {};
+  for (var i = 0; i < 5; i += 1) {
+    targetGeometry = new THREE.BoxGeometry(1, 1, 1);
+    targetMaterial = new THREE.MeshNormalMaterial();
+    target = new THREE.Mesh(targetGeometry, targetMaterial);
+    target.position.set(0, 2, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.50);
+    target.visible = false;
+    scene.add(target);
+
+    spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
+    spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -200);
+    spotLight.castShadow = true;
+    spotLight.shadow.camera.near = 10;
+    spotLight.target = target;
+    spotLight.shadow.mapSize.width = 2048;
+    spotLight.shadow.mapSize.height = 2048;
+    spotLight.fov = 40;
+
+    plane.add(spotLight);
+  }
+}
+
 
 			function runGame()
 				{
