@@ -230,7 +230,7 @@
 				planeLeftGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
 
 				var loader = new THREE.TextureLoader();
-				textureGrass = loader.load( 'grass.jpg', function ( texture )
+				textureGrass = loader.load("EndlessRunner_Grass.jpg", function (texture)
 					{
 					textureGrass.wrapS = texture.wrapT = THREE.RepeatWrapping;
 					textureGrass.offset.set( 0, 0 );
@@ -326,7 +326,7 @@
 					scene.add(object);
 					}
 
-				loader.load("EndlessRunner.dae", function (collada)
+				loader.load("EndlessRunner_Mountains.dae", function (collada)
 					{
 					prototype = collada.scene;
 					prototype.visible = false;
@@ -436,7 +436,7 @@
 				planeGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
 
 				var loader = new THREE.TextureLoader();
-				textureStone = loader.load( 'stone.jpg', function ( texture )
+				textureStone = loader.load("EndlessRunner_Stone.jpg", function (texture)
 					{
 					textureStone.wrapS = texture.wrapT = THREE.RepeatWrapping;
 					textureStone.offset.set( 0, 0 );
