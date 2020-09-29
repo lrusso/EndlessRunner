@@ -162,7 +162,7 @@
 
 					var ray = new THREE.Raycaster(origin, directionVector.clone().normalize());
 					var intersections = ray.intersectObjects(objects);
-					if (intersections.length > 0 && intersections[0].distance < directionVector.length())
+					if (intersections.length > 0 && intersections[0].distance < directionVector.length() + 18)
 						{
 						return true;
 						}
