@@ -13,10 +13,16 @@
 			.message-container button{font-family:Arial;font-size:30px;color:#E91E63;border:2px solid #E91E63;border-radius:10px;cursor:pointer;margin-top:20px;padding:10px 40px}
 			.message-container button:hover{color:#880E4F;border-color:#880E4F}
 			.message-container button:focus{outline:0}
+
+			.aboutcontainer{position:fixed;left:50%;transform:translateX(-50%);white-space:nowrap;bottom:0;z-index:399;cursor:default;margin-bottom:20px;padding:10px;border-radius:10px;text-shadow: 0 0 3px #000000,0 0 7px #000000;font-family:Arial;font-size:25px;font-weight:bold;color:white;background-color:rgba(0,0,0,0.5);display:none}
+			.abouthidden{animation:fadeOut 1.5s;animation-fill-mode:forwards}
+			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 		</style>
-	</head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
+		</head>
 	<body>
 		<div id="container"></div>
+		<div class="aboutcontainer" id="about"></div>
 		<div id="score">0</div>
 		<div id="overlay-gameover">
 			<div class="message-container">
@@ -53,6 +59,20 @@
 			var renderer = {};
 			var scene = {};
 			var score = 0;
+
+			var userLanguage = window.navigator.userLanguage || window.navigator.language;
+
+			var STRING_ABOUT = "";
+
+			// CHECKING THE USER LANGUAGE
+			if (userLanguage.substring(0,2)=="es")
+				{
+				STRING_ABOUT = "Dise&ntilde;ado por www.lrusso.com";
+				}
+				else
+				{
+				STRING_ABOUT = "Designed by www.lrusso.com";
+				}
 
 			function render()
 				{
@@ -397,13 +417,51 @@
 
 			function runGame()
 				{
-				window.addEventListener("resize", onWindowResize);
 				render();
-				onWindowResize();
+				resizeWindow();
 				}
 
-			initGame();
-			runGame();
+			function resizeWindow()
+				{
+				try
+					{
+					camera.aspect = window.innerWidth / (window.innerHeight);
+					camera.updateProjectionMatrix();
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					}
+					catch(err)
+					{
+					}
+				}
+
+			window.addEventListener("resize", function()
+				{
+				resizeWindow();
+				});
+
+			window.addEventListener("load", function()
+				{
+				initGame();
+				runGame();
+
+				// UPDATING THE ABOUT BOX TEXT
+				document.getElementById("about").innerHTML = STRING_ABOUT;
+
+				// SHOWING THE ABOUT BOX
+				document.getElementById("about").style.display = "block";
+
+				// FADING OUT THE ABOUT BOX
+				setTimeout(function()
+					{
+					document.getElementById("about").className = "aboutcontainer abouthidden";
+					}, 3000);
+
+				// HIDING THE ABOUT BOX
+				setTimeout(function()
+					{
+					document.getElementById("about").style.display = "none";
+					}, 4500);
+				});
 		</script>
 	</body>
 </html>
