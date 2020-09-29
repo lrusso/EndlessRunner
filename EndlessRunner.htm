@@ -62,6 +62,9 @@
 			var scene = {};
 			var score = 0;
 
+			var touchstartX = 0;
+			var touchendX = 0;
+
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_ABOUT = "";
@@ -246,6 +249,33 @@
 				planeRight.position.x = PLANE_WIDTH;
 
 				scene.add(planeLeft, planeRight);
+				}
+
+			function createSpotlights()
+				{
+				var spotLight = {};
+				var target = {};
+				var targetGeometry = {};
+				var targetMaterial = {};
+
+				for (var i = 0; i < 5; i += 1)
+					{
+					targetGeometry = new THREE.BoxGeometry(1, 1, 1);
+					targetMaterial = new THREE.MeshNormalMaterial();
+					target = new THREE.Mesh(targetGeometry, targetMaterial);
+					target.position.set(0, 2, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.50);
+					target.visible = false;
+					scene.add(target);
+
+					spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
+					spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -350);
+					spotLight.castShadow = true;
+					spotLight.target = target;
+					spotLight.shadow.mapSize.width = 1024;
+					spotLight.shadow.mapSize.height = 1024;
+
+					plane.add(spotLight);
+					}
 				}
 
 			function createMountain(i, isEast)
@@ -448,31 +478,21 @@
 				scene.add(camera, directionalLight, hemisphereLight, plane, hero);
 				}
 
+			function moveLeft()
+				{
+				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2)
+					{
+					hero.position.x -= (PLANE_WIDTH - PADDING) / 2;
+					}
+				}
 
-function createSpotlights() {
-  var spotLight = {},
-  target = {},
-  targetGeometry = {},
-  targetMaterial = {};
-  for (var i = 0; i < 5; i += 1) {
-    targetGeometry = new THREE.BoxGeometry(1, 1, 1);
-    targetMaterial = new THREE.MeshNormalMaterial();
-    target = new THREE.Mesh(targetGeometry, targetMaterial);
-    target.position.set(0, 2, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.50);
-    target.visible = false;
-    scene.add(target);
-
-    spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
-    spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -350);
-    spotLight.castShadow = true;
-    spotLight.target = target;
-    spotLight.shadow.mapSize.width = 1024;
-    spotLight.shadow.mapSize.height = 1024;
-
-    plane.add(spotLight);
-  }
-}
-
+			function moveRight()
+				{
+				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2)
+					{
+					hero.position.x += (PLANE_WIDTH - PADDING) / 2;
+					}
+				}
 
 			function runGame()
 				{
@@ -509,12 +529,12 @@ function createSpotlights() {
 				initGame();
 				runGame();
 
+				document.getElementById("container").addEventListener("touchstart",function(e){try{touchstartX = e.changedTouches[0].screenX;}catch(err){}});
+				document.getElementById("container").addEventListener("touchend",function(e){try{touchendX = e.changedTouches[0].screenX;if(touchendX < touchstartX){moveLeft();}else if(touchendX > touchstartX){moveRight();}}catch(err){}});
+
 				// UPDATING THE ABOUT BOX TEXT
 				document.getElementById("label-gameover").innerHTML = STRING_GAMEOVER;
-
 				document.getElementById("btn-restart").innerHTML = STRING_PLAYAGAIN;
-
-				// UPDATING THE ABOUT BOX TEXT
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// SHOWING THE ABOUT BOX
@@ -532,53 +552,6 @@ function createSpotlights() {
 					document.getElementById("about").style.display = "none";
 					}, 4500);
 				});
-
-
-
-
-
-function moveLeft()
-	{
-	if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2)
-		{
-		hero.position.x -= (PLANE_WIDTH - PADDING) / 2;
-		}
-	}
-
-function moveRight()
-	{
-	if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2)
-		{
-		hero.position.x += (PLANE_WIDTH - PADDING) / 2;
-		}
-	}
-
-
-
-
-var touchstartX = 0;
-var touchendX = 0;
-
-function handleGesure() {
-  if (touchendX < touchstartX) moveLeft()
-  if (touchendX > touchstartX) moveRight()
-}
-
-document.getElementById('container').addEventListener('touchstart', e => {
-  touchstartX = e.changedTouches[0].screenX
-})
-
-document.getElementById('container').addEventListener('touchend', e => {
-  touchendX = e.changedTouches[0].screenX
-  handleGesure()
-})
-
-
-
-
-
-
-
 		</script>
 	</body>
 </html>
