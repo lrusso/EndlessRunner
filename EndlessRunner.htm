@@ -21,7 +21,7 @@
 			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
-		</head>
+	</head>
 	<body>
 		<div id="container"></div>
 		<div class="aboutcontainer" id="about"></div>
@@ -127,34 +127,6 @@
 					}
 
 				document.getElementById("overlay-gameover").style.display = "block";
-
-				document.getElementById("btn-restart").addEventListener("click",function(event)
-					{
-					try
-						{
-						cancelAnimationFrame(globalRenderID);
-						window.clearInterval(powerupSpawnIntervalID);
-						window.clearInterval(powerupCounterIntervalID);
-						}
-					catch(err)
-						{
-						}
-
-					document.getElementById("overlay-gameover").style.display = "none";
-
-					POWERUP_COUNT = 10;
-
-					powerups.forEach(function (element, index)
-						{
-						scene.remove(powerups[index]);
-						});
-
-					powerups = [];
-					hero.position.x = 0;
-					score = 0;
-					startPowerupLogic();
-					render();
-					});
 				}
 
 			function onWindowResize()
@@ -551,6 +523,24 @@
 					{
 					document.getElementById("about").style.display = "none";
 					}, 4500);
+				});
+
+			document.getElementById("btn-restart").addEventListener("click",function(event)
+				{
+				document.getElementById("overlay-gameover").style.display = "none";
+
+				POWERUP_COUNT = 10;
+
+				powerups.forEach(function (element, index)
+					{
+					scene.remove(powerups[index]);
+					});
+
+				powerups = [];
+				hero.position.x = 0;
+				score = 0;
+				startPowerupLogic();
+				render();
 				});
 		</script>
 	</body>
