@@ -501,10 +501,30 @@
 				initGame();
 				runGame();
 
+				// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS/TOUCHES THE RESTART BUTTON
+				document.getElementById("btn-restart").addEventListener("click",function(event)
+					{
+					document.getElementById("overlay-gameover").style.display = "none";
+
+					POWERUP_COUNT = 10;
+
+					powerups.forEach(function (element, index)
+						{
+						scene.remove(powerups[index]);
+						});
+
+					powerups = [];
+					hero.position.x = 0;
+					score = 0;
+					startPowerupLogic();
+					render();
+					});
+
+				// HANDLING THE SWIPE LEFT AND RIGHT IN MOBILE DEVICES
 				document.getElementById("container").addEventListener("touchstart",function(e){try{touchstartX = e.changedTouches[0].screenX;}catch(err){}});
 				document.getElementById("container").addEventListener("touchend",function(e){try{touchendX = e.changedTouches[0].screenX;if(touchendX < touchstartX){moveLeft();}else if(touchendX > touchstartX){moveRight();}}catch(err){}});
 
-				// UPDATING THE ABOUT BOX TEXT
+				// UPDATING THE LABEL VALUES
 				document.getElementById("label-gameover").innerHTML = STRING_GAMEOVER;
 				document.getElementById("btn-restart").innerHTML = STRING_PLAYAGAIN;
 				document.getElementById("about").innerHTML = STRING_ABOUT;
@@ -523,24 +543,6 @@
 					{
 					document.getElementById("about").style.display = "none";
 					}, 4500);
-				});
-
-			document.getElementById("btn-restart").addEventListener("click",function(event)
-				{
-				document.getElementById("overlay-gameover").style.display = "none";
-
-				POWERUP_COUNT = 10;
-
-				powerups.forEach(function (element, index)
-					{
-					scene.remove(powerups[index]);
-					});
-
-				powerups = [];
-				hero.position.x = 0;
-				score = 0;
-				startPowerupLogic();
-				render();
 				});
 		</script>
 	</body>
