@@ -214,7 +214,7 @@
 					scene.add(object);
 					}
 
-				loader.load("EndlessRunner_Mountains.dae", function (collada)
+				loader.load("EndlessRunner.dae", function (collada)
 					{
 					prototype = collada.scene;
 					prototype.visible = false;
@@ -311,7 +311,7 @@
 
 				// ADDING THE STONE ROAD
 				stoneLoader = new THREE.TextureLoader();
-				stoneTexture = stoneLoader.load("EndlessRunner_Stone.jpg", function (texture)
+				stoneTexture = stoneLoader.load(stoneImageData, function (texture)
 					{
 					stoneTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 					stoneTexture.offset.set( 0, 0 );
@@ -325,7 +325,7 @@
 
 				// ADDING THE GRASS FLOOR
 				grassLoader = new THREE.TextureLoader();
-				grassTexture = grassLoader.load("EndlessRunner_Grass.jpg", function (texture)
+				grassTexture = grassLoader.load(grassImageData, function (texture)
 					{
 					grassTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
 					grassTexture.offset.set( 0, 0 );
