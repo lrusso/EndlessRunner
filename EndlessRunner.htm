@@ -59,38 +59,38 @@
 			var PADDING = PLANE_WIDTH / 5 * 2;
 			var POWERUP_COUNT = 10;
 
-			var camera = {};
-			var controls = {};
+			var camera;
+			var controls;
 			var containerWidth = 0;
 			var containerHeight = 0;
-			var directionalLight = {};
-			var globalRenderID = {};
-			var hemisphereLight = {};
-			var mountain = {};
+			var directionalLight;
+			var globalRenderID;
+			var hemisphereLight;
+			var mountain;
 			var mountains = [];
-			var powerup = {};
+			var powerup;
 			var powerups = [];
-			var powerupSpawnIntervalID = {};
-			var powerupCounterIntervalID = {};
-			var queue = {};
-			var renderer = {};
-			var scene = {};
+			var powerupSpawnIntervalID;
+			var powerupCounterIntervalID;
+			var queue;
+			var renderer;
+			var scene;
 			var score = 0;
 
-			var hero = {};
-			var heroGeometry = {};
-			var heroMaterial = {};
+			var hero;
+			var heroGeometry;
+			var heroMaterial;
 
-			var grassLeft = {};
-			var grassLeftGeometry = {};
-			var grassLeftMaterial = {};
-			var grassRight = {};
+			var grassLeft;
+			var grassLeftGeometry;
+			var grassLeftMaterial;
+			var grassRight;
 			var grassTexture;
 			var grassLoader;
 
-			var stoneRoad = {};
-			var stoneGeometry = {};
-			var stoneMaterial = {};
+			var stoneRoad;
+			var stoneGeometry;
+			var stoneMaterial;
 			var stoneTexture;
 			var stoneLoader;
 
@@ -168,12 +168,12 @@
 
 			function createMountain(i, isEast)
 				{
-				var loader = {};
-				var prototype = {};
-				var object = {};
-				var objectDimensionX = {};
-				var objectDimensionY = {};
-				var objectDimensionZ = {};
+				var loader;
+				var prototype;
+				var object;
+				var objectDimensionX;
+				var objectDimensionY;
+				var objectDimensionZ;
 
 				loader = new THREE.ColladaLoader();
 
@@ -229,10 +229,10 @@
 					return Math.floor(Math.random() * (max - min + 1)) + min;
 					}
 
-				var object = {};
+				var object;
 				var objectDimension = 0;
-				var objectGeometry = {};
-				var objectMaterial = {};
+				var objectGeometry;
+				var objectMaterial;
 				var xPosition = 0;
 				var xPositionValues = [];
 				var yPosition = 0;
@@ -356,10 +356,10 @@
 					}
 
 				// ADDING THE LIGHTS
-				var spotLight = {};
-				var target = {};
-				var targetGeometry = {};
-				var targetMaterial = {};
+				var spotLight;
+				var target;
+				var targetGeometry;
+				var targetMaterial;
 				for (var i = 0; i < 5; i += 1)
 					{
 					targetGeometry = new THREE.BoxGeometry(1, 1, 1);
