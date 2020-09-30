@@ -68,9 +68,6 @@
 			var hemisphereLight = {};
 			var mountain = {};
 			var mountains = [];
-			var plane = {};
-			var planeGeometry = {};
-			var planeMaterial = {};
 			var powerup = {};
 			var powerups = [];
 			var powerupSpawnIntervalID = {};
@@ -91,7 +88,11 @@
 			var grassTexture;
 			var grassLoader;
 
-			var textureStone;
+			var stoneRoad = {};
+			var stoneGeometry = {};
+			var stoneMaterial = {};
+			var stoneTexture;
+			var stoneLoader;
 
 			var touchstartX = 0;
 			var touchendX = 0;
@@ -122,7 +123,7 @@
 				controls.update();
 
 				grassTexture.offset.y -= .05;
-				textureStone.offset.y -= .05;
+				stoneTexture.offset.y -= .05;
 
 				powerups.forEach(function (element, index)
 					{
@@ -143,28 +144,6 @@
 				document.getElementById("score").innerHTML = score;
 
 				renderer.render(scene, camera);
-				}
-
-			function gameOver()
-				{
-				try
-					{
-					cancelAnimationFrame(globalRenderID);
-					window.clearInterval(powerupSpawnIntervalID);
-					window.clearInterval(powerupCounterIntervalID);
-					}
-				catch(err)
-					{
-					}
-
-				document.getElementById("overlay-gameover").style.display = "block";
-				}
-
-			function onWindowResize()
-				{
-				camera.aspect = window.innerWidth / (window.innerHeight);
-				camera.updateProjectionMatrix();
-				renderer.setSize(window.innerWidth, window.innerHeight);
 				}
 
 			function detectCollisions(objects)
@@ -331,18 +310,18 @@
 				controls.maxAzimuthAngle = 0;
 
 				// ADDING THE STONE ROAD
-				planeGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-				var loader = new THREE.TextureLoader();
-				textureStone = loader.load("EndlessRunner_Stone.jpg", function (texture)
+				stoneLoader = new THREE.TextureLoader();
+				stoneTexture = stoneLoader.load("EndlessRunner_Stone.jpg", function (texture)
 					{
-					textureStone.wrapS = texture.wrapT = THREE.RepeatWrapping;
-					textureStone.offset.set( 0, 0 );
-					textureStone.repeat.set( 1, 20 );
+					stoneTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					stoneTexture.offset.set( 0, 0 );
+					stoneTexture.repeat.set( 1, 20 );
 					});
-				planeMaterial = new THREE.MeshLambertMaterial({ map: textureStone });
-				plane = new THREE.Mesh(planeGeometry, planeMaterial);
-				plane.rotation.x = 1.570;
-				plane.receiveShadow = true;
+				stoneMaterial = new THREE.MeshLambertMaterial({ map: stoneTexture });
+				stoneGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
+				stoneRoad = new THREE.Mesh(stoneGeometry, stoneMaterial);
+				stoneRoad.rotation.x = 1.570;
+				stoneRoad.receiveShadow = true;
 
 				// ADDING THE GRASS FLOOR
 				grassLoader = new THREE.TextureLoader();
@@ -397,7 +376,7 @@
 					spotLight.shadow.mapSize.width = 1024;
 					spotLight.shadow.mapSize.height = 1024;
 
-					plane.add(spotLight);
+					stoneRoad.add(spotLight);
 					}
 				directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 				directionalLight.position.set(0, 99, 0);
@@ -413,7 +392,7 @@
 				hero.rotation.x = 0.785;
 
 				// ADDING EVERYTHING THO THE SCENE
-				scene.add(camera, directionalLight, hemisphereLight, plane, hero);
+				scene.add(camera, directionalLight, hemisphereLight, stoneRoad, hero);
 				}
 
 			function moveLeft()
@@ -456,6 +435,39 @@
 				resizeToFitWindow();
 				}
 
+			function restartGame()
+				{
+				document.getElementById("overlay-gameover").style.display = "none";
+
+				POWERUP_COUNT = 10;
+
+				powerups.forEach(function (element, index)
+					{
+					scene.remove(powerups[index]);
+					});
+
+				powerups = [];
+				hero.position.x = 0;
+				score = 0;
+
+				startGame();
+				}
+
+			function gameOver()
+				{
+				try
+					{
+					cancelAnimationFrame(globalRenderID);
+					window.clearInterval(powerupSpawnIntervalID);
+					window.clearInterval(powerupCounterIntervalID);
+					}
+				catch(err)
+					{
+					}
+
+				document.getElementById("overlay-gameover").style.display = "block";
+				}
+
 			function resizeToFitWindow()
 				{
 				try
@@ -487,23 +499,7 @@
 			window.addEventListener("load", function()
 				{
 				// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS/TOUCHES THE RESTART BUTTON
-				document.getElementById("btn-restart").addEventListener("click",function(event)
-					{
-					document.getElementById("overlay-gameover").style.display = "none";
-
-					POWERUP_COUNT = 10;
-
-					powerups.forEach(function (element, index)
-						{
-						scene.remove(powerups[index]);
-						});
-
-					powerups = [];
-					hero.position.x = 0;
-					score = 0;
-
-					startGame();
-					});
+				document.getElementById("btn-restart").addEventListener("click",function(event){restartGame();});
 
 				// HANDLING THE KEY EVENTS
 				window.addEventListener("keydown", function ()
@@ -515,6 +511,13 @@
 					else if (event.keyCode === 39)
 						{
 						moveRight();
+						}
+					else if (event.keyCode === 32)
+						{
+						if (document.getElementById("overlay-gameover").style.display === "block")
+							{
+							restartGame();
+							}
 						}
 					});
 
