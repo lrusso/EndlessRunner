@@ -59,14 +59,12 @@
 			var PADDING = PLANE_WIDTH / 5 * 2;
 			var POWERUP_COUNT = 10;
 
-			var axishelper = {};
 			var camera = {};
 			var controls = {};
 			var containerWidth = 0;
 			var containerHeight = 0;
 			var directionalLight = {};
 			var globalRenderID = {};
-			var hero = {};
 			var hemisphereLight = {};
 			var mountain = {};
 			var mountains = [];
@@ -81,6 +79,19 @@
 			var renderer = {};
 			var scene = {};
 			var score = 0;
+
+			var hero = {};
+			var heroGeometry = {};
+			var heroMaterial = {};
+
+			var grassLeft = {};
+			var grassLeftGeometry = {};
+			var grassLeftMaterial = {};
+			var grassRight = {};
+			var grassTexture;
+			var grassLoader;
+
+			var textureStone;
 
 			var touchstartX = 0;
 			var touchendX = 0;
@@ -110,7 +121,7 @@
 				globalRenderID = requestAnimationFrame(render);
 				controls.update();
 
-				textureGrass.offset.y -= .05;
+				grassTexture.offset.y -= .05;
 				textureStone.offset.y -= .05;
 
 				powerups.forEach(function (element, index)
@@ -176,100 +187,6 @@
 				return false;
 				}
 
-			function getRandomInteger(min, max)
-				{
-				return Math.floor(Math.random() * (max - min + 1)) + min;
-				}
-
-			function Hero()
-				{
-				var hero = {};
-				var heroGeometry = {};
-				var heroMaterial = {};
-
-				heroGeometry = new THREE.CylinderGeometry(0, 2, 5, 10);
-				heroMaterial = new THREE.MeshLambertMaterial({color: 0xE91E63, flatShading: THREE.FlatShading });
-
-				hero = new THREE.Mesh(heroGeometry, heroMaterial);
-				hero.castShadow = true;
-				hero.position.set(0, 5, PLANE_LENGTH / 2);
-				hero.rotation.x = 0.785;
-
-				window.addEventListener("keydown", function ()
-					{
-					if (event.keyCode === 37 && hero.position.x !== -(PLANE_WIDTH - PADDING) / 2)
-						{
-						hero.position.x -= (PLANE_WIDTH - PADDING) / 2;
-						}
-					else if (event.keyCode === 39 && hero.position.x !== (PLANE_WIDTH - PADDING) / 2)
-						{
-						hero.position.x += (PLANE_WIDTH - PADDING) / 2;
-						}
-					});
-
-				return hero;
-				}
-
-				var textureGrass;
-
-			function createLandscapeFloors()
-				{
-				var planeLeft = {};
-				var planeLeftGeometry = {};
-				var planeLeftMaterial = {};
-				var planeRight = {};
-
-				planeLeftGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-
-				var loader = new THREE.TextureLoader();
-				textureGrass = loader.load("EndlessRunner_Grass.jpg", function (texture)
-					{
-					textureGrass.wrapS = texture.wrapT = THREE.RepeatWrapping;
-					textureGrass.offset.set( 0, 0 );
-					textureGrass.repeat.set( 1, 20 );
-					});
-
-				planeLeftMaterial = new THREE.MeshPhongMaterial( { map: textureGrass } );
-
-				planeLeft = new THREE.Mesh(planeLeftGeometry, planeLeftMaterial);
-				planeLeft.receiveShadow = true;
-				planeLeft.rotation.x = 1.570;
-				planeLeft.position.x = -PLANE_WIDTH;
-				planeLeft.position.y = 1;
-
-				planeRight = planeLeft.clone();
-				planeRight.position.x = PLANE_WIDTH;
-
-				scene.add(planeLeft, planeRight);
-				}
-
-			function createSpotlights()
-				{
-				var spotLight = {};
-				var target = {};
-				var targetGeometry = {};
-				var targetMaterial = {};
-
-				for (var i = 0; i < 5; i += 1)
-					{
-					targetGeometry = new THREE.BoxGeometry(1, 1, 1);
-					targetMaterial = new THREE.MeshNormalMaterial();
-					target = new THREE.Mesh(targetGeometry, targetMaterial);
-					target.position.set(0, 2, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.50);
-					target.visible = false;
-					scene.add(target);
-
-					spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
-					spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -350);
-					spotLight.castShadow = true;
-					spotLight.target = target;
-					spotLight.shadow.mapSize.width = 1024;
-					spotLight.shadow.mapSize.height = 1024;
-
-					plane.add(spotLight);
-					}
-				}
-
 			function createMountain(i, isEast)
 				{
 				var loader = {};
@@ -328,6 +245,11 @@
 
 			function PowerUp()
 				{
+				function getRandomInteger(min, max)
+					{
+					return Math.floor(Math.random() * (max - min + 1)) + min;
+					}
+
 				var object = {};
 				var objectDimension = 0;
 				var objectGeometry = {};
@@ -373,29 +295,13 @@
 				return object;
 				}
 
-			function startPowerupLogic()
-				{
-				powerupSpawnIntervalID = window.setInterval(function ()
-					{
-					if (powerups.length < POWERUP_COUNT)
-						{
-						powerup = new PowerUp();
-						powerups.push(powerup);
-						scene.add(powerup);
-						}
-					}, 4000);
-
-				powerupCounterIntervalID = window.setInterval(function ()
-					{
-					POWERUP_COUNT += 1;
-					}, 30000);
-				}
-
 			function loadGameResources()
 				{
+				// GETTING THE CONTAINER SIZE
 				containerWidth = document.getElementById("container").offsetWidth;
 				containerHeight = document.getElementById("container").offsetHeight;
 
+				// SETTING THE RENDER CONFIGURATION
 				renderer = new THREE.WebGLRenderer({alpha:true});
 				renderer.setSize(window.innerWidth, window.innerHeight);
 				renderer.antialias = false;
@@ -404,17 +310,17 @@
 				renderer.shadowMapSoft = true;
 				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+				// ADDING THE CANVAS TO THE CONTAINER
 				document.getElementById("container").appendChild(renderer.domElement);
 
+				// ADDING THE SCENE
 				scene = new THREE.Scene();
 
-				axishelper = new THREE.AxesHelper(PLANE_LENGTH / 2);
-
-				/* CAMERA */
+				// ADDING THE CAMERA
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
 				camera.position.set(0, PLANE_LENGTH / 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
 
-				/* CONTROLS */
+				// ADDING THE CONTROLS SETTINGS
 				controls = new THREE.OrbitControls(camera, document.getElementById("container"));
 				controls.noKeys = true;
 				controls.noPan = true;
@@ -424,9 +330,8 @@
 				controls.minAzimuthAngle = 0;
 				controls.maxAzimuthAngle = 0;
 
-				/* FLOOR */
+				// ADDING THE STONE ROAD
 				planeGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-
 				var loader = new THREE.TextureLoader();
 				textureStone = loader.load("EndlessRunner_Stone.jpg", function (texture)
 					{
@@ -434,15 +339,33 @@
 					textureStone.offset.set( 0, 0 );
 					textureStone.repeat.set( 1, 20 );
 					});
-
 				planeMaterial = new THREE.MeshLambertMaterial({ map: textureStone });
-
 				plane = new THREE.Mesh(planeGeometry, planeMaterial);
 				plane.rotation.x = 1.570;
 				plane.receiveShadow = true;
 
-				/* LANDSCAPE */
-				createLandscapeFloors();
+				// ADDING THE GRASS FLOOR
+				grassLoader = new THREE.TextureLoader();
+				grassTexture = grassLoader.load("EndlessRunner_Grass.jpg", function (texture)
+					{
+					grassTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					grassTexture.offset.set( 0, 0 );
+					grassTexture.repeat.set( 1, 20 );
+					});
+				grassLeftMaterial = new THREE.MeshPhongMaterial( { map: grassTexture } );
+				grassLeftGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
+				grassLeft = new THREE.Mesh(grassLeftGeometry, grassLeftMaterial);
+				grassLeft.receiveShadow = true;
+				grassLeft.rotation.x = 1.570;
+				grassLeft.position.x = -PLANE_WIDTH;
+				grassLeft.position.y = 1;
+
+				grassRight = grassLeft.clone();
+				grassRight.position.x = PLANE_WIDTH;
+
+				scene.add(grassLeft, grassRight);
+
+				// ADDING THE MOUNTAINS
 				for (var i = 0; i < 60; i += 1)
 					{
 					var isEast = false;
@@ -453,20 +376,43 @@
 					createMountain(i, isEast);
 					}
 
-				/* LIGHTS */
-				createSpotlights();
+				// ADDING THE LIGHTS
+				var spotLight = {};
+				var target = {};
+				var targetGeometry = {};
+				var targetMaterial = {};
+				for (var i = 0; i < 5; i += 1)
+					{
+					targetGeometry = new THREE.BoxGeometry(1, 1, 1);
+					targetMaterial = new THREE.MeshNormalMaterial();
+					target = new THREE.Mesh(targetGeometry, targetMaterial);
+					target.position.set(0, 2, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.50);
+					target.visible = false;
+					scene.add(target);
+
+					spotLight = new THREE.SpotLight(0xFFFFFF, 0.1);
+					spotLight.position.set(150, i * PLANE_LENGTH / 5 - PLANE_LENGTH / 2.5, -350);
+					spotLight.castShadow = true;
+					spotLight.target = target;
+					spotLight.shadow.mapSize.width = 1024;
+					spotLight.shadow.mapSize.height = 1024;
+
+					plane.add(spotLight);
+					}
 				directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 				directionalLight.position.set(0, 99, 0);
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
 				hemisphereLight.position.y = 500;
 
-				/* POWERUPS */
-				startPowerupLogic();
+				// ADDING THE HERO
+				heroGeometry = new THREE.CylinderGeometry(0, 2, 5, 10);
+				heroMaterial = new THREE.MeshLambertMaterial({color: 0xE91E63, flatShading: THREE.FlatShading });
+				hero = new THREE.Mesh(heroGeometry, heroMaterial);
+				hero.castShadow = true;
+				hero.position.set(0, 5, PLANE_LENGTH / 2);
+				hero.rotation.x = 0.785;
 
-				/* HERO */
-				hero = new Hero();
-
-				/* SCENE */
+				// ADDING EVERYTHING THO THE SCENE
 				scene.add(camera, directionalLight, hemisphereLight, plane, hero);
 				}
 
@@ -486,13 +432,31 @@
 					}
 				}
 
-			function runGame()
+			function startGame()
 				{
+				/* POWERUPS */
+				powerupSpawnIntervalID = window.setInterval(function ()
+					{
+					if (powerups.length < POWERUP_COUNT)
+						{
+						powerup = new PowerUp();
+						powerups.push(powerup);
+						scene.add(powerup);
+						}
+					}, 4000);
+				powerupCounterIntervalID = window.setInterval(function ()
+					{
+					POWERUP_COUNT += 1;
+					}, 30000);
+
+				// RENDERING THE GAME
 				render();
-				resizeWindow();
+
+				// RESIZING THE CANVAS TO FIT THE WINDOW
+				resizeToFitWindow();
 				}
 
-			function resizeWindow()
+			function resizeToFitWindow()
 				{
 				try
 					{
@@ -505,7 +469,7 @@
 					}
 				}
 
-			// LOADING GAME RESOURCES
+			// LOADING THE GAME RESOURCES
 			loadGameResources();
 
 			window.oncontextmenu = function()
@@ -516,7 +480,8 @@
 
 			window.addEventListener("resize", function()
 				{
-				resizeWindow();
+				// RESIZING THE CANVAS TO FIT THE WINDOW
+				resizeToFitWindow();
 				});
 
 			window.addEventListener("load", function()
@@ -536,13 +501,26 @@
 					powerups = [];
 					hero.position.x = 0;
 					score = 0;
-					startPowerupLogic();
-					render();
+
+					startGame();
+					});
+
+				// HANDLING THE KEY EVENTS
+				window.addEventListener("keydown", function ()
+					{
+					if (event.keyCode === 37)
+						{
+						moveLeft();
+						}
+					else if (event.keyCode === 39)
+						{
+						moveRight();
+						}
 					});
 
 				// HANDLING THE SWIPE LEFT AND RIGHT IN MOBILE DEVICES
-				document.getElementById("container").addEventListener("touchstart",function(e){try{touchstartX = e.changedTouches[0].screenX;}catch(err){}});
-				document.getElementById("container").addEventListener("touchend",function(e){try{touchendX = e.changedTouches[0].screenX;if(touchendX < touchstartX){moveLeft();}else if(touchendX > touchstartX){moveRight();}}catch(err){}});
+				document.getElementById("container").addEventListener("touchstart",function(e){try{touchstartX=e.changedTouches[0].screenX;}catch(err){}});
+				document.getElementById("container").addEventListener("touchend",function(e){try{touchendX=e.changedTouches[0].screenX;if(touchendX<touchstartX){moveLeft();}else if(touchendX>touchstartX){moveRight();}}catch(err){}});
 
 				// UPDATING THE LABEL VALUES
 				document.getElementById("label-gameover").innerHTML = STRING_GAMEOVER;
@@ -558,8 +536,8 @@
 				// SHOWING THE ABOUT BOX
 				document.getElementById("about").style.display = "block";
 
-				// RUNNING THE GAME
-				runGame();
+				// STARTING THE GAME
+				startGame();
 
 				// FADING OUT THE ABOUT BOX
 				setTimeout(function()
