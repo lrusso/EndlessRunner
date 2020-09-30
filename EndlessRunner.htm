@@ -19,6 +19,12 @@
 			.abouthidden{animation:fadeOut 1.5s;animation-fill-mode:forwards}
 			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 
+			/* iPods and other very small devices (portrait and landscape)(very small) */
+			@media screen and (min-width: 0) and (max-width: 320px)
+				{
+				.aboutcontainer{font-size:18px;margin-bottom:10px}
+				}
+
 			.pleasewait{position:fixed;width:64px;height:64px;left:0;right:0;top:0;bottom:0;margin:auto auto;border:0}
 			.lds-spinner{color:white;display:inline-block;position:relative;width:64px;height:64px}
 			.lds-spinner div{transform-origin:32px 32px;animation:lds-spinner 1.2s linear infinite}
