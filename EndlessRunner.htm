@@ -174,14 +174,11 @@
 
 			function createMountain(i, isEast)
 				{
-				var loader;
 				var prototype;
 				var object;
 				var objectDimensionX;
 				var objectDimensionY;
 				var objectDimensionZ;
-
-				loader = new THREE.ColladaLoader();
 
 				function createObject()
 					{
@@ -220,12 +217,10 @@
 					scene.add(object);
 					}
 
-				loader.load("EndlessRunner.dae", function (collada)
-					{
-					prototype = collada.scene;
-					prototype.visible = false;
-					createObject();
-					});
+				var loader = new THREE.ColladaLoader().parse(mountainsModel);
+				prototype = loader.scene;
+				prototype.visible = false;
+				createObject();
 				}
 
 			function PowerUp()
