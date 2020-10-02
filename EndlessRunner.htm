@@ -126,8 +126,6 @@
 			var movingRight = false;
 			var movingDestiny = null;
 
-			var obstacleCounter = -1;
-
 			var game_running = true;
 
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
@@ -290,8 +288,6 @@
 				createObject();
 				}
 
-			var algo = false;
-
 			function PowerUp()
 				{
 				function getRandomInteger(min, max)
@@ -320,7 +316,9 @@
 				yPosition = yPositionValues[getRandomInteger(0, yPositionValues.length - 1)];
 				zPosition = -PLANE_LENGTH / 2;
 
-				if (algo==false)
+				var myRandom = Math.floor(Math.random() * 100);
+
+				if (myRandom<=40)
 					{
 					object = new THREE.Mesh(coinGeometry, coinMaterial);
 					object.scale.x = 0.15;
@@ -328,7 +326,6 @@
 					object.scale.z = 0.15;
 					object.position.set(xPosition, 4, zPosition);
 					object.name = "coin";
-					algo = true;
 					}
 					else
 					{
@@ -337,7 +334,6 @@
 					object = new THREE.Mesh(objectGeometry, objectMaterial);
 					object.position.set(xPosition, yPosition, zPosition);
 					object.name = "enemy";
-					algo = false;
 					}
 
 				object.castShadow = true;
