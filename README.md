@@ -2,6 +2,8 @@
 
 Endless Runner game developed in JavaScript.
 
+![alt screenshot](https://raw.githubusercontent.com/lrusso/EndlessRunner/master/EndlessRunner.png)
+
 ## Web
 
 https://lrusso.github.io/EndlessRunner/EndlessRunner.htm
