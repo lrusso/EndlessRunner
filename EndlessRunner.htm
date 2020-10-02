@@ -163,10 +163,13 @@
 
 					powerups.forEach(function (element, index)
 						{
-						powerups[index].animate();
-						if (powerups[index].name=="coin")
+						if (powerups[index]!=null)
 							{
-							powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
+							powerups[index].animate();
+							if (powerups[index].name=="coin")
+								{
+								powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
+								}
 							}
 						});
 
@@ -212,17 +215,21 @@
 
 				for (var i = 0; i < objects.length; i ++)
 					{
-					var secondBB = new THREE.Box3().setFromObject(objects[i]);
-					if (firstBB.intersectsBox(secondBB)==true)
+					if (objects[i]!=null)
 						{
-						if (objects[i].name=="coin")
+						var secondBB = new THREE.Box3().setFromObject(objects[i]);
+						if (firstBB.intersectsBox(secondBB)==true)
 							{
-							score = score + 100;
-							scene.remove(objects[i]);
-							}
-							else
-							{
-							return true;
+							if (objects[i].name=="coin")
+								{
+								score = score + 100;
+								scene.remove(objects[i]);
+								powerups.splice(i, 1, null);
+								}
+								else
+								{
+								return true;
+								}
 							}
 						}
 					}
