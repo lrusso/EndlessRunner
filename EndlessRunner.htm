@@ -109,6 +109,8 @@
 			var STRING_GAMEOVER = "";
 			var STRING_PLAYAGAIN = "";
 
+			var timestampChecker = -1;
+
 			// CHECKING THE USER LANGUAGE
 			if (userLanguage.substring(0,2)=="es")
 				{
@@ -146,7 +148,11 @@
 					gameOver();
 					}
 
-				score = score + 1;
+				if (Date.now()>timestampChecker+50)
+					{
+					score = score + 1;
+					timestampChecker = Date.now()
+					}
 				document.getElementById("score").innerHTML = score;
 
 				renderer.render(scene, camera);
