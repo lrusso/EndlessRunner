@@ -123,6 +123,8 @@
 			var movingRight = false;
 			var movingDestiny = null;
 
+			var game_running = true;
+
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_ABOUT = "";
@@ -148,54 +150,58 @@
 			function render()
 				{
 				globalRenderID = requestAnimationFrame(render);
-				controls.update();
 
-				grassTexture.offset.y -= .05;
-				stoneTexture.offset.y -= .05;
-
-				powerups.forEach(function (element, index)
+				if (game_running==true)
 					{
-					powerups[index].animate();
-					});
+					controls.update();
 
-				mountains.forEach(function (element, index)
-					{
-					mountains[index].animate();
-					});
+					grassTexture.offset.y -= .05;
+					stoneTexture.offset.y -= .05;
 
-				if (Date.now()>timestampChecker+10 && movingDestiny!=null)
-					{
-					if (hero.position.x != movingDestiny)
+					powerups.forEach(function (element, index)
 						{
-						if (movingLeft==true)
+						powerups[index].animate();
+						});
+
+					mountains.forEach(function (element, index)
+						{
+						mountains[index].animate();
+						});
+
+					if (Date.now()>timestampChecker+10 && movingDestiny!=null)
+						{
+						if (hero.position.x != movingDestiny)
 							{
-							hero.position.x = hero.position.x - 0.5;
+							if (movingLeft==true)
+								{
+								hero.position.x = hero.position.x - 0.5;
+								}
+							else if (movingRight==true)
+								{
+								hero.position.x = hero.position.x + 0.5;
+								}
 							}
-						else if (movingRight==true)
+							else
 							{
-							hero.position.x = hero.position.x + 0.5;
+							movingLeft = false;
+							movingRight = false;
 							}
 						}
-						else
+
+					if (Date.now()>timestampChecker+50)
 						{
-						movingLeft = false;
-						movingRight = false;
+						score = score + 1;
+						timestampChecker = Date.now()
 						}
-					}
+					document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
-				if (Date.now()>timestampChecker+50)
-					{
-					score = score + 1;
-					timestampChecker = Date.now()
-					}
-				document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
+					if (detectCollisions(powerups) === true)
+						{
+						gameOver();
+						}
 
-				if (detectCollisions(powerups) === true)
-					{
-					gameOver();
+					renderer.render(scene, camera);
 					}
-
-				renderer.render(scene, camera);
 				}
 
 			function detectCollisions(objects)
@@ -466,16 +472,22 @@
 				/* POWERUPS */
 				powerupSpawnIntervalID = window.setInterval(function ()
 					{
-					if (powerups.length < POWERUP_COUNT)
+					if (game_running==true)
 						{
-						powerup = new PowerUp();
-						powerups.push(powerup);
-						scene.add(powerup);
+						if (powerups.length < POWERUP_COUNT)
+							{
+							powerup = new PowerUp();
+							powerups.push(powerup);
+							scene.add(powerup);
+							}
 						}
 					}, 4000);
 				powerupCounterIntervalID = window.setInterval(function ()
 					{
-					POWERUP_COUNT += 1;
+					if (game_running==true)
+						{
+						POWERUP_COUNT += 1;
+						}
 					}, 30000);
 
 				// RENDERING THE GAME
@@ -507,6 +519,8 @@
 				{
 				try
 					{
+					movingLeft = false;
+					movingRight = false;
 					cancelAnimationFrame(globalRenderID);
 					window.clearInterval(powerupSpawnIntervalID);
 					window.clearInterval(powerupCounterIntervalID);
@@ -541,6 +555,30 @@
 				// DISABLING THE CONTEXT MENU
 				return false;
 				}
+
+			window.addEventListener("blur", function()
+				{
+				try
+					{
+					// PAUSING THE GAME
+					game_running = false;
+					}
+					catch(err)
+					{
+					}
+				});
+
+			window.addEventListener("focus", function()
+				{
+				try
+					{
+					// RESUMING THE GAME
+					game_running = true;
+					}
+					catch(err)
+					{
+					}
+				});
 
 			window.addEventListener("resize", function()
 				{
