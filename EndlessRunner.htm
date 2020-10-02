@@ -119,6 +119,10 @@
 			var touchstartX = 0;
 			var touchendX = 0;
 
+			var movingLeft = false;
+			var movingRight = false;
+			var movingDestiny = null;
+
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_ABOUT = "";
@@ -159,9 +163,24 @@
 					mountains[index].animate();
 					});
 
-				if (detectCollisions(powerups) === true)
+				if (Date.now()>timestampChecker+10 && movingDestiny!=null)
 					{
-					gameOver();
+					if (hero.position.x != movingDestiny)
+						{
+						if (movingLeft==true)
+							{
+							hero.position.x = hero.position.x - 0.5;
+							}
+						else if (movingRight==true)
+							{
+							hero.position.x = hero.position.x + 0.5;
+							}
+						}
+						else
+						{
+						movingLeft = false;
+						movingRight = false;
+						}
 					}
 
 				if (Date.now()>timestampChecker+50)
@@ -170,6 +189,11 @@
 					timestampChecker = Date.now()
 					}
 				document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
+
+				if (detectCollisions(powerups) === true)
+					{
+					gameOver();
+					}
 
 				renderer.render(scene, camera);
 				}
@@ -421,17 +445,19 @@
 
 			function moveLeft()
 				{
-				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2)
+				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false)
 					{
-					hero.position.x -= (PLANE_WIDTH - PADDING) / 2;
+					movingLeft = true;
+					movingDestiny = hero.position.x - (PLANE_WIDTH - PADDING) / 2;
 					}
 				}
 
 			function moveRight()
 				{
-				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2)
+				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false)
 					{
-					hero.position.x += (PLANE_WIDTH - PADDING) / 2;
+					movingRight = true;
+					movingDestiny = hero.position.x + (PLANE_WIDTH - PADDING) / 2;
 					}
 				}
 
