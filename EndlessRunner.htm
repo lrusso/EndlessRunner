@@ -195,11 +195,6 @@
 							}
 						}
 
-					if (Date.now()>timestampChecker+50)
-						{
-						score = score + 1;
-						timestampChecker = Date.now()
-						}
 					document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 					if (detectCollisions(powerups) === true)
@@ -213,6 +208,28 @@
 
 			function detectCollisions(objects)
 				{
+				var firstBB = new THREE.Box3().setFromObject(hero);
+
+				for (var i = 0; i < objects.length; i ++)
+					{
+					var secondBB = new THREE.Box3().setFromObject(objects[i]);
+					if (firstBB.intersectsBox(secondBB)==true)
+						{
+						if (objects[i].name=="coin")
+							{
+							score = score + 100;
+							scene.remove(objects[i]);
+							}
+							else
+							{
+							return true;
+							}
+						}
+					}
+
+				return false;
+
+				/*
 				var origin = hero.position.clone();
 
 				for (var v = 0, vMax = hero.geometry.vertices.length; v < vMax; v += 1)
@@ -229,6 +246,7 @@
 						}
 					}
 				return false;
+				*/
 				}
 
 			function createMountain(i, isEast)
