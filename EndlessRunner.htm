@@ -150,6 +150,7 @@
 			var timestampChecker = -1;
 
 			var gameAudioContext = null;
+			var gameAudioMusic = new Audio("EndlessRunner.mp3");
 
 			var actions = null;
 			var clock = new THREE.Clock();
@@ -617,6 +618,8 @@
 				movingRight = false;
 				movingDestiny = null;
 
+				playMusic();
+
 				startGame();
 				}
 
@@ -627,6 +630,7 @@
 					cancelAnimationFrame(globalRenderID);
 					window.clearInterval(powerupSpawnIntervalID);
 					window.clearInterval(powerupCounterIntervalID);
+					stopMusic();
 					}
 				catch(err)
 					{
@@ -642,19 +646,28 @@
 					gameAudioContext.resume().then(function()
 						{
 						var audio = new Audio(audioResource);
-						audio.volume = 0.15;
+						audio.volume = 0.5;
 						audio.play();
 						});
 					}
 				}
 
-			function getAudioContext(e)
+			function playMusic()
 				{
-				if(gameAudioContext==null)
+				if (gameAudioContext!=null)
 					{
-					gameAudioContext=new AudioContext();
-					gameAudioContext.resume()
+					gameAudioContext.resume().then(function()
+						{
+						gameAudioMusic.volume = 0.7;
+						gameAudioMusic.play();
+						});
 					}
+				}
+
+			function stopMusic()
+				{
+				gameAudioMusic.pause();
+				gameAudioMusic.currentTime = 0;
 				}
 
 			function soundToggle()
@@ -663,11 +676,13 @@
 					{
 					gameAudioContext=new AudioContext();
 					gameAudioContext.resume();
+					playMusic();
 					document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
 					}
 					else
 					{
 					gameAudioContext=null;
+					stopMusic();
 					document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-off";
 					}
 				}
