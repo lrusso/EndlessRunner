@@ -37,39 +37,39 @@
 				.endlessrunner-gameover-container:hover{background-color:#3a76b1}
 				}
 
-			.aboutcontainer{position:fixed;left:50%;transform:translateX(-50%);white-space:nowrap;bottom:0;z-index:399;cursor:default;margin-bottom:20px;padding:10px;border-radius:10px;text-shadow: 0 0 3px #000000,0 0 7px #000000;font-family:Arial;font-size:25px;font-weight:bold;color:white;background-color:rgba(0,0,0,0.5);display:none}
-			.abouthidden{animation:fadeOut 1.5s;animation-fill-mode:forwards}
+			.endlessrunner-about-label{position:fixed;left:50%;transform:translateX(-50%);white-space:nowrap;bottom:0;z-index:399;cursor:default;margin-bottom:20px;padding:10px;border-radius:10px;text-shadow: 0 0 3px #000000,0 0 7px #000000;font-family:Arial;font-size:25px;font-weight:bold;color:white;background-color:rgba(0,0,0,0.5);display:none}
+			.endlessrunner-about-hidden{animation:fadeOut 1.5s;animation-fill-mode:forwards}
 			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 
 			/* iPods and other very small devices (portrait and landscape)(very small) */
 			@media screen and (min-width: 0) and (max-width: 320px)
 				{
-				.aboutcontainer{font-size:18px;margin-bottom:10px}
+				.endlessrunner-about-label{font-size:18px;margin-bottom:10px}
 				}
 
-			.pleasewait{position:fixed;width:64px;height:64px;left:0;right:0;top:0;bottom:0;margin:auto auto;border:0}
-			.lds-spinner{color:white;display:inline-block;position:relative;width:64px;height:64px}
-			.lds-spinner div{transform-origin:32px 32px;animation:lds-spinner 1.2s linear infinite}
-			.lds-spinner div:after{content:" ";display:block;position:fixed;top:3px;left:29px;width:5px;height:14px;border-radius:20%;background:white}
-			.lds-spinner div:nth-child(1){transform:rotate(0deg);animation-delay:-1.1s}
-			.lds-spinner div:nth-child(2){transform:rotate(30deg);animation-delay:-1s}
-			.lds-spinner div:nth-child(3){transform:rotate(60deg);animation-delay:-0.9s}
-			.lds-spinner div:nth-child(4){transform:rotate(90deg);animation-delay:-0.8s}
-			.lds-spinner div:nth-child(5){transform:rotate(120deg);animation-delay:-0.7s}
-			.lds-spinner div:nth-child(6){transform:rotate(150deg);animation-delay:-0.6s}
-			.lds-spinner div:nth-child(7){transform:rotate(180deg);animation-delay:-0.5s}
-			.lds-spinner div:nth-child(8){transform:rotate(210deg);animation-delay:-0.4s}
-			.lds-spinner div:nth-child(9){transform:rotate(240deg);animation-delay:-0.3s}
-			.lds-spinner div:nth-child(10){transform:rotate(270deg);animation-delay:-0.2s}
-			.lds-spinner div:nth-child(11){transform:rotate(300deg);animation-delay:-0.1s}
-			.lds-spinner div:nth-child(12){transform:rotate(330deg);animation-delay:0s}
-			@keyframes lds-spinner{0%{opacity:1}100%{opacity:0}}
+			.endlessrunner-pleasewait{position:fixed;width:64px;height:64px;left:0;right:0;top:0;bottom:0;margin:auto auto;border:0}
+			.endlessrunner-pleasewait-spinner{color:white;display:inline-block;position:relative;width:64px;height:64px}
+			.endlessrunner-pleasewait-spinner div{transform-origin:32px 32px;animation:endlessrunner-pleasewait-spinner 1.2s linear infinite}
+			.endlessrunner-pleasewait-spinner div:after{content:" ";display:block;position:fixed;top:3px;left:29px;width:5px;height:14px;border-radius:20%;background:white}
+			.endlessrunner-pleasewait-spinner div:nth-child(1){transform:rotate(0deg);animation-delay:-1.1s}
+			.endlessrunner-pleasewait-spinner div:nth-child(2){transform:rotate(30deg);animation-delay:-1s}
+			.endlessrunner-pleasewait-spinner div:nth-child(3){transform:rotate(60deg);animation-delay:-0.9s}
+			.endlessrunner-pleasewait-spinner div:nth-child(4){transform:rotate(90deg);animation-delay:-0.8s}
+			.endlessrunner-pleasewait-spinner div:nth-child(5){transform:rotate(120deg);animation-delay:-0.7s}
+			.endlessrunner-pleasewait-spinner div:nth-child(6){transform:rotate(150deg);animation-delay:-0.6s}
+			.endlessrunner-pleasewait-spinner div:nth-child(7){transform:rotate(180deg);animation-delay:-0.5s}
+			.endlessrunner-pleasewait-spinner div:nth-child(8){transform:rotate(210deg);animation-delay:-0.4s}
+			.endlessrunner-pleasewait-spinner div:nth-child(9){transform:rotate(240deg);animation-delay:-0.3s}
+			.endlessrunner-pleasewait-spinner div:nth-child(10){transform:rotate(270deg);animation-delay:-0.2s}
+			.endlessrunner-pleasewait-spinner div:nth-child(11){transform:rotate(300deg);animation-delay:-0.1s}
+			.endlessrunner-pleasewait-spinner div:nth-child(12){transform:rotate(330deg);animation-delay:0s}
+			@keyframes endlessrunner-pleasewait-spinner{0%{opacity:1}100%{opacity:0}}
 		</style>
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, user-scalable=no"/>
 	</head>
 	<body>
 		<div class="endlessrunner-container"></div>
-		<div class="aboutcontainer" id="about"></div>
+		<div class="endlessrunner-about-label" id="about"></div>
 		<div class="endlessrunner-soundhandler-container">
 			<div class="endlessrunner-soundhandler-off" id="endlessrunner-soundhandler"></div>
 		</div>
@@ -80,7 +80,7 @@
 				<button id="endlessrunner-gameover-restart"></button>
 			</div>
 		</div>
-		<div class="pleasewait"><div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
+		<div class="endlessrunner-pleasewait"><div class="endlessrunner-pleasewait-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
 		<script src="EndlessRunner.js"></script>
 		<script>
 			var PLANE_WIDTH = 20;
@@ -713,7 +713,7 @@
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// HIDING THE LOADING SPLASH
-				document.getElementsByClassName("pleasewait")[0].style.display = "none";
+				document.getElementsByClassName("endlessrunner-pleasewait")[0].style.display = "none";
 
 				// SHOWING THE GAME CONTAINER
 				document.getElementsByClassName("endlessrunner-container")[0].style.display = "block";
@@ -733,7 +733,7 @@
 				// FADING OUT THE ABOUT BOX
 				setTimeout(function()
 					{
-					document.getElementById("about").className = "aboutcontainer abouthidden";
+					document.getElementById("about").className = "endlessrunner-about-label endlessrunner-about-hidden";
 					}, 3000);
 
 				// HIDING THE ABOUT BOX
