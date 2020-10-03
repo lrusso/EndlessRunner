@@ -681,7 +681,7 @@
 					{
 					gameAudioContext=new AudioContext();
 					gameAudioContext.resume();
-					playMusic();
+					setTimeout(function(){playMusic();},100);
 					document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
 					}
 					else
