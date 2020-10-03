@@ -150,8 +150,11 @@
 			var timestampChecker = -1;
 
 			var gameAudioContext = null;
+			var gameAudioRing =  new Audio(ringSound);
 			var gameAudioMusic = new Audio("EndlessRunner.mp3");
+			gameAudioRing.volume = 0.5;
 			gameAudioMusic.loop = true;
+			gameAudioMusic.volume = 0.7;
 
 			var actions = null;
 			var clock = new THREE.Clock();
@@ -241,7 +244,7 @@
 							{
 							score = score + 100;
 							objects[i].visible = false;
-							playSound(ringSound);
+							playSound(gameAudioRing);
 							}
 							else
 							{
@@ -646,9 +649,8 @@
 					{
 					gameAudioContext.resume().then(function()
 						{
-						var audio = new Audio(audioResource);
-						audio.volume = 0.5;
-						audio.play();
+						audioResource.currentTime = 0;
+						audioResource.play();
 						});
 					}
 				}
@@ -659,7 +661,7 @@
 					{
 					gameAudioContext.resume().then(function()
 						{
-						gameAudioMusic.volume = 0.7;
+						gameAudioMusic.currentTime = 0;
 						gameAudioMusic.play();
 						});
 					}
@@ -668,7 +670,6 @@
 			function stopMusic()
 				{
 				gameAudioMusic.pause();
-				gameAudioMusic.currentTime = 0;
 				}
 
 			function soundToggle()
@@ -718,6 +719,12 @@
 					{
 					// PAUSING THE GAME
 					game_running = false;
+
+					// PAUSING THE MUSIC
+					if (gameAudioContext!=null)
+						{
+						gameAudioMusic.pause();
+						}
 					}
 					catch(err)
 					{
@@ -730,6 +737,12 @@
 					{
 					// RESUMING THE GAME
 					game_running = true;
+
+					// RESUMING THE MUSIC
+					if (gameAudioContext!=null)
+						{
+						gameAudioMusic.play();
+						}
 					}
 					catch(err)
 					{
