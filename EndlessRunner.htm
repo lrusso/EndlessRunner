@@ -163,13 +163,10 @@
 
 					powerups.forEach(function (element, index)
 						{
-						if (powerups[index]!=null)
+						powerups[index].animate();
+						if (powerups[index].name=="coin")
 							{
-							powerups[index].animate();
-							if (powerups[index].name=="coin")
-								{
-								powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
-								}
+							powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
 							}
 						});
 
@@ -215,20 +212,17 @@
 
 				for (var i = 0; i < objects.length; i ++)
 					{
-					if (objects[i]!=null)
+					var obstacleMeshBox = new THREE.Box3().setFromObject(objects[i]);
+					if (heroMeshBox.intersectsBox(obstacleMeshBox)==true)
 						{
-						var obstacleMeshBox = new THREE.Box3().setFromObject(objects[i]);
-						if (heroMeshBox.intersectsBox(obstacleMeshBox)==true)
+						if (objects[i].name=="coin")
 							{
-							if (objects[i].name=="coin")
-								{
-								score = score + 100;
-								objects[i].visible = false;
-								}
-								else
-								{
-								return true;
-								}
+							score = score + 100;
+							objects[i].visible = false;
+							}
+							else
+							{
+							return true;
 							}
 						}
 					}
