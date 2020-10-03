@@ -112,6 +112,8 @@
 			var hero;
 			var heroGeometry;
 			var heroMaterial;
+			var heroActions;
+			var heroLoader;
 
 			var grassLeft;
 			var grassLeftGeometry;
@@ -128,6 +130,9 @@
 
 			var ringGeometry;
 			var ringMaterial;
+
+			var enemyGeometry;
+			var enemyMaterial;
 
 			var touchstartX = 0;
 			var touchendX = 0;
@@ -147,6 +152,9 @@
 			var timestampChecker = -1;
 
 			var gameAudioContext = null;
+
+			var actions = null;
+			var clock = new THREE.Clock();
 
 			// CHECKING THE USER LANGUAGE
 			if (userLanguage.substring(0,2)=="es")
@@ -168,6 +176,7 @@
 
 				if (game_running==true)
 					{
+					heroActions.update(clock.getDelta());
 					controls.update();
 
 					grassTexture.offset.y -= .05;
@@ -193,15 +202,16 @@
 							{
 							if (movingLeft==true)
 								{
-								hero.position.x = hero.position.x - 1;
+								hero.position.x = hero.position.x - 0.5;
 								}
 							else if (movingRight==true)
 								{
-								hero.position.x = hero.position.x + 1;
+								hero.position.x = hero.position.x + 0.5;
 								}
 							}
 							else
 							{
+							movingDestiny = null;
 							movingLeft = false;
 							movingRight = false;
 							}
@@ -333,9 +343,7 @@
 					}
 					else
 					{
-					objectGeometry = new THREE.BoxGeometry(objectDimension, objectDimension, objectDimension, objectDimension);
-					objectMaterial = new THREE.MeshLambertMaterial({ color: 0x29B6F6, flatShading: THREE.FlatShading });
-					object = new THREE.Mesh(objectGeometry, objectMaterial);
+					object = new THREE.Mesh(enemyGeometry, enemyMaterial);
 					object.position.set(xPosition, yPosition, zPosition);
 					object.name = "enemy";
 					}
@@ -470,23 +478,6 @@
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
 				hemisphereLight.position.y = 500;
 
-				// LOADING THE HERO
-				heroGeometry = new THREE.CylinderGeometry(0, 2, 5, 10);
-				heroMaterial = new THREE.MeshLambertMaterial({color: 0xE91E63, flatShading: THREE.FlatShading });
-				hero = new THREE.Mesh(heroGeometry, heroMaterial);
-				hero.castShadow = true;
-				hero.position.set(0, 5, PLANE_LENGTH / 2);
-				hero.rotation.x = 0.785;
-
-				// LOADING THE RING GEOMETRY
-				ringGeometry = new THREE.STLLoader().parse(ringModel);
-				ringGeometry.computeFaceNormals();
-				ringGeometry.computeVertexNormals();
-				ringGeometry.center();
-
-				// LOADING THE RING MATERIAL
-				ringMaterial = new THREE.MeshLambertMaterial({ color: 0xD4AF37, flatShading: THREE.FlatShading });
-
 				// LOADING THE SKY
 				backgroundSky = new THREE.Sky();
 				backgroundSky.scale.setScalar( 450000 );
@@ -505,25 +496,77 @@
 				backgroundSun.z = Math.sin(phi) * Math.cos(theta);
 				uniforms["sunPosition"].value.copy(backgroundSun);
 
-				// ADDING EVERYTHING TO THE SCENE
-				scene.add(camera, directionalLight, hemisphereLight, backgroundSky, stoneRoad, hero);
+				// LOADING THE RING GEOMETRY
+				ringGeometry = new THREE.STLLoader().parse(ringModel);
+				ringGeometry.computeFaceNormals();
+				ringGeometry.computeVertexNormals();
+				ringGeometry.center();
+
+				// LOADING THE RING MATERIAL
+				ringMaterial = new THREE.MeshLambertMaterial({ color: 0xD4AF37, flatShading: THREE.FlatShading });
+
+				// LOADING THE ENEMY GEOMETRY
+				enemyGeometry = new THREE.BoxGeometry(2.5, 2.5, 2.5, 2.5);
+
+				// LOADING THE ENEMY MATERIAL
+				enemyMaterial = new THREE.MeshLambertMaterial({ color: 0x29B6F6, flatShading: THREE.FlatShading });
+
+				// ADDING A HIDDEN RING AND ENEMY MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
+				// DURING THE COMPILING OF UNLOADED MODELS
+				var object1 = new THREE.Mesh(ringGeometry, ringMaterial);
+				var object2 = new THREE.Mesh(enemyGeometry, enemyMaterial);
+				object1.scale.set(0.1,0.1,0.1);
+				object2.scale.set(0.1,0.1,0.1);
+				object1.position.y = -99;
+				object2.position.y = -99;
+				scene.add(object1);
+				scene.add(object2);
+
+				// LOADING THE HERO
+				heroLoader = new THREE.GLTFLoader().parse(sonicModel,null,function(gltf)
+					{
+					gltf.scene.traverse(function(node)
+						{
+						if (node instanceof THREE.Mesh)
+							{
+							node.castShadow = true;
+							node.material.side = THREE.DoubleSide;
+							}
+						});
+
+					hero = gltf.scene;
+					hero.scale.set(11,11,11);
+					hero.position.x = 0;
+					hero.position.y = 1;
+					hero.position.z = 500;
+					hero.rotation.y = 66;
+
+					//console.log(gltf.animations); //shows all animations available
+
+					heroActions = new THREE.AnimationMixer(hero);
+					heroActions.clipAction(gltf.animations[0]).play();
+					//heroActions.clipAction(gltf.animations[0]).stop();
+
+					// ADDING EVERYTHING TO THE SCENE
+					scene.add(camera, directionalLight, hemisphereLight, backgroundSky, stoneRoad, hero);
+					});
 				}
 
 			function moveLeft()
 				{
-				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false)
+				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestiny==null)
 					{
 					movingLeft = true;
-					movingDestiny = hero.position.x - (PLANE_WIDTH - PADDING) / 2;
+					movingDestiny = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 					}
 				}
 
 			function moveRight()
 				{
-				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false)
+				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestiny==null)
 					{
 					movingRight = true;
-					movingDestiny = hero.position.x + (PLANE_WIDTH - PADDING) / 2;
+					movingDestiny = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 					}
 				}
 
@@ -574,6 +617,7 @@
 
 				movingLeft = false;
 				movingRight = false;
+				movingDestiny = null;
 
 				startGame();
 				}
