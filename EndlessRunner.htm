@@ -106,6 +106,9 @@
 			var scene;
 			var score = 0;
 
+			var backgroundSky;
+			var backgroundSun;
+
 			var hero;
 			var heroGeometry;
 			var heroMaterial;
@@ -373,10 +376,10 @@
 				renderer.shadowMapSoft = true;
 				renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-				// ADDING THE CANVAS TO THE CONTAINER
+				// ADDING THE CANVAS INTO THE CONTAINER
 				document.getElementsByClassName("endlessrunner-container")[0].appendChild(renderer.domElement);
 
-				// ADDING THE SCENE
+				// CREATING THE SCENE
 				scene = new THREE.Scene();
 
 				// ADDING THE CAMERA
@@ -393,7 +396,7 @@
 				controls.minAzimuthAngle = 0;
 				controls.maxAzimuthAngle = 0;
 
-				// ADDING THE STONE ROAD
+				// LOADING THE STONE ROAD
 				stoneLoader = new THREE.TextureLoader();
 				stoneTexture = stoneLoader.load(stoneImageData, function (texture)
 					{
@@ -407,7 +410,7 @@
 				stoneRoad.rotation.x = 1.570;
 				stoneRoad.receiveShadow = true;
 
-				// ADDING THE GRASS FLOOR
+				// LOADING THE GRASS FLOOR
 				grassLoader = new THREE.TextureLoader();
 				grassTexture = grassLoader.load(grassImageData, function (texture)
 					{
@@ -428,7 +431,7 @@
 
 				scene.add(grassLeft, grassRight);
 
-				// ADDING THE MOUNTAINS
+				// LOADING THE MOUNTAINS
 				for (var i = 0; i < 60; i += 1)
 					{
 					var isEast = false;
@@ -439,7 +442,7 @@
 					createMountain(i, isEast);
 					}
 
-				// ADDING THE LIGHTS
+				// LOADING THE LIGHTS
 				var spotLight;
 				var target;
 				var targetGeometry;
@@ -467,7 +470,7 @@
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
 				hemisphereLight.position.y = 500;
 
-				// ADDING THE HERO
+				// LOADING THE HERO
 				heroGeometry = new THREE.CylinderGeometry(0, 2, 5, 10);
 				heroMaterial = new THREE.MeshLambertMaterial({color: 0xE91E63, flatShading: THREE.FlatShading });
 				hero = new THREE.Mesh(heroGeometry, heroMaterial);
@@ -484,86 +487,26 @@
 				// LOADING THE RING MATERIAL
 				ringMaterial = new THREE.MeshLambertMaterial({ color: 0xD4AF37, flatShading: THREE.FlatShading });
 
+				// LOADING THE SKY
+				backgroundSky = new THREE.Sky();
+				backgroundSky.scale.setScalar( 450000 );
+				var uniforms = backgroundSky.material.uniforms;
+				uniforms["turbidity"].value = 20;
+				uniforms["rayleigh"].value = 3;
+				uniforms["mieCoefficient"].value = 0.005;
+				uniforms["mieDirectionalG"].value = 0.7;
+				var theta = Math.PI * (10 - 0.5); // 10 = day     0.49 = sunset
+				var phi = 2 * Math.PI * (0.25 - 0.5); // Facing front
 
-
-
-
-
-
-
-
-
-
-
-
-			function initSky() {
-
-				// Add Sky
-				sky = new THREE.Sky();
-				sky.scale.setScalar( 450000 );
-				scene.add( sky );
-
-				sun = new THREE.Vector3();
-
-				/// GUI
-
-				var effectController = {
-					turbidity: 10,
-					rayleigh: 3,
-					mieCoefficient: 0.005,
-					mieDirectionalG: 0.7,
-					inclination: 0.49, // elevation / inclination
-					azimuth: 0.25, // Facing front,
-					exposure: renderer.toneMappingExposure
-				};
-
-				function guiChanged() {
-
-					var uniforms = sky.material.uniforms;
-					uniforms[ "turbidity" ].value = effectController.turbidity;
-					uniforms[ "rayleigh" ].value = effectController.rayleigh;
-					uniforms[ "mieCoefficient" ].value = effectController.mieCoefficient;
-					uniforms[ "mieDirectionalG" ].value = effectController.mieDirectionalG;
-
-					var theta = Math.PI * ( effectController.inclination - 0.5 );
-					var phi = 2 * Math.PI * ( effectController.azimuth - 0.5 );
-
-					sun.x = Math.cos( phi );
-					sun.y = Math.sin( phi ) * Math.sin( theta );
-					sun.z = Math.sin( phi ) * Math.cos( theta );
-
-					uniforms[ "sunPosition" ].value.copy( sun );
-
-					renderer.toneMappingExposure = effectController.exposure;
-					renderer.render( scene, camera );
-
-				}
-				guiChanged();
-
-			}
-initSky();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+				// LOADING THE SUN
+				backgroundSun = new THREE.Vector3();
+				backgroundSun.x = Math.cos(phi);
+				backgroundSun.y = Math.sin(phi) * Math.sin(theta);
+				backgroundSun.z = Math.sin(phi) * Math.cos(theta);
+				uniforms["sunPosition"].value.copy(backgroundSun);
 
 				// ADDING EVERYTHING TO THE SCENE
-				scene.add(camera, directionalLight, hemisphereLight, stoneRoad, hero);
+				scene.add(camera, directionalLight, hemisphereLight, backgroundSky, stoneRoad, hero);
 				}
 
 			function moveLeft()
