@@ -110,8 +110,6 @@
 			var backgroundSun;
 
 			var hero;
-			var heroGeometry;
-			var heroMaterial;
 			var heroActions;
 			var heroLoader;
 
@@ -513,14 +511,14 @@
 
 				// ADDING A HIDDEN RING AND ENEMY MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
 				// DURING THE COMPILING OF UNLOADED MODELS
-				var object1 = new THREE.Mesh(ringGeometry, ringMaterial);
-				var object2 = new THREE.Mesh(enemyGeometry, enemyMaterial);
-				object1.scale.set(0.1,0.1,0.1);
-				object2.scale.set(0.1,0.1,0.1);
-				object1.position.y = -99;
-				object2.position.y = -99;
-				scene.add(object1);
-				scene.add(object2);
+				var unusedObject1 = new THREE.Mesh(ringGeometry, ringMaterial);
+				var unusedObject2 = new THREE.Mesh(enemyGeometry, enemyMaterial);
+				unusedObject1.scale.set(0.1,0.1,0.1);
+				unusedObject2.scale.set(0.1,0.1,0.1);
+				unusedObject1.position.y = -99;
+				unusedObject2.position.y = -99;
+				scene.add(unusedObject1);
+				scene.add(unusedObject2);
 
 				// LOADING THE HERO
 				heroLoader = new THREE.GLTFLoader().parse(sonicModel,null,function(gltf)
