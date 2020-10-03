@@ -223,8 +223,7 @@
 							if (objects[i].name=="coin")
 								{
 								score = score + 100;
-								scene.remove(objects[i]);
-								powerups.splice(i, 1, null);
+								objects[i].visible = false;
 								}
 								else
 								{
@@ -288,7 +287,7 @@
 				createObject();
 				}
 
-			function PowerUp()
+			function PowerUp(typeObstacle)
 				{
 				function getRandomInteger(min, max)
 					{
@@ -316,9 +315,7 @@
 				yPosition = yPositionValues[getRandomInteger(0, yPositionValues.length - 1)];
 				zPosition = -PLANE_LENGTH / 2;
 
-				var myRandom = Math.floor(Math.random() * 100);
-
-				if (myRandom<=40)
+				if (typeObstacle==1 || typeObstacle==3 || typeObstacle==5)
 					{
 					object = new THREE.Mesh(coinGeometry, coinMaterial);
 					object.scale.x = 0.15;
@@ -349,6 +346,7 @@
 						{
 						object.position.x = xPositionValues[getRandomInteger(0, xPositionValues.length - 1)];
 						object.position.z = -PLANE_LENGTH / 2;
+						object.visible = true;
 						}
 					};
 
@@ -513,7 +511,7 @@
 						{
 						if (powerups.length < POWERUP_COUNT)
 							{
-							powerup = new PowerUp();
+							powerup = new PowerUp(powerups.length);
 							powerups.push(powerup);
 							scene.add(powerup);
 							}
