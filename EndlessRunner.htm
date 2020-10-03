@@ -550,6 +550,9 @@
 				hero.position.x = 0;
 				score = 0;
 
+				movingLeft = false;
+				movingRight = false;
+
 				startGame();
 				}
 
@@ -557,8 +560,6 @@
 				{
 				try
 					{
-					movingLeft = false;
-					movingRight = false;
 					cancelAnimationFrame(globalRenderID);
 					window.clearInterval(powerupSpawnIntervalID);
 					window.clearInterval(powerupCounterIntervalID);
