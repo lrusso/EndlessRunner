@@ -31,9 +31,9 @@
 			.endlessrunner-gameover-container{position:relative;top:50%;transform:translateY(-50%);text-align:center;color:white;margin-top:-50px}
 			.endlessrunner-gameover-label{color:#ffffff;font-size:50px;opacity:0}
 			.endlessrunner-gameover-points{color:#ffffff;font-size:40px;padding-bottom:25px;opacity:0}
-			.endlessrunner-gameover-container button{font-size:30px;color:white;border:2px solid white;border-radius:10px;padding:10px 40px;background-color:#3a76b1;opacity:0}
+			.endlessrunner-gameover-container button{font-size:30px;color:white;border:2px solid white;border-radius:10px;padding:10px 40px;background-color:#3a76b1;cursor:pointer;opacity:0}
 			.endlessrunner-gameover-container button:hover{background-color:#4383c1}
-			.endlessrunner-gameover-fadein{animation:fadeIn 3s;animation-fill-mode:forwards}
+			.endlessrunner-gameover-fadein{animation:fadeIn 4s;animation-fill-mode:forwards}
 
 			@media (pointer: coarse)
 				{
@@ -622,38 +622,33 @@
 
 			function restartGame()
 				{
-				if (document.getElementById("endlessrunner-gameover-restart").style.cursor=="pointer")
+				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "none";
+				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
+				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
+
+				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
+				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
+
+				POWERUP_COUNT = 10;
+
+				powerups.forEach(function (element, index)
 					{
-					document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "none";
-					document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
-					document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
+					scene.remove(powerups[index]);
+					});
 
-					document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
-					document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
-					document.getElementById("endlessrunner-gameover-restart").className = "";
-					document.getElementById("endlessrunner-gameover-restart").style.cursor = "default";
+				powerups = [];
+				hero.position.x = 0;
+				score = 0;
 
-					POWERUP_COUNT = 10;
+				movingLeft = false;
+				movingRight = false;
+				movingDestiny = null;
 
-					powerups.forEach(function (element, index)
-						{
-						scene.remove(powerups[index]);
-						});
+				gameAudioOver.pause();
 
-					powerups = [];
-					hero.position.x = 0;
-					score = 0;
+				playMusic();
 
-					movingLeft = false;
-					movingRight = false;
-					movingDestiny = null;
-
-					gameAudioOver.pause();
-
-					playMusic();
-
-					startGame();
-					}
+				startGame();
 				}
 
 			function gameOver()
@@ -671,6 +666,8 @@
 					{
 					}
 
+				document.getElementById("about").style.display = "none";
+
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "none";
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
 				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "block";
@@ -678,15 +675,8 @@
 				document.getElementsByClassName("endlessrunner-gameover-points")[0].style.display = "block";
 
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label endlessrunner-gameover-fadein";
-				setTimeout(function()
-					{
-					document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points endlessrunner-gameover-fadein";
-					}, 1500);
-				setTimeout(function()
-					{
-					document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
-					document.getElementById("endlessrunner-gameover-restart").style.cursor = "pointer";
-					}, 3000);
+				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points endlessrunner-gameover-fadein";
+				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 				}
 
 			function playSound(audioResource)
