@@ -98,8 +98,6 @@
 			var directionalLight;
 			var globalRenderID;
 			var hemisphereLight;
-			var mountain;
-			var mountains = [];
 			var powerup;
 			var powerups = [];
 			var powerupSpawnIntervalID;
@@ -125,6 +123,11 @@
 			var stoneMaterial;
 			var stoneTexture;
 			var stoneLoader;
+
+			var oceanFloor;
+			var oceanMaterial;
+			var oceanTexture;
+			var oceanLoader;
 
 			var ringGeometry;
 			var ringMaterial;
@@ -189,6 +192,7 @@
 
 					grassTexture.offset.y -= .05;
 					stoneTexture.offset.y -= .05;
+					oceanTexture.offset.y -= .0001;
 
 					powerups.forEach(function (element, index)
 						{
@@ -197,11 +201,6 @@
 							{
 							powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
 							}
-						});
-
-					mountains.forEach(function (element, index)
-						{
-						mountains[index].animate();
 						});
 
 					if (Date.now()>timestampChecker+10 && movingDestiny!=null)
@@ -258,57 +257,6 @@
 					}
 
 				return false;
-				}
-
-			function createMountain(i, isEast)
-				{
-				var prototype;
-				var object;
-				var objectDimensionX;
-				var objectDimensionY;
-				var objectDimensionZ;
-
-				function createObject()
-					{
-					object = prototype.clone();
-					objectDimensionX = Math.random() * 0.25 + 0.05;
-					objectDimensionY = Math.random() * 0.25;
-					objectDimensionZ = objectDimensionX;
-					object.scale.set(objectDimensionX, objectDimensionY, objectDimensionZ);
-
-					if (isEast === true)
-						{
-						object.position.x = PLANE_WIDTH * 2 + 50;
-						object.position.z = i * PLANE_LENGTH / 27 - 1.5 * PLANE_LENGTH;
-						}
-					else
-						{
-						object.position.x = -PLANE_WIDTH * 2 - 50;
-						object.position.z = i * PLANE_LENGTH / 27 - PLANE_LENGTH / 2;
-						}
-
-					object.visible = true;
-
-					object.animate = function ()
-						{
-						if (object.position.z < PLANE_LENGTH / 2 + 10)
-							{
-							object.position.z += 5;
-							}
-						else
-							{
-							object.position.z = -PLANE_LENGTH / 2;
-							}
-						};
-
-					mountains.push(object);
-					scene.add(object);
-					}
-
-				var loader = new THREE.ColladaLoader().parse(mountainsModel);
-				prototype = loader.scene;
-				prototype.visible = false;
-				createObject();
 				}
 
 			function PowerUp(typeObstacle)
@@ -446,16 +394,21 @@
 
 				scene.add(grassLeft, grassRight);
 
-				// LOADING THE MOUNTAINS
-				for (var i = 0; i < 60; i += 1)
+				// ADDING THE OCEAN
+				oceanLoader = new THREE.TextureLoader();
+				oceanTexture = oceanLoader.load(oceanImageData, function (texture)
 					{
-					var isEast = false;
-					if (i > 29)
-						{
-						isEast = true;
-						}
-					createMountain(i, isEast);
-					}
+					oceanTexture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+					oceanTexture.offset.set( 0, 0 );
+					});
+				oceanMaterial = new THREE.MeshPhongMaterial( { map: oceanTexture } );
+				oceanGeometry = new THREE.BoxGeometry(window.innerWidth, 1300);
+				oceanFloor = new THREE.Mesh(oceanGeometry, oceanMaterial);
+				oceanFloor.receiveShadow = true;
+				oceanFloor.rotation.x = 1.570;
+				oceanFloor.position.x = 0;
+				oceanFloor.position.y = -1;
+				scene.add(oceanFloor);
 
 				// LOADING THE LIGHTS
 				var spotLight;
@@ -573,6 +526,10 @@
 
 			function startGame()
 				{
+				powerup = new PowerUp(powerups.length);
+				powerups.push(powerup);
+				scene.add(powerup);
+
 				/* POWERUPS */
 				powerupSpawnIntervalID = window.setInterval(function ()
 					{
@@ -792,6 +749,7 @@
 					if (gameAudioContext!=null)
 						{
 						gameAudioMusic.pause();
+						gameAudioOver.pause();
 						}
 					}
 					catch(err)
@@ -814,6 +772,19 @@
 							{
 							// RESUMING THE MUSIC
 							gameAudioMusic.play();
+							}
+						}
+						else
+						{
+						// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
+						if (gameAudioContext!=null)
+							{
+							// CHECKING IF THE AUDIO HAS ANY PLAYING TIME LEFT
+							if (gameAudioOver.currentTime!=gameAudioOver.duration)
+								{
+								// RESUMING THE GAME OVER MUSIC
+								gameAudioOver.play();
+								}
 							}
 						}
 					}
