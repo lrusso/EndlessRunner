@@ -191,10 +191,7 @@
 					powerups.forEach(function (element, index)
 						{
 						powerups[index].animate();
-						if (powerups[index].name=="ring")
-							{
-							powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
-							}
+						powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
 						});
 
 					mountains.forEach(function (element, index)
@@ -349,9 +346,9 @@
 					}
 					else
 					{
-					object = new THREE.Mesh(enemyGeometry, enemyMaterial);
+					object = buildObstacle();
 					object.position.set(xPosition, yPosition, zPosition);
-					object.name = "enemy";
+					object.name = "obstacle";
 					}
 
 				object.castShadow = true;
@@ -511,10 +508,10 @@
 				// LOADING THE ENEMY MATERIAL
 				enemyMaterial = new THREE.MeshLambertMaterial({ color: 0x29B6F6, flatShading: THREE.FlatShading });
 
-				// ADDING A HIDDEN RING AND ENEMY MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
+				// ADDING A HIDDEN RING AND OBSTACLE MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
 				// DURING THE COMPILING OF UNLOADED MODELS
 				var unusedObject1 = new THREE.Mesh(ringGeometry, ringMaterial);
-				var unusedObject2 = new THREE.Mesh(enemyGeometry, enemyMaterial);
+				var unusedObject2 = buildObstacle();
 				unusedObject1.scale.set(0.1,0.1,0.1);
 				unusedObject2.scale.set(0.1,0.1,0.1);
 				unusedObject1.position.y = -99;
@@ -598,6 +595,66 @@
 
 				// RESIZING THE CANVAS TO FIT THE WINDOW
 				resizeToFitWindow();
+				}
+
+			function buildObstacle()
+				{
+				var material = [
+					new THREE.MeshLambertMaterial({ color: 0x8b0000, flatShading: THREE.FlatShading }), // darkred
+					new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: THREE.FlatShading }), // gold
+					];
+
+				var c0 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 12));
+				c0.position.y = 6;
+
+				var c1 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
+				c1.position.x = -6;
+				c1.position.y = 6;
+				c1.position.z = 0;
+				c1.rotation.z = (90 * Math.PI)/180;
+
+				var c2 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
+				c2.position.x = 6;
+				c2.position.y = 6;
+				c2.position.z = 0;
+				c2.rotation.z = (-90 * Math.PI)/180;
+
+				var c3 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
+				c3.position.x = 0;
+				c3.position.y = 6;
+				c3.position.z = 6;
+				c3.rotation.x = (90 * Math.PI)/180;
+
+				var c4 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
+				c4.position.x = 0;
+				c4.position.y = 6;
+				c4.position.z = -6;
+				c4.rotation.x = (-90 * Math.PI)/180;
+
+				var g = new THREE.Geometry();
+				c0.updateMatrix();
+				c1.updateMatrix();
+				c2.updateMatrix();
+				c3.updateMatrix();
+				c4.updateMatrix();
+				g.merge(c0.geometry, c0.matrix);
+				g.merge(c1.geometry, c1.matrix);
+				g.merge(c2.geometry, c2.matrix);
+				g.merge(c3.geometry, c3.matrix);
+				g.merge(c4.geometry, c4.matrix);
+
+				var b = c0.geometry.faces.length;
+				for (var i = 0, l = g.faces.length; i < l; i++)
+					{
+					g.faces[i].materialIndex = i < b ? 0 : 1;
+					}
+
+				var m = new THREE.Mesh(g, material);
+
+				m.scale.x = 0.3;
+				m.scale.y = 0.3;
+				m.scale.z = 0.3;
+				return m;
 				}
 
 			function restartGame()
