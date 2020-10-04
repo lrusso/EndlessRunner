@@ -236,10 +236,9 @@
 
 			function detectCollisions(objects)
 				{
-				var heroMeshBox = new THREE.Box3().setFromObject(hero);
-
 				for (var i = 0; i < objects.length; i ++)
 					{
+					var heroMeshBox = new THREE.Box3().setFromObject(hero);
 					var obstacleMeshBox = new THREE.Box3().setFromObject(objects[i]);
 					if (heroMeshBox.intersectsBox(obstacleMeshBox)==true)
 						{
