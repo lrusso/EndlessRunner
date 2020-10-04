@@ -191,7 +191,10 @@
 					powerups.forEach(function (element, index)
 						{
 						powerups[index].animate();
-						powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
+						if (powerups[index].name=="ring")
+							{
+							powerups[index].rotation.y = powerups[index].rotation.y + 0.15;
+							}
 						});
 
 					mountains.forEach(function (element, index)
