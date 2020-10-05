@@ -388,8 +388,6 @@
 				// ADDING THE CAMERA
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
 				camera.position.set(cameraPositionX, 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ);
-				//camera.position.set(0, PLANE_LENGTH / 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
-
 				camera.rotation.y = (cameraDegrees * Math.PI)/180;
 
 				// LOADING THE STONE ROAD
@@ -564,27 +562,21 @@
 				/* POWERUPS */
 				powerupSpawnIntervalID = window.setInterval(function ()
 					{
-					if (game_running==true)
+					if (game_running==true && cameraIntroDone==true)
 						{
-						if (cameraIntroDone==true)
+						if (powerups.length < POWERUP_COUNT)
 							{
-							if (powerups.length < POWERUP_COUNT)
-								{
-								powerup = new PowerUp(powerups.length);
-								powerups.push(powerup);
-								scene.add(powerup);
-								}
+							powerup = new PowerUp(powerups.length);
+							powerups.push(powerup);
+							scene.add(powerup);
 							}
 						}
 					}, 4000);
 				powerupCounterIntervalID = window.setInterval(function ()
 					{
-					if (game_running==true)
+					if (game_running==true && cameraIntroDone==true)
 						{
-						if (cameraIntroDone==true)
-							{
-							POWERUP_COUNT += 1;
-							}
+						POWERUP_COUNT += 1;
 						}
 					}, 30000);
 
