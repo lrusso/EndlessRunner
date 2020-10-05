@@ -94,7 +94,6 @@
 			var POWERUP_COUNT = 10;
 
 			var camera;
-			var controls;
 			var containerWidth = 0;
 			var containerHeight = 0;
 			var directionalLight;
@@ -160,6 +159,14 @@
 			var actions = null;
 			var clock = new THREE.Clock();
 
+			var cameraDegrees = -90;
+			var cameraPositionX = -45;
+			var cameraPositionZ = 40;
+			var cameraIntroTime = 4000;
+			var cameraIntroDone = false;
+			var cameraInitialTimestamp = null;
+			var cameraTimestampChecker = 0;
+
 			var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 			var STRING_ABOUT = "";
@@ -187,10 +194,40 @@
 				{
 				globalRenderID = requestAnimationFrame(render);
 
+				if (cameraIntroDone==false)
+					{
+					if (cameraInitialTimestamp==null)
+						{
+						cameraInitialTimestamp = Date.now()
+						}
+
+					if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
+						{
+						if (cameraDegrees!=0)
+							{
+							cameraDegrees = cameraDegrees + 2;
+							camera.rotation.y = cameraDegrees * Math.PI/180;
+							}
+						if (cameraPositionX!=0)
+							{
+							cameraPositionX = cameraPositionX + 1;
+							camera.position.x = camera.position.x + 1;
+							}
+						if (cameraPositionZ!=0)
+							{
+							cameraPositionZ = cameraPositionZ - 1;
+							camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ;
+							}
+						if (cameraDegrees==0 && cameraPositionX==0 && cameraPositionZ==0)
+							{
+							cameraIntroDone = true;
+							}
+						}
+					}
+
 				if (game_running==true)
 					{
 					heroActions.update(clock.getDelta());
-					controls.update();
 
 					grassTexture.offset.y -= .05;
 					stoneTexture.offset.y -= .05;
@@ -233,8 +270,9 @@
 						gameOver();
 						}
 
-					renderer.render(scene, camera);
 					}
+
+				renderer.render(scene, camera);
 				}
 
 			function detectCollisions(objects)
@@ -349,17 +387,10 @@
 
 				// ADDING THE CAMERA
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
-				camera.position.set(0, PLANE_LENGTH / 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
+				camera.position.set(cameraPositionX, 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ);
+				//camera.position.set(0, PLANE_LENGTH / 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - 15);
 
-				// ADDING THE CONTROLS SETTINGS
-				controls = new THREE.OrbitControls(camera, document.getElementsByClassName("endlessrunner-container")[0]);
-				controls.noKeys = true;
-				controls.noPan = true;
-				controls.noZoom = true;
-				controls.minPolarAngle = 1.55;
-				controls.maxPolarAngle = 1.55;
-				controls.minAzimuthAngle = 0;
-				controls.maxAzimuthAngle = 0;
+				camera.rotation.y = (cameraDegrees * Math.PI)/180;
 
 				// LOADING THE STONE ROAD
 				stoneLoader = new THREE.TextureLoader();
@@ -473,8 +504,10 @@
 				var unusedObject2 = buildObstacle();
 				unusedObject1.scale.set(0.1,0.1,0.1);
 				unusedObject2.scale.set(0.1,0.1,0.1);
-				unusedObject1.position.y = -99;
-				unusedObject2.position.y = -99;
+				unusedObject1.position.x = 0;
+				unusedObject1.position.y = -10;
+				unusedObject2.position.x = -6;
+				unusedObject2.position.y = -10;
 				scene.add(unusedObject1);
 				scene.add(unusedObject2);
 
@@ -528,20 +561,19 @@
 
 			function startGame()
 				{
-				powerup = new PowerUp(powerups.length);
-				powerups.push(powerup);
-				scene.add(powerup);
-
 				/* POWERUPS */
 				powerupSpawnIntervalID = window.setInterval(function ()
 					{
 					if (game_running==true)
 						{
-						if (powerups.length < POWERUP_COUNT)
+						if (cameraIntroDone==true)
 							{
-							powerup = new PowerUp(powerups.length);
-							powerups.push(powerup);
-							scene.add(powerup);
+							if (powerups.length < POWERUP_COUNT)
+								{
+								powerup = new PowerUp(powerups.length);
+								powerups.push(powerup);
+								scene.add(powerup);
+								}
 							}
 						}
 					}, 4000);
@@ -549,7 +581,10 @@
 					{
 					if (game_running==true)
 						{
-						POWERUP_COUNT += 1;
+						if (cameraIntroDone==true)
+							{
+							POWERUP_COUNT += 1;
+							}
 						}
 					}, 30000);
 
