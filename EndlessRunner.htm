@@ -541,19 +541,25 @@
 
 			function moveLeft()
 				{
-				if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestiny==null)
+				if (cameraIntroDone==true)
 					{
-					movingLeft = true;
-					movingDestiny = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+					if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestiny==null)
+						{
+						movingLeft = true;
+						movingDestiny = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+						}
 					}
 				}
 
 			function moveRight()
 				{
-				if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestiny==null)
+				if (cameraIntroDone==true)
 					{
-					movingRight = true;
-					movingDestiny = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+					if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestiny==null)
+						{
+						movingRight = true;
+						movingDestiny = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+						}
 					}
 				}
 
