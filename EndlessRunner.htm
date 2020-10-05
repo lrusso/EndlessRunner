@@ -559,6 +559,22 @@
 
 			function startGame()
 				{
+				if (cameraIntroDone==true)
+					{
+					powerup = new PowerUp(powerups.length);
+					powerups.push(powerup);
+					scene.add(powerup);
+					}
+					else
+					{
+					setTimeout(function()
+						{
+						powerup = new PowerUp(powerups.length);
+						powerups.push(powerup);
+						scene.add(powerup);
+						}, 5000);
+					}
+
 				/* POWERUPS */
 				powerupSpawnIntervalID = window.setInterval(function ()
 					{
