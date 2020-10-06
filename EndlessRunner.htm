@@ -711,11 +711,12 @@
 					cancelAnimationFrame(globalRenderID);
 					window.clearInterval(powerupSpawnIntervalID);
 					window.clearInterval(powerupCounterIntervalID);
-					stopMusic();
 					}
 				catch(err)
 					{
 					}
+
+				stopMusic();
 
 				document.getElementById("about").style.display = "none";
 
@@ -732,18 +733,24 @@
 
 			function playSound(audioResource)
 				{
-				// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-				if (gameAudioContext!=null)
+				try
 					{
-					// RESUMING THE AUDIO CONTEXT
-					gameAudioContext.resume().then(function()
+					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
+					if (gameAudioContext!=null)
 						{
-						// SET THE AUDIO RESOURCE CURRENT TIME TO 0
-						audioResource.currentTime = 0;
+						// RESUMING THE AUDIO CONTEXT
+						gameAudioContext.resume().then(function()
+							{
+							// SET THE AUDIO RESOURCE CURRENT TIME TO 0
+							audioResource.currentTime = 0;
 
-						// PLAYING THE GAME MUSIC
-						audioResource.play();
-						});
+							// PLAYING THE GAME MUSIC
+							audioResource.play();
+							});
+						}
+					}
+					catch(err)
+					{
 					}
 				}
 
@@ -822,8 +829,13 @@
 				{
 				try
 					{
+					// UPDATING THE CAMERA ASPECT
 					camera.aspect = window.innerWidth / (window.innerHeight);
+
+					// UPDATING THE CAMERA PROJECTION
 					camera.updateProjectionMatrix();
+
+					// UPDATING THE RENDERING SIZE
 					renderer.setSize(window.innerWidth, window.innerHeight);
 					}
 					catch(err)
