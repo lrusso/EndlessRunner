@@ -744,19 +744,31 @@
 
 			function playMusic()
 				{
-				if (gameAudioContext!=null)
+				try
 					{
-					gameAudioContext.resume().then(function()
+					if (gameAudioContext!=null)
 						{
-						gameAudioMusic.currentTime = 0;
-						gameAudioMusic.play();
-						});
+						gameAudioContext.resume().then(function()
+							{
+							gameAudioMusic.currentTime = 0;
+							gameAudioMusic.play();
+							});
+						}
+					}
+					catch(Exception e)
+					{
 					}
 				}
 
 			function stopMusic()
 				{
-				gameAudioMusic.pause();
+				try
+					{
+					gameAudioMusic.pause();
+					}
+					catch(err)
+					{
+					}
 				}
 
 			function soundToggle()
@@ -807,10 +819,13 @@
 					// PAUSING THE GAME
 					game_running = false;
 
-					// PAUSING THE MUSIC
+					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
 					if (gameAudioContext!=null)
 						{
+						// PAUSING THE GAME MUSIC
 						gameAudioMusic.pause();
+
+						// PAUSING THE GAME OVER MUSIC
 						gameAudioOver.pause();
 						}
 					}
@@ -894,8 +909,10 @@
 						}
 					else if (event.keyCode === 32)
 						{
+						// CHECKING IF THE GAME IS OVER
 						if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display === "block")
 							{
+							// RESTARTING THE GAME
 							restartGame();
 							}
 						}
