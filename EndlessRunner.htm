@@ -673,12 +673,19 @@
 
 			function restartGame()
 				{
+				// HIDING THE GAME OVER CONTAINER
 				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "none";
+
+				// SHOWING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
+
+				// SHOWING THE SCORE COUNTER
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
 
+				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER LABEL, POINTS AND RESTART BUTTON
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
 				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
+				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 
 				POWERUP_COUNT = 10;
 
