@@ -664,10 +664,16 @@
 				g.merge(c4.geometry, c4.matrix);
 
 				// SETTING THE MATERIALS FOR EACH GEOMETRY
-				var b = c0.geometry.faces.length;
-				for (var i = 0, l = g.faces.length; i < l; i++)
+				for (var i = 0; i < g.faces.length; i++)
 					{
-					g.faces[i].materialIndex = i < b ? 0 : 1;
+					if (i < c0.geometry.faces.length)
+						{
+						g.faces[i].materialIndex = 0;
+						}
+						else
+						{
+						g.faces[i].materialIndex = 1;
+						}
 					}
 
 				// CREATING THE ENEMY WITH A GEOMETRY AND MATERIAL
