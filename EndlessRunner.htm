@@ -667,6 +667,7 @@
 				m.scale.x = 0.3;
 				m.scale.y = 0.3;
 				m.scale.z = 0.3;
+
 				return m;
 				}
 
@@ -686,25 +687,36 @@
 				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
 				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 
+				// SETTING THE INITIAL ENEMY COUNT
 				ENEMY_COUNT = 10;
 
+				// REMOVING ALL THE ENEMIES FROM THE SCENE
 				enemies.forEach(function (element, index)
 					{
 					scene.remove(enemies[index]);
 					});
 
+				// CLEARING THE ENEMIES ARRAY
 				enemies = [];
+
+				// CENTERING THE HERO
 				hero.position.x = 0;
+
+				// CLEARING THE SCORE
 				score = 0;
 
+				// CLEARING ALL MOVEMENTS
 				movingLeft = false;
 				movingRight = false;
 				movingDestiny = null;
 
+				// PAUSING THE GAME OVER MUSIC
 				gameAudioOver.pause();
 
+				// PLAYING THE GAME MUSIC
 				playMusic();
 
+				// STARTING THE GAME
 				startGame();
 				}
 
@@ -758,7 +770,7 @@
 							// SET THE AUDIO RESOURCE CURRENT TIME TO 0
 							audioResource.currentTime = 0;
 
-							// PLAYING THE GAME MUSIC
+							// PLAYING THE AUDIO RESOURCE
 							audioResource.play();
 							});
 						}
