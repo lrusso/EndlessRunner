@@ -197,39 +197,39 @@
 				{
 				globalRenderID = requestAnimationFrame(render);
 
-				if (cameraIntroDone==false)
-					{
-					if (cameraInitialTimestamp==null)
-						{
-						cameraInitialTimestamp = Date.now()
-						}
-
-					if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
-						{
-						if (cameraDegrees!=0)
-							{
-							cameraDegrees = cameraDegrees + 2;
-							camera.rotation.y = cameraDegrees * Math.PI/180;
-							}
-						if (cameraPositionX!=0)
-							{
-							cameraPositionX = cameraPositionX + 1;
-							camera.position.x = camera.position.x + 1;
-							}
-						if (cameraPositionZ!=0)
-							{
-							cameraPositionZ = cameraPositionZ - 1;
-							camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ;
-							}
-						if (cameraDegrees==0 && cameraPositionX==0 && cameraPositionZ==0)
-							{
-							cameraIntroDone = true;
-							}
-						}
-					}
-
 				if (game_running==true)
 					{
+					if (cameraIntroDone==false)
+						{
+						if (cameraInitialTimestamp==null)
+							{
+							cameraInitialTimestamp = Date.now()
+							}
+
+						if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
+							{
+							if (cameraDegrees!=0)
+								{
+								cameraDegrees = cameraDegrees + 2;
+								camera.rotation.y = cameraDegrees * Math.PI/180;
+								}
+							if (cameraPositionX!=0)
+								{
+								cameraPositionX = cameraPositionX + 1;
+								camera.position.x = camera.position.x + 1;
+								}
+							if (cameraPositionZ!=0)
+								{
+								cameraPositionZ = cameraPositionZ - 1;
+								camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ;
+								}
+							if (cameraDegrees==0 && cameraPositionX==0 && cameraPositionZ==0)
+								{
+								cameraIntroDone = true;
+								}
+							}
+						}
+
 					heroActions.update(clock.getDelta());
 
 					grassTexture.offset.y -= .05;
@@ -272,7 +272,6 @@
 						{
 						gameOver();
 						}
-
 					}
 
 				renderer.render(scene, camera);
