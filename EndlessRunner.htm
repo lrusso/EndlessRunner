@@ -481,7 +481,7 @@
 				canvas.getContext("2d").fillStyle = gradient;
 				canvas.getContext("2d").fillRect(0, 0, canvas.width, canvas.height);
 				document.getElementsByClassName("endlessrunner-container")[0].style.background = "url(" + canvas.toDataURL("image/png") + ")";
-				document.getElementsByClassName("endlessrunner-container")[0].style.backgroundSize = '32px 100%';
+				document.getElementsByClassName("endlessrunner-container")[0].style.backgroundSize = "32px 100%";
 
 				// LOADING THE RING GEOMETRY
 				ringGeometry = new THREE.STLLoader().parse(ringModel);
@@ -732,11 +732,16 @@
 
 			function playSound(audioResource)
 				{
+				// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
 				if (gameAudioContext!=null)
 					{
+					// RESUMING THE AUDIO CONTEXT
 					gameAudioContext.resume().then(function()
 						{
+						// SET THE AUDIO RESOURCE CURRENT TIME TO 0
 						audioResource.currentTime = 0;
+
+						// PLAYING THE GAME MUSIC
 						audioResource.play();
 						});
 					}
@@ -746,11 +751,16 @@
 				{
 				try
 					{
+					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
 					if (gameAudioContext!=null)
 						{
+						// RESUMING THE AUDIO CONTEXT
 						gameAudioContext.resume().then(function()
 							{
+							// SET THE GAME MUSIC CURRENT TIME TO 0
 							gameAudioMusic.currentTime = 0;
+
+							// PLAYING THE GAME MUSIC
 							gameAudioMusic.play();
 							});
 						}
@@ -764,6 +774,7 @@
 				{
 				try
 					{
+					// PAUSING THE GAME MUSIC
 					gameAudioMusic.pause();
 					}
 					catch(err)
@@ -773,18 +784,37 @@
 
 			function soundToggle()
 				{
-				if(gameAudioContext==null)
+				try
 					{
-					gameAudioContext=new AudioContext();
-					gameAudioContext.resume();
-					setTimeout(function(){playMusic();},100);
-					document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
+					// CHECKING IF THERE IS NO AUDIO CONTEXT AVAILABLE
+					if (gameAudioContext==null)
+						{
+						// CREATING A NEW AUDIO CONTEXT
+						gameAudioContext = new AudioContext();
+
+						// RESUMING THE AUDIO CONTEXT
+						gameAudioContext.resume();
+
+						// PLAYING THE MUSIC 100 MS AFTER THE AUDIO CONTEXT WAS RESUMED
+						setTimeout(function(){playMusic();},100);
+
+						// SHOWING THE "SOUND ON" ICON
+						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
+						}
+						else
+						{
+						// CLEARING THE AUDIO CONTEXT
+						gameAudioContext=null;
+
+						// STOPPING THE MUSIC
+						stopMusic();
+
+						// SHOWING THE "SOUND OFF" ICON
+						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-off";
+						}
 					}
-					else
+					catch(err)
 					{
-					gameAudioContext=null;
-					stopMusic();
-					document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-off";
 					}
 				}
 
