@@ -339,7 +339,7 @@
 					}
 					else
 					{
-					object = buildObstacle();
+					object = createEnemy();
 					object.position.set(xPosition, yPosition, zPosition);
 					object.name = "obstacle";
 					}
@@ -497,10 +497,10 @@
 				// LOADING THE ENEMY MATERIAL
 				enemyMaterial = new THREE.MeshLambertMaterial({ color: 0x29B6F6, flatShading: THREE.FlatShading });
 
-				// ADDING A HIDDEN RING AND OBSTACLE MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
+				// ADDING A HIDDEN RING AND ENEMY MODELS IN ORDER TO PREVENT THE GAME TO FREEZE FOR A SECOND
 				// DURING THE COMPILING OF UNLOADED MODELS
 				var unusedObject1 = new THREE.Mesh(ringGeometry, ringMaterial);
-				var unusedObject2 = buildObstacle();
+				var unusedObject2 = createEnemy();
 				unusedObject1.scale.set(0.1,0.1,0.1);
 				unusedObject2.scale.set(0.1,0.1,0.1);
 				unusedObject1.position.x = 0;
@@ -610,40 +610,47 @@
 				resizeCanvasToFitWindow();
 				}
 
-			function buildObstacle()
+			function createEnemy()
 				{
+				// SETTING THE MATERIALS
 				var material = [
-					new THREE.MeshLambertMaterial({ color: 0x8b0000, flatShading: THREE.FlatShading }), // darkred
-					new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: THREE.FlatShading }), // gold
-					];
+								new THREE.MeshLambertMaterial({ color: 0x8b0000, flatShading: THREE.FlatShading }), // DARKRED
+								new THREE.MeshLambertMaterial({ color: 0xffffff, flatShading: THREE.FlatShading }), // GOLD
+								];
 
+				// CREATING THE SPHERE
 				var c0 = new THREE.Mesh(new THREE.SphereGeometry(5, 12, 12));
 				c0.position.y = 6;
 
+				// CREATING THE FIRST SPIKE
 				var c1 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
 				c1.position.x = -6;
 				c1.position.y = 6;
 				c1.position.z = 0;
 				c1.rotation.z = (90 * Math.PI)/180;
 
+				// CREATING THE SECOND SPIKE
 				var c2 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
 				c2.position.x = 6;
 				c2.position.y = 6;
 				c2.position.z = 0;
 				c2.rotation.z = (-90 * Math.PI)/180;
 
+				// CREATING THE THIRD SPIKE
 				var c3 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
 				c3.position.x = 0;
 				c3.position.y = 6;
 				c3.position.z = 6;
 				c3.rotation.x = (90 * Math.PI)/180;
 
+				// CREATING THE FOURTH SPIKE
 				var c4 = new THREE.Mesh(new THREE.ConeGeometry(2, 5, 12));
 				c4.position.x = 0;
 				c4.position.y = 6;
 				c4.position.z = -6;
 				c4.rotation.x = (-90 * Math.PI)/180;
 
+				// CREATING THE ENEMY GEOMETRY
 				var g = new THREE.Geometry();
 				c0.updateMatrix();
 				c1.updateMatrix();
@@ -656,18 +663,22 @@
 				g.merge(c3.geometry, c3.matrix);
 				g.merge(c4.geometry, c4.matrix);
 
+				// SETTING THE MATERIALS FOR EACH GEOMETRY
 				var b = c0.geometry.faces.length;
 				for (var i = 0, l = g.faces.length; i < l; i++)
 					{
 					g.faces[i].materialIndex = i < b ? 0 : 1;
 					}
 
+				// CREATING THE ENEMY WITH A GEOMETRY AND MATERIAL
 				var m = new THREE.Mesh(g, material);
 
+				// SCALING THE ENEMY
 				m.scale.x = 0.3;
 				m.scale.y = 0.3;
 				m.scale.z = 0.3;
 
+				// RETURNING THE ENEMY
 				return m;
 				}
 
