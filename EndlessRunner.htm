@@ -666,12 +666,15 @@
 				// SETTING THE MATERIALS FOR EACH GEOMETRY
 				for (var i = 0; i < g.faces.length; i++)
 					{
+					// CHECKING IF THE FACE BELONGS TO THE FIRST OBJECT (THE SPHERE)
 					if (i < c0.geometry.faces.length)
 						{
+						// SETTING THE FIRST COLOR INDEX (DARKRED)
 						g.faces[i].materialIndex = 0;
 						}
 						else
 						{
+						// SETTING THE SECOND COLOR INDEX (GOLD)
 						g.faces[i].materialIndex = 1;
 						}
 					}
