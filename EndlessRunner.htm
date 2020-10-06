@@ -704,10 +704,9 @@
 
 			function gameOver()
 				{
-				playSound(gameAudioOver);
-
 				try
 					{
+					// STOPPING ALL THE ANIMATION PROCESSES
 					cancelAnimationFrame(globalRenderID);
 					window.clearInterval(powerupSpawnIntervalID);
 					window.clearInterval(powerupCounterIntervalID);
@@ -716,16 +715,25 @@
 					{
 					}
 
+				// PAUSING THE MUSIC
 				stopMusic();
 
-				document.getElementById("about").style.display = "none";
+				// PLAYING THE GAME OVER MUSIC
+				playSound(gameAudioOver);
 
+				// HIDING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "none";
-				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
-				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "block";
-				document.getElementsByClassName("endlessrunner-gameover-points")[0].innerHTML = score + " " + STRING_POINTS;
-				document.getElementsByClassName("endlessrunner-gameover-points")[0].style.display = "block";
 
+				// HIDING THE SCORE COUNTER
+				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
+
+				// UPDATING THE GAME OVER POINTS LABEL
+				document.getElementsByClassName("endlessrunner-gameover-points")[0].innerHTML = score + " " + STRING_POINTS;
+
+				// SHOWING THE GAME OVER CONTAINER
+				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "block";
+
+				// IMPLEMENTING THE FADE IN EFFECT FOR THE GAME OVER LABEL, POINTS AND RESTART BUTTON
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
