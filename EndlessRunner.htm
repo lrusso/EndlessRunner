@@ -964,8 +964,8 @@
 
 			window.addEventListener("load", function()
 				{
-				// CHECKING IF IT IS A MOBILE DEVICE
-				if (isMobileDevice()==true)
+				// CHECKING IF IT IS AN ANDROID DEVICE AND NOT AN IOS DEVICE (BECAUSE IN IOS THE TOUCHSTART EVENT DOES NOT WORK TO RESUME THE AUDIO CONTEXT)
+				if (isMobileDevice()==true && usingiOS()==false)
 					{
 					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE RESTART BUTTON
 					document.getElementById("endlessrunner-gameover-restart").addEventListener("touchstart",function(event){restartGame();});
