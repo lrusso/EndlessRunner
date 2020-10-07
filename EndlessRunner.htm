@@ -132,6 +132,14 @@
 			var cloud2;
 			var cloud3;
 			var cloud4;
+			var cloudsPortraitX1 = -150;
+			var cloudsPortraitX2 = -50;
+			var cloudsPortraitY1 = 150;
+			var cloudsPortraitY2 = 50;
+			var cloudsLandscapeX1 = -250;
+			var cloudsLandscapeX2 = -150;
+			var cloudsLandscapeY1 = 150;
+			var cloudsLandscapeY2 = 50;
 			var cloudGeometry;
 			var cloudMaterial;
 
@@ -500,27 +508,22 @@
 
 				// CREATING AND ADDING THE FIRST CLOUD
 				cloud1 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				cloud1.position.x = -250;
-				cloud1.position.y = 150;
 				scene.add(cloud1);
 
 				// CREATING AND ADDING THE SECOND CLOUD
 				cloud2 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				cloud2.position.x = -150;
-				cloud2.position.y = 50;
 				scene.add(cloud2);
 
 				// CREATING AND ADDING THE THIRTH CLOUD
 				cloud3 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				cloud3.position.x = 150;
-				cloud3.position.y = 50;
 				scene.add(cloud3);
 
 				// CREATING AND ADDING THE FOURTH CLOUD
 				cloud4 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				cloud4.position.x = 250;
-				cloud4.position.y = 150;
 				scene.add(cloud4);
+
+				// UPDATING CLOUDS POSITIONS
+				updateCloudsPositions();
 
 				// LOADING THE RING GEOMETRY
 				ringGeometry = new THREE.STLLoader().parse(ringModel);
@@ -911,6 +914,30 @@
 					}
 				}
 
+			function updateCloudsPositions()
+				{
+				try
+					{
+					if (window.innerWidth>window.innerHeight)
+						{
+						cloud1.position.x = cloudsLandscapeX1;cloud1.position.y = cloudsLandscapeY1;
+						cloud2.position.x = cloudsLandscapeX2;cloud2.position.y = cloudsLandscapeY2;
+						cloud3.position.x = cloudsLandscapeX2 * -1;cloud3.position.y = cloudsLandscapeY2;
+						cloud4.position.x = cloudsLandscapeX1 * -1;cloud4.position.y = cloudsLandscapeY1;
+						}
+						else
+						{
+						cloud1.position.x = cloudsPortraitX1;cloud1.position.y = cloudsPortraitY1;
+						cloud2.position.x = cloudsPortraitX2;cloud2.position.y = cloudsPortraitY2;
+						cloud3.position.x = cloudsPortraitX2 * -1;cloud3.position.y = cloudsPortraitY2;
+						cloud4.position.x = cloudsPortraitX1 * -1;cloud4.position.y = cloudsPortraitY1;
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
 			function resizeCanvasToFitWindow()
 				{
 				try
@@ -923,6 +950,9 @@
 
 					// UPDATING THE RENDERING SIZE
 					renderer.setSize(window.innerWidth, window.innerHeight);
+
+					// UPDATING THE CLOUDS POSITIONS
+					updateCloudsPositions();
 					}
 					catch(err)
 					{
