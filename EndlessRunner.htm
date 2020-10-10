@@ -104,7 +104,7 @@
 			var hemisphereLight;
 			var renderer;
 			var scene;
-			var score = 0;
+			var score;
 
 			var hero;
 			var heroActions;
@@ -634,6 +634,49 @@
 
 			function startGame()
 				{
+				// HIDING THE GAME OVER CONTAINER
+				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "none";
+
+				// SHOWING THE SOUND HANDLER
+				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
+
+				// SHOWING THE SCORE COUNTER
+				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
+
+				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER LABEL, POINTS AND RESTART BUTTON
+				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
+				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
+				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
+
+				// SETTING THE INITIAL OBSTACLES COUNT
+				OBSTACLES_COUNT = 10;
+
+				// REMOVING ALL THE OBSTACLES FROM THE SCENE
+				obstacles.forEach(function (element, index)
+					{
+					scene.remove(obstacles[index]);
+					});
+
+				// CLEARING THE OBSTACLES ARRAY
+				obstacles = [];
+
+				// CENTERING THE HERO
+				hero.position.x = 0;
+
+				// CLEARING THE SCORE
+				score = 0;
+
+				// CLEARING ALL MOVEMENTS
+				movingLeft = false;
+				movingRight = false;
+				movingDestiny = null;
+
+				// PAUSING THE GAME OVER MUSIC
+				gameAudioOver.pause();
+
+				// PLAYING THE GAME MUSIC
+				playMusic();
+
 				// CHECKING IF THE INTRO IS DONE
 				if (cameraIntroDone==true)
 					{
@@ -767,55 +810,6 @@
 					catch(err)
 					{
 					}
-				}
-
-			function restartGame()
-				{
-				// HIDING THE GAME OVER CONTAINER
-				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "none";
-
-				// SHOWING THE SOUND HANDLER
-				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
-
-				// SHOWING THE SCORE COUNTER
-				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
-
-				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER LABEL, POINTS AND RESTART BUTTON
-				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
-				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
-				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
-
-				// SETTING THE INITIAL OBSTACLES COUNT
-				OBSTACLES_COUNT = 10;
-
-				// REMOVING ALL THE OBSTACLES FROM THE SCENE
-				obstacles.forEach(function (element, index)
-					{
-					scene.remove(obstacles[index]);
-					});
-
-				// CLEARING THE OBSTACLES ARRAY
-				obstacles = [];
-
-				// CENTERING THE HERO
-				hero.position.x = 0;
-
-				// CLEARING THE SCORE
-				score = 0;
-
-				// CLEARING ALL MOVEMENTS
-				movingLeft = false;
-				movingRight = false;
-				movingDestiny = null;
-
-				// PAUSING THE GAME OVER MUSIC
-				gameAudioOver.pause();
-
-				// PLAYING THE GAME MUSIC
-				playMusic();
-
-				// STARTING THE GAME
-				startGame();
 				}
 
 			function gameOver()
@@ -1072,7 +1066,7 @@
 				if (isMobileDevice()==true && usingiOS()==false)
 					{
 					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE RESTART BUTTON
-					document.getElementById("endlessrunner-gameover-restart").addEventListener("touchstart",function(event){restartGame();});
+					document.getElementById("endlessrunner-gameover-restart").addEventListener("touchstart",function(event){startGame();});
 
 					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE SOUND BUTTON
 					document.getElementById("endlessrunner-soundhandler").addEventListener("touchstart",function(event){soundToggle();});
@@ -1080,7 +1074,7 @@
 					else
 					{
 					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE RESTART BUTTON
-					document.getElementById("endlessrunner-gameover-restart").addEventListener("click",function(event){restartGame();});
+					document.getElementById("endlessrunner-gameover-restart").addEventListener("click",function(event){startGame();});
 
 					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE SOUND BUTTON
 					document.getElementById("endlessrunner-soundhandler").addEventListener("click",function(event){soundToggle();});
@@ -1105,7 +1099,7 @@
 						if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display === "block")
 							{
 							// RESTARTING THE GAME
-							restartGame();
+							startGame();
 							}
 						}
 					});
