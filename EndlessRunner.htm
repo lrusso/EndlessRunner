@@ -693,6 +693,42 @@
 				resizeCanvasToFitWindow();
 				}
 
+			function addObstacle()
+				{
+				try
+					{
+					var object;
+
+					if (obstacles.length%2==1)
+						{
+						object = new THREE.Mesh(ringGeometry, ringMaterial);
+						object.scale.x = 0.05;
+						object.scale.y = 0.05;
+						object.scale.z = 0.05;
+						object.position.set(getRandomPositionX(), 4, OBSTACLES_POSITION_Z);
+						object.name = "ring";
+						}
+						else
+						{
+						object = createEnemy();
+						object.position.set(getRandomPositionX(), 3.5, OBSTACLES_POSITION_Z);
+						object.name = "obstacle";
+						}
+
+					object.castShadow = true;
+					object.receiveShadow = true;
+
+					// ADDING A NEW OBSTACLE TO THE OBSTACLES ARRAY
+					obstacles.push(object);
+
+					// ADDING THE NEW OBSTACLE TO THE SCENE
+					scene.add(object);
+					}
+					catch(err)
+					{
+					}
+				}
+
 			function createEnemy()
 				{
 				// SETTING THE MATERIALS
@@ -772,42 +808,6 @@
 
 				// RETURNING THE ENEMY
 				return m;
-				}
-
-			function addObstacle()
-				{
-				try
-					{
-					var object;
-
-					if (obstacles.length%2==1)
-						{
-						object = new THREE.Mesh(ringGeometry, ringMaterial);
-						object.scale.x = 0.05;
-						object.scale.y = 0.05;
-						object.scale.z = 0.05;
-						object.position.set(getRandomPositionX(), 4, OBSTACLES_POSITION_Z);
-						object.name = "ring";
-						}
-						else
-						{
-						object = createEnemy();
-						object.position.set(getRandomPositionX(), 3.5, OBSTACLES_POSITION_Z);
-						object.name = "obstacle";
-						}
-
-					object.castShadow = true;
-					object.receiveShadow = true;
-
-					// ADDING A NEW OBSTACLE TO THE OBSTACLES ARRAY
-					obstacles.push(object);
-
-					// ADDING THE NEW OBSTACLE TO THE SCENE
-					scene.add(object);
-					}
-					catch(err)
-					{
-					}
 				}
 
 			function gameOver()
