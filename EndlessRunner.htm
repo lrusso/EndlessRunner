@@ -1029,22 +1029,18 @@
 					// RESUMING THE GAME
 					game_running = true;
 
-					// CHECKING IF THE GAME IS NOT OVER
-					if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display!=="block")
+					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
+					if (gameAudioContext!=null)
 						{
-						// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-						if (gameAudioContext!=null)
+						// CHECKING IF THE GAME IS NOT OVER
+						if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display!=="block")
 							{
-							// RESUMING THE MUSIC
+							// RESUMING THE GAME MUSIC
 							gameAudioMusic.play();
 							}
-						}
-						else
-						{
-						// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-						if (gameAudioContext!=null)
+							else
 							{
-							// CHECKING IF THE AUDIO HAS ANY PLAYING TIME LEFT
+							// CHECKING IF THE GAME OVER MUSIC HAS ANY PLAYING TIME LEFT
 							if (gameAudioOver.currentTime!=gameAudioOver.duration)
 								{
 								// RESUMING THE GAME OVER MUSIC
