@@ -261,10 +261,13 @@
 
 					obstacles.forEach(function (element, index)
 						{
-						obstacles[index].animate();
-						if (obstacles[index].name=="ring")
+						var obstacle = obstacles[index];
+
+						obstacle.animate();
+
+						if (obstacle.name=="ring")
 							{
-							obstacles[index].rotation.y = obstacles[index].rotation.y + 0.15;
+							obstacle.rotation.y = obstacle.rotation.y + 0.15;
 							}
 						});
 
