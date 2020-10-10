@@ -312,20 +312,26 @@
 
 			function getRandomPositionX()
 				{
+				// FUNCTION FOR GETTING A RANDOM INTEGER
 				function getRandomInteger(min, max)
 					{
 					return Math.floor(Math.random() * (max - min + 1)) + min;
 					}
 
+				// GETTING THE LAST OBSTACLE X POSITION
 				var newPositionX = obstaclesLastPositionX;
 
+				// LOOPING UNTIL THE NEW OBSTACLE X POSITION WILL BE DIFFERENT FROM THE LAST ONE
 				while (newPositionX==obstaclesLastPositionX)
 					{
+					// GETTING A NEW RANDOM OBSTACLE X POSITION
 					newPositionX = OBSTACLES_POSITION_X[getRandomInteger(0, OBSTACLES_POSITION_X.length - 1)];
 					}
 
+				// UPDATING THE LAST OBSTACLE X POSITION
 				obstaclesLastPositionX = newPositionX;
 
+				// RETURNING THE NEW OBSTACLE X POSITION
 				return newPositionX;
 				}
 
