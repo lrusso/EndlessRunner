@@ -94,7 +94,7 @@
 			var PLANE_WIDTH = 20;
 			var PLANE_LENGTH = 1000;
 			var PADDING = PLANE_WIDTH / 5 * 2;
-			var OBSTACLES_COUNT = 10;
+			var OBSTACLES_COUNT;
 
 			var camera;
 			var containerWidth = 0;
@@ -663,7 +663,7 @@
 				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 
 				// SETTING THE INITIAL OBSTACLES COUNT
-				OBSTACLES_COUNT = 10;
+				OBSTACLES_COUNT = 5;
 
 				// REMOVING ALL THE OBSTACLES FROM THE SCENE
 				obstacles.forEach(function (element, index)
