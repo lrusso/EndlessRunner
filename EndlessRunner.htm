@@ -411,8 +411,9 @@
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
 				camera.position.set(cameraPositionX, 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ);
 				camera.rotation.y = (cameraDegrees * Math.PI)/180;
+				scene.add(camera);
 
-				// LOADING THE STONE ROAD
+				// ADDING THE STONE ROAD
 				stoneLoader = new THREE.TextureLoader();
 				stoneTexture = stoneLoader.load(stoneImageData, function (texture)
 					{
@@ -425,8 +426,9 @@
 				stoneRoad = new THREE.Mesh(stoneGeometry, stoneMaterial);
 				stoneRoad.rotation.x = 1.570;
 				stoneRoad.receiveShadow = true;
+				scene.add(stoneRoad);
 
-				// LOADING THE GRASS FLOOR
+				// ADDING THE GRASS FLOOR
 				grassLoader = new THREE.TextureLoader();
 				grassTexture = grassLoader.load(grassImageData, function (texture)
 					{
@@ -441,10 +443,8 @@
 				grassLeft.rotation.x = 1.570;
 				grassLeft.position.x = -PLANE_WIDTH;
 				grassLeft.position.y = 1;
-
 				grassRight = grassLeft.clone();
 				grassRight.position.x = PLANE_WIDTH;
-
 				scene.add(grassLeft, grassRight);
 
 				// ADDING THE OCEAN
@@ -463,7 +463,7 @@
 				oceanFloor.position.y = -1;
 				scene.add(oceanFloor);
 
-				// LOADING THE LIGHTS
+				// ADDING THE LIGHTS
 				var spotLight;
 				var target;
 				var targetGeometry;
@@ -490,8 +490,10 @@
 				directionalLight.position.set(0, 99, 0);
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
 				hemisphereLight.position.y = 500;
+				scene.add(directionalLight);
+				scene.add(hemisphereLight);
 
-				// LOADING THE SKY
+				// ADDING THE SKY
 				var canvas = document.createElement("canvas");
 				canvas.width = 32;
 				canvas.height = window.innerHeight;
@@ -512,23 +514,23 @@
 				// LOADING THE CLOUD MATERIAL
 				cloudMaterial = new THREE.MeshLambertMaterial({ color: 0xF8F8F8, flatShading: THREE.FlatShading });
 
-				// CREATING AND ADDING THE FIRST CLOUD
+				// ADDING THE FIRST CLOUD
 				cloud1 = new THREE.Mesh(cloudGeometry, cloudMaterial);
 				scene.add(cloud1);
 
-				// CREATING AND ADDING THE SECOND CLOUD
+				// ADDING THE SECOND CLOUD
 				cloud2 = new THREE.Mesh(cloudGeometry, cloudMaterial);
 				scene.add(cloud2);
 
-				// CREATING AND ADDING THE THIRTH CLOUD
+				// ADDING THE THIRTH CLOUD
 				cloud3 = new THREE.Mesh(cloudGeometry, cloudMaterial);
 				scene.add(cloud3);
 
-				// CREATING AND ADDING THE FOURTH CLOUD
+				// ADDING THE FOURTH CLOUD
 				cloud4 = new THREE.Mesh(cloudGeometry, cloudMaterial);
 				scene.add(cloud4);
 
-				// UPDATING CLOUDS POSITIONS
+				// UPDATING THE CLOUDS POSITIONS
 				updateCloudsPositions();
 
 				// LOADING THE RING GEOMETRY
@@ -562,30 +564,37 @@
 				// LOADING THE HERO
 				heroLoader = new THREE.GLTFLoader().parse(sonicModel,null,function(gltf)
 					{
+					// SETTING THAT THE HERO MODEL WILL BE CASTING A SHADOW
 					gltf.scene.traverse(function(node)
 						{
 						if (node instanceof THREE.Mesh)
 							{
 							node.castShadow = true;
-							node.material.side = THREE.DoubleSide;
 							}
 						});
 
+					// GETTING THE HERO MODEL
 					hero = gltf.scene;
+
+					// SETTING THE HERO SCALE
 					hero.scale.set(11,11,11);
+
+					// SETTING THE HERO POSITION
 					hero.position.x = 0;
 					hero.position.y = 1;
 					hero.position.z = 490;
+
+					// SETTING THE HERO ROTATION
 					hero.rotation.y = 66;
 
-					//console.log(gltf.animations); //shows all animations available
-
+					// SETTING THE HERO ANIMATION
 					heroActions = new THREE.AnimationMixer(hero);
 					heroActions.clipAction(gltf.animations[0]).play();
 					//heroActions.clipAction(gltf.animations[0]).stop();
+					//console.log(gltf.animations); //shows all animations available
 
-					// ADDING EVERYTHING TO THE SCENE
-					scene.add(camera, directionalLight, hemisphereLight, stoneRoad, hero);
+					// ADDING THE HERO TO THE SCENE
+					scene.add(hero);
 					});
 				}
 
