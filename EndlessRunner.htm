@@ -158,7 +158,7 @@
 
 			var movingLeft = false;
 			var movingRight = false;
-			var movingDestiny = null;
+			var movingDestinyX = null;
 
 			var game_running = true;
 
@@ -176,12 +176,12 @@
 			var actions = null;
 			var clock = new THREE.Clock();
 
-			var cameraDegrees = -90;
-			var cameraDegreesDestiny = 0;
-			var cameraPositionX = -45;
-			var cameraPositionXDestiny = 0;
-			var cameraPositionZ = 50;
-			var cameraPositionZDestiny = 10;
+			var cameraDegreesStart = -90;
+			var cameraDegreesEnd = 0;
+			var cameraPositionXStart = -45;
+			var cameraPositionXEnd = 0;
+			var cameraPositionZStart = 50;
+			var cameraPositionZEnd = 10;
 			var cameraIntroTime = 4000;
 			var cameraIntroDone = false;
 			var cameraInitialTimestamp = null;
@@ -225,22 +225,26 @@
 
 						if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
 							{
-							if (cameraDegrees!=cameraDegreesDestiny)
+
+							if (cameraDegreesStart!=cameraDegreesEnd)
 								{
-								cameraDegrees = cameraDegrees + 2;
-								camera.rotation.y = cameraDegrees * Math.PI/180;
+								cameraDegreesStart = cameraDegreesStart + 2;
+								camera.rotation.y = cameraDegreesStart * Math.PI/180;
 								}
-							if (cameraPositionX!=cameraPositionXDestiny)
+
+							if (cameraPositionXStart!=cameraPositionXEnd)
 								{
-								cameraPositionX = cameraPositionX + 1;
+								cameraPositionXStart = cameraPositionXStart + 1;
 								camera.position.x = camera.position.x + 1;
 								}
-							if (cameraPositionZ!=cameraPositionZDestiny)
+
+							if (cameraPositionZStart!=cameraPositionZEnd)
 								{
-								cameraPositionZ = cameraPositionZ - 1;
-								camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ;
+								cameraPositionZStart = cameraPositionZStart - 1;
+								camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZStart;
 								}
-							if (cameraDegrees==cameraDegreesDestiny && cameraPositionX==cameraPositionXDestiny && cameraPositionZ==cameraPositionZDestiny)
+
+							if (cameraDegreesStart==cameraDegreesEnd && cameraPositionXStart==cameraPositionXEnd && cameraPositionZStart==cameraPositionZEnd)
 								{
 								cameraIntroDone = true;
 
@@ -264,9 +268,9 @@
 							}
 						});
 
-					if (Date.now()>timestampChecker+10 && movingDestiny!=null)
+					if (Date.now()>timestampChecker+10 && movingDestinyX!=null)
 						{
-						if (hero.position.x != movingDestiny)
+						if (hero.position.x != movingDestinyX)
 							{
 							if (movingLeft==true)
 								{
@@ -279,7 +283,7 @@
 							}
 							else
 							{
-							movingDestiny = null;
+							movingDestinyX = null;
 							movingLeft = false;
 							movingRight = false;
 							}
@@ -423,8 +427,8 @@
 
 				// ADDING THE CAMERA
 				camera = new THREE.PerspectiveCamera(45, containerWidth / containerHeight, 1, 3000);
-				camera.position.set(cameraPositionX, 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ);
-				camera.rotation.y = (cameraDegrees * Math.PI)/180;
+				camera.position.set(cameraPositionXStart, 10, PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZStart);
+				camera.rotation.y = (cameraDegreesStart * Math.PI)/180;
 				scene.add(camera);
 
 				// ADDING THE STONE ROAD
@@ -618,13 +622,13 @@
 				if (cameraIntroDone==true)
 					{
 					// CHECKING IF THE HERO CAN MOVE TO THE LEFT, IF THERE ISN'T A MOVING DESTINY AND IF THE HERO ISN'T MOVING TO THE RIGHT
-					if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestiny==null)
+					if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestinyX==null)
 						{
 						// SETTING THAT THE HERO WILL BE MOVING TO THE LEFT
 						movingLeft = true;
 
 						// SETTING THAT THE HERO MOVING DESTINY
-						movingDestiny = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+						movingDestinyX = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 						}
 					}
 				}
@@ -635,13 +639,13 @@
 				if (cameraIntroDone==true)
 					{
 					// CHECKING IF THE HERO CAN MOVE TO THE RIGHT, IF THERE ISN'T A MOVING DESTINY AND IF THE HERO ISN'T MOVING TO THE LEFT
-					if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestiny==null)
+					if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestinyX==null)
 						{
 						// SETTING THAT THE HERO WILL BE MOVING TO THE RIGHT
 						movingRight = true;
 
 						// SETTING THAT THE HERO MOVING DESTINY
-						movingDestiny = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
+						movingDestinyX = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 						}
 					}
 				}
@@ -683,7 +687,7 @@
 				// CLEARING ALL MOVEMENTS
 				movingLeft = false;
 				movingRight = false;
-				movingDestiny = null;
+				movingDestinyX = null;
 
 				// PAUSING THE GAME OVER MUSIC
 				gameAudioOver.pause();
