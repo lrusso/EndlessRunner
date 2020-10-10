@@ -292,8 +292,6 @@
 							}
 						}
 
-					document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
-
 					if (detectCollisions() === true)
 						{
 						gameOver();
@@ -390,6 +388,9 @@
 
 							// HIDING THE RING
 							obstacles[i].visible = false;
+
+							// UPDATING THE SCORE CONTAINER
+							document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 							// PLAYING THE RING SOUND
 							playSound(gameAudioRing);
@@ -661,7 +662,7 @@
 				// SHOWING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
 
-				// SHOWING THE SCORE COUNTER
+				// SHOWING THE SCORE CONTAINER
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
 
 				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER LABEL, POINTS AND RESTART BUTTON
@@ -686,6 +687,9 @@
 
 				// CLEARING THE SCORE
 				score = 0;
+
+				// UPDATING THE SCORE CONTAINER
+				document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 				// CLEARING ALL MOVEMENTS
 				movingLeft = false;
@@ -855,7 +859,7 @@
 				// HIDING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "none";
 
-				// HIDING THE SCORE COUNTER
+				// HIDING THE SCORE CONTAINER
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
 
 				// UPDATING THE GAME OVER POINTS LABEL
