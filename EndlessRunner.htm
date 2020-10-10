@@ -95,6 +95,8 @@
 			var PLANE_LENGTH = 1000;
 			var PADDING = PLANE_WIDTH / 5 * 2;
 			var OBSTACLES_COUNT;
+			var OBSTACLES_POSITION_X = [-(PLANE_WIDTH - PADDING) / 2, 0, (PLANE_WIDTH - PADDING) / 2];
+			var OBSTACLES_POSITION_Z = -PLANE_LENGTH / 2;
 
 			var camera;
 			var containerWidth = 0;
@@ -260,7 +262,16 @@
 						{
 						var obstacle = obstacles[index];
 
-						obstacle.animate();
+						if (obstacle.position.z < PLANE_LENGTH / 2 + PLANE_LENGTH / 10)
+							{
+							obstacle.position.z += 10;
+							}
+							else
+							{
+							obstacle.position.x = getRandomPositionX();
+							obstacle.position.z = OBSTACLES_POSITION_Z;
+							obstacle.visible = true;
+							}
 
 						if (obstacle.name=="ring")
 							{
@@ -298,69 +309,13 @@
 				renderer.render(scene, camera);
 				}
 
-			function Obstacle()
+			function getRandomPositionX()
 				{
 				function getRandomInteger(min, max)
 					{
 					return Math.floor(Math.random() * (max - min + 1)) + min;
 					}
-
-				var object;
-				var objectDimension = 0;
-				var objectGeometry;
-				var objectMaterial;
-				var xPosition = 0;
-				var xPositionValues = [];
-				var yPosition = 0;
-				var yPositionValues = [];
-				var zPosition = 0;
-				var zPositionValues = [];
-				var typeObstacle = obstacles.length;
-
-				objectDimension = 2.5;
-
-				xPositionValues = [-(PLANE_WIDTH - PADDING) / 2, 0, (PLANE_WIDTH - PADDING) / 2];
-				yPositionValues = [objectDimension + 1];
-				zPositionValues = [-(PLANE_LENGTH - PADDING) / 2];
-
-				xPosition = xPositionValues[getRandomInteger(0, xPositionValues.length - 1)];
-				yPosition = yPositionValues[getRandomInteger(0, yPositionValues.length - 1)];
-				zPosition = -PLANE_LENGTH / 2;
-
-				if (typeObstacle==1 || typeObstacle==3 || typeObstacle==5)
-					{
-					object = new THREE.Mesh(ringGeometry, ringMaterial);
-					object.scale.x = 0.05;
-					object.scale.y = 0.05;
-					object.scale.z = 0.05;
-					object.position.set(xPosition, 4, zPosition);
-					object.name = "ring";
-					}
-					else
-					{
-					object = createEnemy();
-					object.position.set(xPosition, yPosition, zPosition);
-					object.name = "obstacle";
-					}
-
-				object.castShadow = true;
-				object.receiveShadow = true;
-
-				object.animate = function ()
-					{
-					if (object.position.z < PLANE_LENGTH / 2 + PLANE_LENGTH / 10)
-						{
-						object.position.z += 10;
-						}
-						else
-						{
-						object.position.x = xPositionValues[getRandomInteger(0, xPositionValues.length - 1)];
-						object.position.z = -PLANE_LENGTH / 2;
-						object.visible = true;
-						}
-					};
-
-				return object;
+				return OBSTACLES_POSITION_X[getRandomInteger(0, OBSTACLES_POSITION_X.length - 1)];
 				}
 
 			function detectCollisions()
@@ -823,11 +778,32 @@
 				{
 				try
 					{
+					var object;
+
+					if (obstacles.length%2==1)
+						{
+						object = new THREE.Mesh(ringGeometry, ringMaterial);
+						object.scale.x = 0.05;
+						object.scale.y = 0.05;
+						object.scale.z = 0.05;
+						object.position.set(getRandomPositionX(), 4, OBSTACLES_POSITION_Z);
+						object.name = "ring";
+						}
+						else
+						{
+						object = createEnemy();
+						object.position.set(getRandomPositionX(), 3.5, OBSTACLES_POSITION_Z);
+						object.name = "obstacle";
+						}
+
+					object.castShadow = true;
+					object.receiveShadow = true;
+
 					// ADDING A NEW OBSTACLE TO THE OBSTACLES ARRAY
-					obstacles.push(new Obstacle());
+					obstacles.push(object);
 
 					// ADDING THE NEW OBSTACLE TO THE SCENE
-					scene.add(obstacles[obstacles.length-1]);
+					scene.add(object);
 					}
 					catch(err)
 					{
