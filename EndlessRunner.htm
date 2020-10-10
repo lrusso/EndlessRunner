@@ -240,6 +240,10 @@
 							if (cameraDegrees==0 && cameraPositionX==0 && cameraPositionZ==0)
 								{
 								cameraIntroDone = true;
+
+								enemy = new PowerUp(enemies.length);
+								enemies.push(enemy);
+								scene.add(enemy);
 								}
 							}
 						}
@@ -614,15 +618,6 @@
 					enemy = new PowerUp(enemies.length);
 					enemies.push(enemy);
 					scene.add(enemy);
-					}
-					else
-					{
-					setTimeout(function()
-						{
-						enemy = new PowerUp(enemies.length);
-						enemies.push(enemy);
-						scene.add(enemy);
-						}, 5000);
 					}
 
 				enemiesSpawnIntervalID = window.setInterval(function ()
