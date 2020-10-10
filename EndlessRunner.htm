@@ -287,37 +287,13 @@
 
 					document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
-					if (detectCollisions(obstacles) === true)
+					if (detectCollisions() === true)
 						{
 						gameOver();
 						}
 					}
 
 				renderer.render(scene, camera);
-				}
-
-			function detectCollisions(objects)
-				{
-				for (var i = 0; i < objects.length; i ++)
-					{
-					var heroMeshBox = new THREE.Box3().setFromObject(hero);
-					var obstacleMeshBox = new THREE.Box3().setFromObject(objects[i]);
-					if (heroMeshBox.intersectsBox(obstacleMeshBox)==true)
-						{
-						if (objects[i].name=="ring")
-							{
-							score = score + 50;
-							objects[i].visible = false;
-							playSound(gameAudioRing);
-							}
-							else
-							{
-							return true;
-							}
-						}
-					}
-
-				return false;
 				}
 
 			function Obstacle()
@@ -383,6 +359,44 @@
 					};
 
 				return object;
+				}
+
+			function detectCollisions()
+				{
+				// LOOPING ALL THE OBSTACLES
+				for (var i = 0; i < obstacles.length; i ++)
+					{
+					// CREATING A BOX ARROUND THE HERO CURRENT POSITION
+					var heroMeshBox = new THREE.Box3().setFromObject(hero);
+
+					// CREATING A BOX ARROUND THE OBSTACLE CURRENT POSITION
+					var obstacleMeshBox = new THREE.Box3().setFromObject(obstacles[i]);
+
+					// CHECKING IF THERE IS AN INTERSECTION BETWEEN TWO BOXES
+					if (heroMeshBox.intersectsBox(obstacleMeshBox)==true)
+						{
+						// CHECKING IF THE OBSTACLE IS A RING
+						if (obstacles[i].name=="ring")
+							{
+							// UPDATING THE SCORE
+							score = score + 50;
+
+							// HIDING THE RING
+							obstacles[i].visible = false;
+
+							// PLAYING THE RING SOUND
+							playSound(gameAudioRing);
+							}
+							else
+							{
+							// RETURNING THAT THERE IS A COLLISION BETWEEN THE HERO AND THE OBSTACLE
+							return true;
+							}
+						}
+					}
+
+				// RETURNING THAT THERE IS NO COLLISION
+				return false;
 				}
 
 			function loadGameResources()
