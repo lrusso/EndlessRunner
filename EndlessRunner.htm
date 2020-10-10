@@ -932,8 +932,10 @@
 				{
 				try
 					{
+					// CHECKING THE WINDOW SIZE (DEVICE ORIENTATION)
 					if (window.innerWidth>window.innerHeight)
 						{
+						// UPDATING THE CLOUDS POSITIONS FOR LANDSCAPE ORIENTATION
 						cloud1.position.x = cloudsLandscapeX1;cloud1.position.y = cloudsLandscapeY1;
 						cloud2.position.x = cloudsLandscapeX2;cloud2.position.y = cloudsLandscapeY2;
 						cloud3.position.x = cloudsLandscapeX2 * -1;cloud3.position.y = cloudsLandscapeY2;
@@ -941,6 +943,7 @@
 						}
 						else
 						{
+						// UPDATING THE CLOUDS POSITIONS FOR PORTRAIT ORIENTATION
 						cloud1.position.x = cloudsPortraitX1;cloud1.position.y = cloudsPortraitY1;
 						cloud2.position.x = cloudsPortraitX2;cloud2.position.y = cloudsPortraitY2;
 						cloud3.position.x = cloudsPortraitX2 * -1;cloud3.position.y = cloudsPortraitY2;
@@ -1071,10 +1074,12 @@
 					{
 					if (event.keyCode === 37)
 						{
+						// MOVING THE HERO TO THE LEFT
 						moveLeft();
 						}
 					else if (event.keyCode === 39)
 						{
+						// MOVING THE HERO TO THE RIGHT
 						moveRight();
 						}
 					else if (event.keyCode === 32)
