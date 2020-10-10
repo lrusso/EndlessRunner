@@ -600,11 +600,16 @@
 
 			function moveLeft()
 				{
+				// CHECKING IF THE INTRO IS DONE
 				if (cameraIntroDone==true)
 					{
+					// CHECKING IF THE HERO CAN MOVE TO THE LEFT, IF THERE ISN'T A MOVING DESTINY AND IF THE HERO ISN'T MOVING TO THE RIGHT
 					if (hero.position.x !== -(PLANE_WIDTH - PADDING) / 2 && movingRight==false && movingDestiny==null)
 						{
+						// SETTING THAT THE HERO WILL BE MOVING TO THE LEFT
 						movingLeft = true;
+
+						// SETTING THAT THE HERO MOVING DESTINY
 						movingDestiny = parseFloat(hero.position.x - (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 						}
 					}
@@ -612,11 +617,16 @@
 
 			function moveRight()
 				{
+				// CHECKING IF THE INTRO IS DONE
 				if (cameraIntroDone==true)
 					{
+					// CHECKING IF THE HERO CAN MOVE TO THE RIGHT, IF THERE ISN'T A MOVING DESTINY AND IF THE HERO ISN'T MOVING TO THE LEFT
 					if (hero.position.x !== (PLANE_WIDTH - PADDING) / 2 && movingLeft==false && movingDestiny==null)
 						{
+						// SETTING THAT THE HERO WILL BE MOVING TO THE RIGHT
 						movingRight = true;
+
+						// SETTING THAT THE HERO MOVING DESTINY
 						movingDestiny = parseFloat(hero.position.x + (PLANE_WIDTH - PADDING) / 2).toFixed(0);
 						}
 					}
@@ -624,8 +634,10 @@
 
 			function startGame()
 				{
+				// CHECKING IF THE INTRO IS DONE
 				if (cameraIntroDone==true)
 					{
+					// ADDING AN OBSTACLE
 					addObstacle();
 					}
 
