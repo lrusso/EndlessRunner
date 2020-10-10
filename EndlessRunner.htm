@@ -177,8 +177,11 @@
 			var clock = new THREE.Clock();
 
 			var cameraDegrees = -90;
+			var cameraDegreesDestiny = 0;
 			var cameraPositionX = -45;
+			var cameraPositionXDestiny = 0;
 			var cameraPositionZ = 40;
+			var cameraPositionZDestiny = 0;
 			var cameraIntroTime = 4000;
 			var cameraIntroDone = false;
 			var cameraInitialTimestamp = null;
@@ -222,22 +225,22 @@
 
 						if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
 							{
-							if (cameraDegrees!=0)
+							if (cameraDegrees!=cameraDegreesDestiny)
 								{
 								cameraDegrees = cameraDegrees + 2;
 								camera.rotation.y = cameraDegrees * Math.PI/180;
 								}
-							if (cameraPositionX!=0)
+							if (cameraPositionX!=cameraPositionXDestiny)
 								{
 								cameraPositionX = cameraPositionX + 1;
 								camera.position.x = camera.position.x + 1;
 								}
-							if (cameraPositionZ!=0)
+							if (cameraPositionZ!=cameraPositionZDestiny)
 								{
 								cameraPositionZ = cameraPositionZ - 1;
 								camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZ;
 								}
-							if (cameraDegrees==0 && cameraPositionX==0 && cameraPositionZ==0)
+							if (cameraDegrees==cameraDegreesDestiny && cameraPositionX==cameraPositionXDestiny && cameraPositionZ==cameraPositionZDestiny)
 								{
 								cameraIntroDone = true;
 
