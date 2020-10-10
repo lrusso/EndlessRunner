@@ -464,8 +464,7 @@
 				directionalLight.position.set(0, 99, 0);
 				hemisphereLight = new THREE.HemisphereLight(0xFFB74D, 0x37474F, 1);
 				hemisphereLight.position.y = 500;
-				scene.add(directionalLight);
-				scene.add(hemisphereLight);
+				scene.add(directionalLight,hemisphereLight);
 
 				// ADDING THE SKY
 				var canvas = document.createElement("canvas");
