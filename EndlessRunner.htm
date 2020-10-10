@@ -148,10 +148,10 @@
 
 			var enemyGeometry;
 			var enemyMaterial;
-			var enemiesSpawnIntervalID;
-			var enemiesCounterIntervalID;
 
 			var obstacles = [];
+			var obstaclesSpawnIntervalID;
+			var obstaclesCounterIntervalID;
 
 			var touchstartX = 0;
 			var touchendX = 0;
@@ -641,10 +641,13 @@
 					addObstacle();
 					}
 
-				enemiesSpawnIntervalID = window.setInterval(function ()
+				// SETTING THAT NEW OBSTACLES WILL BE ADDED EVERY 4 SECONDS
+				obstaclesSpawnIntervalID = window.setInterval(function ()
 					{
+					// CHECKING IF THE GAME IS RUNNING AND THE INTRO IS DONE
 					if (game_running==true && cameraIntroDone==true)
 						{
+						// CHECKING IF A NEW OBSTACLE CAN BE ADDED
 						if (obstacles.length < OBSTACLES_COUNT)
 							{
 							addObstacle();
@@ -652,10 +655,13 @@
 						}
 					}, 4000);
 
-				enemiesCounterIntervalID = window.setInterval(function ()
+				// SETTING THAT OBSTACLES COUNT WILL BE UPDATED EVERY 30 SECONDS
+				obstaclesCounterIntervalID = window.setInterval(function ()
 					{
+					// CHECKING IF THE GAME IS RUNNING AND THE INTRO IS DONE
 					if (game_running==true && cameraIntroDone==true)
 						{
+						// UPDATING THE OBSTACLES COUNT
 						OBSTACLES_COUNT += 1;
 						}
 					}, 30000);
@@ -818,8 +824,8 @@
 					{
 					// STOPPING ALL THE ANIMATION PROCESSES
 					cancelAnimationFrame(globalRenderID);
-					window.clearInterval(enemiesSpawnIntervalID);
-					window.clearInterval(enemiesCounterIntervalID);
+					window.clearInterval(obstaclesSpawnIntervalID);
+					window.clearInterval(obstaclesCounterIntervalID);
 					}
 				catch(err)
 					{
