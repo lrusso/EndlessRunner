@@ -94,7 +94,7 @@
 			var PLANE_WIDTH = 20;
 			var PLANE_LENGTH = 1000;
 			var PADDING = PLANE_WIDTH / 5 * 2;
-			var ENEMY_COUNT = 10;
+			var OBSTACLES_COUNT = 10;
 
 			var camera;
 			var containerWidth = 0;
@@ -147,11 +147,12 @@
 			var ringMaterial;
 
 			var enemy;
-			var enemies = [];
 			var enemyGeometry;
 			var enemyMaterial;
 			var enemiesSpawnIntervalID;
 			var enemiesCounterIntervalID;
+
+			var obstacles = [];
 
 			var touchstartX = 0;
 			var touchendX = 0;
@@ -244,8 +245,8 @@
 								{
 								cameraIntroDone = true;
 
-								enemy = new PowerUp(enemies.length);
-								enemies.push(enemy);
+								enemy = new PowerUp(obstacles.length);
+								obstacles.push(enemy);
 								scene.add(enemy);
 								}
 							}
@@ -257,12 +258,12 @@
 					stoneTexture.offset.y -= .05;
 					oceanTexture.offset.y -= .0001;
 
-					enemies.forEach(function (element, index)
+					obstacles.forEach(function (element, index)
 						{
-						enemies[index].animate();
-						if (enemies[index].name=="ring")
+						obstacles[index].animate();
+						if (obstacles[index].name=="ring")
 							{
-							enemies[index].rotation.y = enemies[index].rotation.y + 0.15;
+							obstacles[index].rotation.y = obstacles[index].rotation.y + 0.15;
 							}
 						});
 
@@ -289,7 +290,7 @@
 
 					document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
-					if (detectCollisions(enemies) === true)
+					if (detectCollisions(obstacles) === true)
 						{
 						gameOver();
 						}
@@ -618,8 +619,8 @@
 				{
 				if (cameraIntroDone==true)
 					{
-					enemy = new PowerUp(enemies.length);
-					enemies.push(enemy);
+					enemy = new PowerUp(obstacles.length);
+					obstacles.push(enemy);
 					scene.add(enemy);
 					}
 
@@ -627,10 +628,10 @@
 					{
 					if (game_running==true && cameraIntroDone==true)
 						{
-						if (enemies.length < ENEMY_COUNT)
+						if (obstacles.length < OBSTACLES_COUNT)
 							{
-							enemy = new PowerUp(enemies.length);
-							enemies.push(enemy);
+							enemy = new PowerUp(obstacles.length);
+							obstacles.push(enemy);
 							scene.add(enemy);
 							}
 						}
@@ -640,7 +641,7 @@
 					{
 					if (game_running==true && cameraIntroDone==true)
 						{
-						ENEMY_COUNT += 1;
+						OBSTACLES_COUNT += 1;
 						}
 					}, 30000);
 
@@ -748,17 +749,17 @@
 				document.getElementById("endlessrunner-gameover-points").className = "endlessrunner-gameover-points";
 				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 
-				// SETTING THE INITIAL ENEMY COUNT
-				ENEMY_COUNT = 10;
+				// SETTING THE INITIAL OBSTACLES COUNT
+				OBSTACLES_COUNT = 10;
 
-				// REMOVING ALL THE ENEMIES FROM THE SCENE
-				enemies.forEach(function (element, index)
+				// REMOVING ALL THE OBSTACLES FROM THE SCENE
+				obstacles.forEach(function (element, index)
 					{
-					scene.remove(enemies[index]);
+					scene.remove(obstacles[index]);
 					});
 
-				// CLEARING THE ENEMIES ARRAY
-				enemies = [];
+				// CLEARING THE OBSTACLES ARRAY
+				obstacles = [];
 
 				// CENTERING THE HERO
 				hero.position.x = 0;
