@@ -152,6 +152,7 @@
 			var enemyMaterial;
 
 			var obstacles = [];
+			var obstaclesLastPositionX = null;
 			var obstaclesSpawnIntervalID;
 			var obstaclesCounterIntervalID;
 
@@ -315,7 +316,20 @@
 					{
 					return Math.floor(Math.random() * (max - min + 1)) + min;
 					}
-				return OBSTACLES_POSITION_X[getRandomInteger(0, OBSTACLES_POSITION_X.length - 1)];
+
+				var newPositionX = obstaclesLastPositionX;
+
+				while (newPositionX==obstaclesLastPositionX)
+					{
+					newPositionX = OBSTACLES_POSITION_X[getRandomInteger(0, OBSTACLES_POSITION_X.length - 1)];
+					}
+
+				obstaclesLastPositionX = newPositionX;
+
+				return newPositionX;
+
+
+				//return OBSTACLES_POSITION_X[getRandomInteger(0, OBSTACLES_POSITION_X.length - 1)];
 				}
 
 			function detectCollisions()
@@ -683,7 +697,7 @@
 						// UPDATING THE OBSTACLES COUNT
 						OBSTACLES_COUNT += 1;
 						}
-					}, 30000);
+					}, 10000);
 
 				// RENDERING THE GAME
 				render();
