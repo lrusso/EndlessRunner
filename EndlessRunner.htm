@@ -245,9 +245,7 @@
 								{
 								cameraIntroDone = true;
 
-								enemy = new PowerUp(obstacles.length);
-								obstacles.push(enemy);
-								scene.add(enemy);
+								addObstacle();
 								}
 							}
 						}
@@ -256,7 +254,7 @@
 
 					grassTexture.offset.y -= .05;
 					stoneTexture.offset.y -= .05;
-					oceanTexture.offset.y -= .0001;
+					oceanTexture.offset.y -= .0002;
 
 					obstacles.forEach(function (element, index)
 						{
@@ -323,7 +321,7 @@
 				return false;
 				}
 
-			function PowerUp(typeObstacle)
+			function PowerUp()
 				{
 				function getRandomInteger(min, max)
 					{
@@ -340,6 +338,7 @@
 				var yPositionValues = [];
 				var zPosition = 0;
 				var zPositionValues = [];
+				var typeObstacle = obstacles.length;
 
 				objectDimension = 2.5;
 
@@ -619,9 +618,7 @@
 				{
 				if (cameraIntroDone==true)
 					{
-					enemy = new PowerUp(obstacles.length);
-					obstacles.push(enemy);
-					scene.add(enemy);
+					addObstacle();
 					}
 
 				enemiesSpawnIntervalID = window.setInterval(function ()
@@ -630,9 +627,7 @@
 						{
 						if (obstacles.length < OBSTACLES_COUNT)
 							{
-							enemy = new PowerUp(obstacles.length);
-							obstacles.push(enemy);
-							scene.add(enemy);
+							addObstacle();
 							}
 						}
 					}, 4000);
@@ -731,6 +726,18 @@
 
 				// RETURNING THE ENEMY
 				return m;
+				}
+
+			function addObstacle()
+				{
+				try
+					{
+					obstacles.push(new PowerUp());
+					scene.add(obstacles[obstacles.length-1]);
+					}
+					catch(err)
+					{
+					}
 				}
 
 			function restartGame()
