@@ -275,7 +275,7 @@
 
 						if (obstacle.name=="ring")
 							{
-							obstacle.rotation.y = obstacle.rotation.y + 0.15;
+							obstacle.rotation.y = obstacle.rotation.y + 0.12;
 							}
 						});
 
@@ -696,26 +696,40 @@
 				{
 				try
 					{
+					// CREATING AN OBJECT
 					var object;
 
+					// CHECKING IF THE NUMBER IS ODD
 					if (obstacles.length%2==1)
 						{
+						// CREATING THE RING MODEL
 						object = new THREE.Mesh(ringGeometry, ringMaterial);
+
+						// SCALING THE RING MODEL
 						object.scale.x = 0.05;
 						object.scale.y = 0.05;
 						object.scale.z = 0.05;
+
+						// POSITIONING THE RING MODEL
 						object.position.set(getRandomPositionX(), 4, OBSTACLES_POSITION_Z);
+
+						// SETTING THE RING MODEL NAME
 						object.name = "ring";
 						}
 						else
 						{
+						// CREATING THE ENEMY MODEL
 						object = createEnemy();
+
+						// POSITIONING THE ENEMY MODEL
 						object.position.set(getRandomPositionX(), 3.5, OBSTACLES_POSITION_Z);
-						object.name = "obstacle";
+
+						// SETTING THE ENEMY MODEL NAME
+						object.name = "enemy";
 						}
 
+					// SETTING THAT THE MODEL WILL BE CASTING A SHADOW
 					object.castShadow = true;
-					object.receiveShadow = true;
 
 					// ADDING A NEW OBSTACLE TO THE OBSTACLES ARRAY
 					obstacles.push(object);
