@@ -98,6 +98,8 @@
 			var OBSTACLES_POSITION_X = [-(PLANE_WIDTH - PADDING) / 2, 0, (PLANE_WIDTH - PADDING) / 2];
 			var OBSTACLES_POSITION_Z = -PLANE_LENGTH / 2;
 
+			var soundEnabled = false;
+
 			var camera;
 			var containerWidth = 0;
 			var containerHeight = 0;
@@ -164,15 +166,6 @@
 			var movingDestinyX = null;
 
 			var game_running = true;
-
-			var gameAudioContext = null;
-			var gameAudioRing =  new Audio(ringSound);
-			var gameAudioMusic = new Audio(musicSound);
-			var gameAudioOver = new Audio(gameOverSound);
-			gameAudioRing.volume = 0.5;
-			gameAudioMusic.loop = true;
-			gameAudioMusic.volume = 0.7;
-			gameAudioOver.volume = 0.7;
 
 			var actions = null;
 			var clock = new THREE.Clock();
@@ -362,7 +355,7 @@
 							document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 							// PLAYING THE RING SOUND
-							playSound(gameAudioRing);
+							playRing();
 							}
 							else
 							{
@@ -665,7 +658,7 @@
 				movingDestinyX = null;
 
 				// PAUSING THE GAME OVER MUSIC
-				gameAudioOver.pause();
+				pauseGameOver();
 
 				// PLAYING THE GAME MUSIC
 				playMusic();
@@ -854,10 +847,10 @@
 					}
 
 				// PAUSING THE MUSIC
-				stopMusic();
+				pauseMusic();
 
 				// PLAYING THE GAME OVER MUSIC
-				playSound(gameAudioOver);
+				playGameOver();
 
 				// HIDING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "none";
@@ -877,23 +870,15 @@
 				document.getElementById("endlessrunner-gameover-restart").className = "endlessrunner-gameover-fadein";
 				}
 
-			function playSound(audioResource)
+			function playRing()
 				{
 				try
 					{
-					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if (gameAudioContext!=null)
-						{
-						// RESUMING THE AUDIO CONTEXT
-						gameAudioContext.resume().then(function()
-							{
-							// SET THE AUDIO RESOURCE CURRENT TIME TO 0
-							audioResource.currentTime = 0;
+					// SET THE RING SOUND CURRENT TIME TO 0
+					audioRingPlayer.currentTime = 0;
 
-							// PLAYING THE AUDIO RESOURCE
-							audioResource.play();
-							});
-						}
+					// PLAYING THE RING SOUND
+					audioRingPlayer.play();
 					}
 					catch(err)
 					{
@@ -904,18 +889,14 @@
 				{
 				try
 					{
-					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if (gameAudioContext!=null)
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
 						{
-						// RESUMING THE AUDIO CONTEXT
-						gameAudioContext.resume().then(function()
-							{
-							// SET THE GAME MUSIC CURRENT TIME TO 0
-							gameAudioMusic.currentTime = 0;
+						// SET THE GAME MUSIC CURRENT TIME TO 0
+						audioMusicPlayer.currentTime = 0;
 
-							// PLAYING THE GAME MUSIC
-							gameAudioMusic.play();
-							});
+						// PLAYING THE GAME MUSIC
+						audioMusicPlayer.play();
 						}
 					}
 					catch(err)
@@ -923,12 +904,75 @@
 					}
 				}
 
-			function stopMusic()
+			function resumeMusic()
+				{
+				try
+					{
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
+						{
+						// RESUMING THE GAME MUSIC
+						audioMusicPlayer.play();
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
+			function pauseMusic()
 				{
 				try
 					{
 					// PAUSING THE GAME MUSIC
-					gameAudioMusic.pause();
+					audioMusicPlayer.pause();
+					}
+					catch(err)
+					{
+					}
+				}
+
+			function playGameOver()
+				{
+				try
+					{
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
+						{
+						// SET THE GAME OVER MUSIC CURRENT TIME TO 0
+						audioOverPlayer.currentTime = 0;
+
+						// PLAYING THE GAME OVER MUSIC
+						audioOverPlayer.play();
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
+			function resumeGameOver()
+				{
+				try
+					{
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
+						{
+						// RESUMING THE GAME OVER MUSIC
+						audioOverPlayer.play();
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
+			function pauseGameOver()
+				{
+				try
+					{
+					// PAUSING THE GAME OVER MUSIC
+					audioOverPlayer.pause();
 					}
 					catch(err)
 					{
@@ -940,13 +984,10 @@
 				try
 					{
 					// CHECKING IF THERE IS NO AUDIO CONTEXT AVAILABLE
-					if (gameAudioContext==null)
+					if (soundEnabled==false)
 						{
-						// CREATING A NEW AUDIO CONTEXT
-						gameAudioContext = new AudioContext();
-
-						// RESUMING THE AUDIO CONTEXT
-						gameAudioContext.resume();
+						// UPDATING THE VARIABLE
+						soundEnabled = true;
 
 						// PLAYING THE MUSIC 100 MS AFTER THE AUDIO CONTEXT WAS RESUMED
 						setTimeout(function(){playMusic();},100);
@@ -956,11 +997,11 @@
 						}
 						else
 						{
-						// CLEARING THE AUDIO CONTEXT
-						gameAudioContext=null;
+						// UPDATING THE VARIABLE
+						soundEnabled = false;
 
-						// STOPPING THE MUSIC
-						stopMusic();
+						// PAUSING THE MUSIC
+						pauseMusic();
 
 						// SHOWING THE "SOUND OFF" ICON
 						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-off";
@@ -1036,13 +1077,13 @@
 					game_running = false;
 
 					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if (gameAudioContext!=null)
+					if(true)//if (gameAudioContext!=null)
 						{
 						// PAUSING THE GAME MUSIC
-						gameAudioMusic.pause();
+						pauseMusic();
 
 						// PAUSING THE GAME OVER MUSIC
-						gameAudioOver.pause();
+						pauseGameOver();
 						}
 					}
 					catch(err)
@@ -1058,21 +1099,21 @@
 					game_running = true;
 
 					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if (gameAudioContext!=null)
+					if(true)//if (gameAudioContext!=null)
 						{
 						// CHECKING IF THE GAME IS NOT OVER
 						if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display!=="block")
 							{
 							// RESUMING THE GAME MUSIC
-							gameAudioMusic.play();
+							resumeMusic();
 							}
 							else
 							{
 							// CHECKING IF THE GAME OVER MUSIC HAS ANY PLAYING TIME LEFT
-							if (gameAudioOver.currentTime!=gameAudioOver.duration)
+							if (audioOverPlayer.currentTime!=audioOverPlayer.duration)
 								{
 								// RESUMING THE GAME OVER MUSIC
-								gameAudioOver.play();
+								resumeGameOver();
 								}
 							}
 						}
