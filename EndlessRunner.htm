@@ -983,19 +983,8 @@
 				{
 				try
 					{
-					// CHECKING IF THERE IS NO AUDIO CONTEXT AVAILABLE
-					if (soundEnabled==false)
-						{
-						// UPDATING THE VARIABLE
-						soundEnabled = true;
-
-						// PLAYING THE MUSIC 100 MS AFTER THE AUDIO CONTEXT WAS RESUMED
-						setTimeout(function(){playMusic();},100);
-
-						// SHOWING THE "SOUND ON" ICON
-						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
-						}
-						else
+					// CHECKING IF SOUND IS ENABLED
+					if (soundEnabled==true)
 						{
 						// UPDATING THE VARIABLE
 						soundEnabled = false;
@@ -1005,6 +994,17 @@
 
 						// SHOWING THE "SOUND OFF" ICON
 						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-off";
+						}
+						else
+						{
+						// UPDATING THE VARIABLE
+						soundEnabled = true;
+
+						// PLAYING THE MUSIC 100 MS AFTER THE AUDIO CONTEXT WAS RESUMED
+						setTimeout(function(){playMusic();},100);
+
+						// SHOWING THE "SOUND ON" ICON
+						document.getElementById("endlessrunner-soundhandler").className = "endlessrunner-soundhandler-on";
 						}
 					}
 					catch(err)
@@ -1076,8 +1076,8 @@
 					// PAUSING THE GAME
 					game_running = false;
 
-					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if(true)//if (gameAudioContext!=null)
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
 						{
 						// PAUSING THE GAME MUSIC
 						pauseMusic();
@@ -1098,8 +1098,8 @@
 					// RESUMING THE GAME
 					game_running = true;
 
-					// CHECKING IF THERE IS AN AUDIO CONTEXT AVAILABLE
-					if(true)//if (gameAudioContext!=null)
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
 						{
 						// CHECKING IF THE GAME IS NOT OVER
 						if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display!=="block")
