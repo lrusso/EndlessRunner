@@ -874,11 +874,15 @@
 				{
 				try
 					{
-					// SET THE RING SOUND CURRENT TIME TO 0
-					audioRingPlayer.currentTime = 0;
+					// CHECKING IF THE SOUND IS ENABLED
+					if (soundEnabled==true)
+						{
+						// SET THE RING SOUND CURRENT TIME TO 0
+						audioRingPlayer.currentTime = 0;
 
-					// PLAYING THE RING SOUND
-					audioRingPlayer.play();
+						// PLAYING THE RING SOUND
+						audioRingPlayer.play();
+						}
 					}
 					catch(err)
 					{
