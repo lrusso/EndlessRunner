@@ -135,6 +135,21 @@
 			var oceanTexture;
 			var oceanLoader;
 
+			var cloud1;
+			var cloud2;
+			var cloud3;
+			var cloud4;
+			var cloudsPortraitX1 = -150;
+			var cloudsPortraitX2 = -100;
+			var cloudsPortraitY1 = 50;
+			var cloudsPortraitY2 = 150;
+			var cloudsLandscapeX1 = -300;
+			var cloudsLandscapeX2 = -200;
+			var cloudsLandscapeY1 = 50;
+			var cloudsLandscapeY2 = 150;
+			var cloudGeometry;
+			var cloudMaterial;
+
 			var ringGeometry;
 			var ringMaterial;
 
@@ -483,6 +498,34 @@
 				canvas.getContext("2d").fillRect(0, 0, canvas.width, canvas.height);
 				document.getElementsByClassName("endlessrunner-container")[0].style.background = "url(" + canvas.toDataURL("image/png") + ")";
 				document.getElementsByClassName("endlessrunner-container")[0].style.backgroundSize = "32px 100%";
+
+				// LOADING THE CLOUD GEOMETRY
+				cloudGeometry = new THREE.STLLoader().parse(cloudModel);
+				cloudGeometry.computeFaceNormals();
+				cloudGeometry.computeVertexNormals();
+				cloudGeometry.center();
+
+				// LOADING THE CLOUD MATERIAL
+				cloudMaterial = new THREE.MeshLambertMaterial({ color: 0xF8F8F8, flatShading: THREE.FlatShading, opacity: 0.7 });
+
+				// ADDING THE FIRST CLOUD
+				cloud1 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				scene.add(cloud1);
+
+				// ADDING THE SECOND CLOUD
+				cloud2 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				scene.add(cloud2);
+
+				// ADDING THE THIRTH CLOUD
+				cloud3 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				scene.add(cloud3);
+
+				// ADDING THE FOURTH CLOUD
+				cloud4 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				scene.add(cloud4);
+
+				// UPDATING THE CLOUDS POSITIONS
+				updateCloudsPositions();
 
 				// ADDING THE BACKGROUND ENEMY
 				backgroundEnemy = new THREE.ColladaLoader().parse(robotnikModel);
@@ -1104,6 +1147,33 @@
 					}
 				}
 
+			function updateCloudsPositions()
+				{
+				try
+					{
+					// CHECKING THE WINDOW SIZE (DEVICE ORIENTATION)
+					if (window.innerWidth>window.innerHeight)
+						{
+						// UPDATING THE CLOUDS POSITIONS FOR LANDSCAPE ORIENTATION
+						cloud1.position.x = cloudsLandscapeX1;cloud1.position.y = cloudsLandscapeY1;
+						cloud2.position.x = cloudsLandscapeX2;cloud2.position.y = cloudsLandscapeY2;
+						cloud3.position.x = cloudsLandscapeX2 * -1;cloud3.position.y = cloudsLandscapeY2;
+						cloud4.position.x = cloudsLandscapeX1 * -1;cloud4.position.y = cloudsLandscapeY1;
+						}
+						else
+						{
+						// UPDATING THE CLOUDS POSITIONS FOR PORTRAIT ORIENTATION
+						cloud1.position.x = cloudsPortraitX1;cloud1.position.y = cloudsPortraitY1;
+						cloud2.position.x = cloudsPortraitX2;cloud2.position.y = cloudsPortraitY2;
+						cloud3.position.x = cloudsPortraitX2 * -1;cloud3.position.y = cloudsPortraitY2;
+						cloud4.position.x = cloudsPortraitX1 * -1;cloud4.position.y = cloudsPortraitY1;
+						}
+					}
+					catch(err)
+					{
+					}
+				}
+
 			function resizeCanvasToFitWindow()
 				{
 				try
@@ -1116,6 +1186,9 @@
 
 					// UPDATING THE RENDERING SIZE
 					renderer.setSize(window.innerWidth, window.innerHeight);
+
+					// UPDATING THE CLOUDS POSITIONS
+					updateCloudsPositions();
 					}
 					catch(err)
 					{
