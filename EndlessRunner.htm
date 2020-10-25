@@ -877,11 +877,11 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// SET THE RING SOUND CURRENT TIME TO 0
-						audioRingPlayer.currentTime = 0;
-
 						// PLAYING THE RING SOUND
-						audioRingPlayer.play();
+						audioContextRingPlayer = audioContextRing.createBufferSource();
+						audioContextRingPlayer.buffer = audioContextRingBuffer;
+						audioContextRingPlayer.connect(audioContextRing.destination);
+						audioContextRingPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -896,11 +896,14 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// SET THE GAME MUSIC CURRENT TIME TO 0
-						audioMusicPlayer.currentTime = 0;
+						// PAUSING THE GAME MUSIC (IF PLAYING)
+						try{audioContextMusicPlayer.stop();}catch(err){}
 
 						// PLAYING THE GAME MUSIC
-						audioMusicPlayer.play();
+						audioContextMusicPlayer = audioContextMusic.createBufferSource();
+						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
+						audioContextMusicPlayer.connect(audioContextMusic.destination);
+						audioContextMusicPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -916,7 +919,10 @@
 					if (soundEnabled==true)
 						{
 						// RESUMING THE GAME MUSIC
-						audioMusicPlayer.play();
+						audioContextMusicPlayer = audioContextMusic.createBufferSource();
+						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
+						audioContextMusicPlayer.connect(audioContextMusic.destination);
+						audioContextMusicPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -929,7 +935,7 @@
 				try
 					{
 					// PAUSING THE GAME MUSIC
-					audioMusicPlayer.pause();
+					audioContextMusicPlayer.stop();
 					}
 					catch(err)
 					{
@@ -943,11 +949,14 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// SET THE GAME OVER MUSIC CURRENT TIME TO 0
-						audioOverPlayer.currentTime = 0;
+						// PAUSING THE GAME MUSIC (IF PLAYING)
+						try{audioContextMusicPlayer.stop();}catch(err){}
 
 						// PLAYING THE GAME OVER MUSIC
-						audioOverPlayer.play();
+						audioContextOverPlayer = audioContextOver.createBufferSource();
+						audioContextOverPlayer.buffer = audioContextOverBuffer;
+						audioContextOverPlayer.connect(audioContextOver.destination);
+						audioContextOverPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -963,7 +972,10 @@
 					if (soundEnabled==true)
 						{
 						// RESUMING THE GAME OVER MUSIC
-						audioOverPlayer.play();
+						audioContextOverPlayer = audioContextOver.createBufferSource();
+						audioContextOverPlayer.buffer = audioContextOverBuffer;
+						audioContextOverPlayer.connect(audioContextOver.destination);
+						audioContextOverPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -976,7 +988,7 @@
 				try
 					{
 					// PAUSING THE GAME OVER MUSIC
-					audioOverPlayer.pause();
+					audioContextOverPlayer.stop();
 					}
 					catch(err)
 					{
@@ -1113,12 +1125,8 @@
 							}
 							else
 							{
-							// CHECKING IF THE GAME OVER MUSIC HAS ANY PLAYING TIME LEFT
-							if (audioOverPlayer.currentTime!=audioOverPlayer.duration)
-								{
-								// RESUMING THE GAME OVER MUSIC
-								resumeGameOver();
-								}
+							// RESUMING THE GAME OVER MUSIC
+							resumeGameOver();
 							}
 						}
 					}
