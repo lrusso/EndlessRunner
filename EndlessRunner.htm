@@ -357,7 +357,7 @@
 							// HIDING THE RING
 							obstacles[i].visible = false;
 
-							// UPDATING THE SCORE CONTAINER
+							// UPDATING THE SCORE LABEL
 							document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 							// PLAYING THE RING SOUND
@@ -629,10 +629,10 @@
 				// SHOWING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "block";
 
-				// SHOWING THE SCORE CONTAINER
+				// SHOWING THE SCORE LABEL
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
 
-				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER LABEL, SCORE AND RESTART BUTTON
+				// REMOVING THE FADE IN EFFECT FOR THE GAME OVER, SCORE, HIGHSCORE AND RESTART BUTTON
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
 				document.getElementById("endlessrunner-gameover-score").className = "endlessrunner-gameover-score";
 				document.getElementById("endlessrunner-gameover-high").className = "endlessrunner-gameover-high";
@@ -656,7 +656,7 @@
 				// CLEARING THE SCORE
 				score = 0;
 
-				// UPDATING THE SCORE CONTAINER
+				// UPDATING THE SCORE LABEL
 				document.getElementsByClassName("endlessrunner-score")[0].innerHTML = score;
 
 				// CLEARING ALL MOVEMENTS
@@ -862,10 +862,10 @@
 				// HIDING THE SOUND HANDLER
 				document.getElementsByClassName("endlessrunner-soundhandler-container")[0].style.display = "none";
 
-				// HIDING THE SCORE CONTAINER
+				// HIDING THE SCORE LABEL
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
 
-				// UPDATING THE SCORE LABEL
+				// UPDATING THE GAME OVER SCORE LABEL
 				document.getElementsByClassName("endlessrunner-gameover-score")[0].innerHTML = STRING_SCORE + score;
 
 				// CHECKING IF THE USER SET A HIGH SCORE
@@ -881,7 +881,7 @@
 				// SHOWING THE GAME OVER CONTAINER
 				document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display = "block";
 
-				// IMPLEMENTING THE FADE IN EFFECT FOR THE GAME OVER LABEL, SCORE AND RESTART BUTTON
+				// IMPLEMENTING THE FADE IN EFFECT FOR THE GAME OVER, SCORE, HIGHSCORE AND RESTART BUTTON
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-score").className = "endlessrunner-gameover-score endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-high").className = "endlessrunner-gameover-high endlessrunner-gameover-fadein";
@@ -1258,7 +1258,7 @@
 				// SHOWING THE GAME CONTAINER
 				document.getElementsByClassName("endlessrunner-container")[0].style.display = "block";
 
-				// SHOWING THE SCORE CONTAINER
+				// SHOWING THE SCORE LABEL
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "block";
 
 				// SHOWING THE SOUND HANDLER CONTAINER
