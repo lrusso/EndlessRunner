@@ -878,10 +878,10 @@
 					if (soundEnabled==true)
 						{
 						// PLAYING THE RING SOUND
-						audioContextRingPlayer = audioContextRing.createBufferSource();
-						audioContextRingPlayer.buffer = audioContextRingBuffer;
-						audioContextRingPlayer.connect(audioContextRing.destination);
-						audioContextRingPlayer.start(0);
+						audioContextSoundPlayer = audioContextSound.createBufferSource();
+						audioContextSoundPlayer.buffer = audioContextRingSoundBuffer;
+						audioContextSoundPlayer.connect(audioContextSound.destination);
+						audioContextSoundPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -896,13 +896,13 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// PAUSING THE GAME MUSIC (IF PLAYING)
+						// PAUSING THE MUSIC (IF PLAYING)
 						try{audioContextMusicPlayer.stop();}catch(err){}
 
-						// CHECKING IF THE GAME MUSIC VOLUME WAS CONFIGURED
+						// CHECKING IF THE MUSIC VOLUME WAS CONFIGURED
 						if (audioContextMusicVolume==null)
 							{
-							// SETTING THE GAME MUSIC VOLUME TO 70%
+							// SETTING THE MUSIC VOLUME TO 70%
 							audioContextMusicVolume = audioContextMusic.createGain();
 							audioContextMusicVolume.gain.value = 0.7;
 							audioContextMusicVolume.connect(audioContextMusic.destination);
@@ -910,7 +910,7 @@
 
 						// PLAYING THE GAME MUSIC
 						audioContextMusicPlayer = audioContextMusic.createBufferSource();
-						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
+						audioContextMusicPlayer.buffer = audioContextGameMusicBuffer;
 						audioContextMusicPlayer.connect(audioContextMusicVolume);
 						audioContextMusicPlayer.loop = true;
 						audioContextMusicPlayer.start(0);
@@ -928,10 +928,10 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// CHECKING IF THE GAME MUSIC VOLUME WAS CONFIGURED
+						// CHECKING IF THE MUSIC VOLUME WAS CONFIGURED
 						if (audioContextMusicVolume==null)
 							{
-							// SETTING THE GAME MUSIC VOLUME TO 70%
+							// SETTING THE MUSIC VOLUME TO 70%
 							audioContextMusicVolume = audioContextMusic.createGain();
 							audioContextMusicVolume.gain.value = 0.7;
 							audioContextMusicVolume.connect(audioContextMusic.destination);
@@ -939,8 +939,8 @@
 
 						// RESUMING THE GAME MUSIC
 						audioContextMusicPlayer = audioContextMusic.createBufferSource();
-						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
-						audioContextMusicPlayer.connect(volumeHandler);
+						audioContextMusicPlayer.buffer = audioContextGameMusicBuffer;
+						audioContextMusicPlayer.connect(audioContextMusicVolume);
 						audioContextMusicPlayer.loop = true;
 						audioContextMusicPlayer.start(0);
 						}
@@ -969,23 +969,24 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// PAUSING THE GAME MUSIC (IF PLAYING)
+						// PAUSING THE MUSIC (IF PLAYING)
 						try{audioContextMusicPlayer.stop();}catch(err){}
 
-						// CHECKING IF THE GAME OVER MUSIC VOLUME WAS CONFIGURED
-						if (audioContextOverVolume==null)
+						// CHECKING IF THE MUSIC VOLUME WAS CONFIGURED
+						if (audioContextMusicVolume==null)
 							{
-							// SETTING THE GAME OVER MUSIC VOLUME TO 70%
-							audioContextOverVolume = audioContextOver.createGain();
-							audioContextOverVolume.gain.value = 0.7;
-							audioContextOverVolume.connect(audioContextOver.destination);
+							// SETTING THE MUSIC VOLUME TO 70%
+							audioContextMusicVolume = audioContextMusic.createGain();
+							audioContextMusicVolume.gain.value = 0.7;
+							audioContextMusicVolume.connect(audioContextMusic.destination);
 							}
 
 						// PLAYING THE GAME OVER MUSIC
-						audioContextOverPlayer = audioContextOver.createBufferSource();
-						audioContextOverPlayer.buffer = audioContextOverBuffer;
-						audioContextOverPlayer.connect(audioContextOverVolume);
-						audioContextOverPlayer.start(0);
+						audioContextMusicPlayer = audioContextMusic.createBufferSource();
+						audioContextMusicPlayer.buffer = audioContextGameOverBuffer;
+						audioContextMusicPlayer.connect(audioContextMusicVolume);
+						audioContextMusicPlayer.loop = false;
+						audioContextMusicPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -1000,20 +1001,21 @@
 					// CHECKING IF THE SOUND IS ENABLED
 					if (soundEnabled==true)
 						{
-						// CHECKING IF THE GAME OVER MUSIC VOLUME WAS CONFIGURED
-						if (audioContextOverVolume==null)
+						// CHECKING IF THE MUSIC VOLUME WAS CONFIGURED
+						if (audioContextMusicVolume==null)
 							{
-							// SETTING THE GAME OVER MUSIC VOLUME TO 70%
-							audioContextOverVolume = audioContextOver.createGain();
-							audioContextOverVolume.gain.value = 0.7;
-							audioContextOverVolume.connect(audioContextOver.destination);
+							// SETTING THE MUSIC VOLUME TO 70%
+							audioContextMusicVolume = audioContextMusic.createGain();
+							audioContextMusicVolume.gain.value = 0.7;
+							audioContextMusicVolume.connect(audioContextMusic.destination);
 							}
 
-						// RESUMING THE GAME OVER MUSIC
-						audioContextOverPlayer = audioContextOver.createBufferSource();
-						audioContextOverPlayer.buffer = audioContextOverBuffer;
-						audioContextOverPlayer.connect(audioContextOverVolume);
-						audioContextOverPlayer.start(0);
+						// PLAYING THE GAME OVER MUSIC
+						audioContextMusicPlayer = audioContextMusic.createBufferSource();
+						audioContextMusicPlayer.buffer = audioContextGameOverBuffer;
+						audioContextMusicPlayer.connect(audioContextMusicVolume);
+						audioContextMusicPlayer.loop = false;
+						audioContextMusicPlayer.start(0);
 						}
 					}
 					catch(err)
@@ -1026,7 +1028,7 @@
 				try
 					{
 					// PAUSING THE GAME OVER MUSIC
-					audioContextOverPlayer.stop();
+					audioContextMusicPlayer.stop();
 					}
 					catch(err)
 					{
