@@ -142,6 +142,9 @@
 			var enemyMaterial;
 
 			var backgroundEnemy;
+			var backgroundEnemyHole;
+			var backgroundEnemyHoleGeometry;
+			var backgroundEnemyHoleMaterial;
 
 			var obstacles = [];
 			var obstaclesLastPositionX = null;
@@ -518,13 +521,13 @@
 				scene.add(backgroundEnemy.scene);
 
 				// ADDING THE BLACK HOLE FROM WHERE ALL THE ELEMENTS WILL BE COMING FROM
-				var geometry = new THREE.CircleGeometry(29, 32);
-				var material = new THREE.MeshBasicMaterial({ color:0x000000 });
-				var circle = new THREE.Mesh(geometry,material);
-				circle.position.x = -2;
-				circle.position.y = 12;
-				circle.position.z = -500;
-				scene.add(circle);
+				backgroundEnemyHoleGeometry = new THREE.CircleGeometry(29, 32);
+				backgroundEnemyHoleMaterial = new THREE.MeshBasicMaterial({ color:0x000000 });
+				backgroundEnemyHole = new THREE.Mesh(backgroundEnemyHoleGeometry, backgroundEnemyHoleMaterial);
+				backgroundEnemyHole.position.x = -1.75;
+				backgroundEnemyHole.position.y = 12;
+				backgroundEnemyHole.position.z = -500;
+				scene.add(backgroundEnemyHole);
 
 				// LOADING THE RING GEOMETRY
 				ringGeometry = new THREE.STLLoader().parse(ringModel);
