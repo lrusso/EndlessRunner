@@ -139,10 +139,6 @@
 			var cloud2;
 			var cloud3;
 			var cloud4;
-			var cloudsPortraitX1 = -150;
-			var cloudsPortraitX2 = -100;
-			var cloudsPortraitY1 = 50;
-			var cloudsPortraitY2 = 150;
 			var cloudsLandscapeX1 = -300;
 			var cloudsLandscapeX2 = -200;
 			var cloudsLandscapeY1 = 50;
@@ -510,18 +506,26 @@
 
 				// ADDING THE FIRST CLOUD
 				cloud1 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				cloud1.position.x = cloudsLandscapeX1;
+				cloud1.position.y = cloudsLandscapeY1;
 				scene.add(cloud1);
 
 				// ADDING THE SECOND CLOUD
 				cloud2 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				cloud2.position.x = cloudsLandscapeX2;
+				cloud2.position.y = cloudsLandscapeY2;
 				scene.add(cloud2);
 
 				// ADDING THE THIRTH CLOUD
 				cloud3 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				cloud3.position.x = cloudsLandscapeX2 * -1;
+				cloud3.position.y = cloudsLandscapeY2;
 				scene.add(cloud3);
 
 				// ADDING THE FOURTH CLOUD
 				cloud4 = new THREE.Mesh(cloudGeometry, cloudMaterial);
+				cloud4.position.x = cloudsLandscapeX1 * -1;
+				cloud4.position.y = cloudsLandscapeY1;
 				scene.add(cloud4);
 
 				// UPDATING THE CLOUDS POSITIONS
@@ -1154,19 +1158,19 @@
 					// CHECKING THE WINDOW SIZE (DEVICE ORIENTATION)
 					if (window.innerWidth>window.innerHeight)
 						{
-						// UPDATING THE CLOUDS POSITIONS FOR LANDSCAPE ORIENTATION
-						cloud1.position.x = cloudsLandscapeX1;cloud1.position.y = cloudsLandscapeY1;
-						cloud2.position.x = cloudsLandscapeX2;cloud2.position.y = cloudsLandscapeY2;
-						cloud3.position.x = cloudsLandscapeX2 * -1;cloud3.position.y = cloudsLandscapeY2;
-						cloud4.position.x = cloudsLandscapeX1 * -1;cloud4.position.y = cloudsLandscapeY1;
+						// IN LANDSCAPE ORIENTATION THE CLOUDS ARE VISIBLE
+						cloud1.visible = true;
+						cloud2.visible = true;
+						cloud3.visible = true;
+						cloud4.visible = true;
 						}
 						else
 						{
-						// UPDATING THE CLOUDS POSITIONS FOR PORTRAIT ORIENTATION
-						cloud1.position.x = cloudsPortraitX1;cloud1.position.y = cloudsPortraitY1;
-						cloud2.position.x = cloudsPortraitX2;cloud2.position.y = cloudsPortraitY2;
-						cloud3.position.x = cloudsPortraitX2 * -1;cloud3.position.y = cloudsPortraitY2;
-						cloud4.position.x = cloudsPortraitX1 * -1;cloud4.position.y = cloudsPortraitY1;
+						// IN PORTRAIT ORIENTATION THE CLOUDS ARE HIDDEN
+						cloud1.visible = false;
+						cloud2.visible = false;
+						cloud3.visible = false;
+						cloud4.visible = false;
 						}
 					}
 					catch(err)
