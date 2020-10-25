@@ -135,26 +135,13 @@
 			var oceanTexture;
 			var oceanLoader;
 
-			var cloud1;
-			var cloud2;
-			var cloud3;
-			var cloud4;
-			var cloudsPortraitX1 = -100;
-			var cloudsPortraitX2 = -50;
-			var cloudsPortraitY1 = 150;
-			var cloudsPortraitY2 = 50;
-			var cloudsLandscapeX1 = -250;
-			var cloudsLandscapeX2 = -150;
-			var cloudsLandscapeY1 = 150;
-			var cloudsLandscapeY2 = 50;
-			var cloudGeometry;
-			var cloudMaterial;
-
 			var ringGeometry;
 			var ringMaterial;
 
 			var enemyGeometry;
 			var enemyMaterial;
+
+			var backgroundEnemy;
 
 			var obstacles = [];
 			var obstaclesLastPositionX = null;
@@ -494,33 +481,50 @@
 				document.getElementsByClassName("endlessrunner-container")[0].style.background = "url(" + canvas.toDataURL("image/png") + ")";
 				document.getElementsByClassName("endlessrunner-container")[0].style.backgroundSize = "32px 100%";
 
-				// LOADING THE CLOUD GEOMETRY
-				cloudGeometry = new THREE.STLLoader().parse(cloudModel);
-				cloudGeometry.computeFaceNormals();
-				cloudGeometry.computeVertexNormals();
-				cloudGeometry.center();
+				// ADDING THE BACKGROUND ENEMY
+				backgroundEnemy = new THREE.ColladaLoader().parse(robotnikModel);
+				backgroundEnemy.scene.traverse(function(node)
+					{
+					if (node.material)
+						{
+						if (node.material[0])
+								{
+								if (node.material[0].name=="edge_color1989494255")
+									{
+									node.material[0].visible = false;
+									}
+								}
+							else if(node.material.name=="edge_color1989494255")
+								{
+								node.material.visible = false;
+								}
+							if (node.material.name=="edge_color000255")
+								{
+								node.material.visible = false
+								}
+							if(node.material.name=="Translucent_Glass_Blue")
+								{
+								//node.material.visible = false;
+								}
+							}
+						});
+				backgroundEnemy.scene.position.z = -650;
+				backgroundEnemy.scene.position.y = 10.5;
+				backgroundEnemy.scene.position.x = -470;
+				backgroundEnemy.scene.rotation.x = (-60 * Math.PI)/180;
+				backgroundEnemy.scene.scale.x = 2.5;
+				backgroundEnemy.scene.scale.y = 2.5;
+				backgroundEnemy.scene.scale.z = 2.5;
+				scene.add(backgroundEnemy.scene);
 
-				// LOADING THE CLOUD MATERIAL
-				cloudMaterial = new THREE.MeshLambertMaterial({ color: 0xF8F8F8, flatShading: THREE.FlatShading });
-
-				// ADDING THE FIRST CLOUD
-				cloud1 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				scene.add(cloud1);
-
-				// ADDING THE SECOND CLOUD
-				cloud2 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				scene.add(cloud2);
-
-				// ADDING THE THIRTH CLOUD
-				cloud3 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				scene.add(cloud3);
-
-				// ADDING THE FOURTH CLOUD
-				cloud4 = new THREE.Mesh(cloudGeometry, cloudMaterial);
-				scene.add(cloud4);
-
-				// UPDATING THE CLOUDS POSITIONS
-				updateCloudsPositions();
+				// ADDING THE BLACK HOLE FROM WHERE ALL THE ELEMENTS WILL BE COMING FROM
+				var geometry = new THREE.CircleGeometry(29, 32);
+				var material = new THREE.MeshBasicMaterial({ color:0x000000 });
+				var circle = new THREE.Mesh(geometry,material);
+				circle.position.x = -2;
+				circle.position.y = 12;
+				circle.position.z = -500;
+				scene.add(circle);
 
 				// LOADING THE RING GEOMETRY
 				ringGeometry = new THREE.STLLoader().parse(ringModel);
@@ -1086,33 +1090,6 @@
 					}
 				}
 
-			function updateCloudsPositions()
-				{
-				try
-					{
-					// CHECKING THE WINDOW SIZE (DEVICE ORIENTATION)
-					if (window.innerWidth>window.innerHeight)
-						{
-						// UPDATING THE CLOUDS POSITIONS FOR LANDSCAPE ORIENTATION
-						cloud1.position.x = cloudsLandscapeX1;cloud1.position.y = cloudsLandscapeY1;
-						cloud2.position.x = cloudsLandscapeX2;cloud2.position.y = cloudsLandscapeY2;
-						cloud3.position.x = cloudsLandscapeX2 * -1;cloud3.position.y = cloudsLandscapeY2;
-						cloud4.position.x = cloudsLandscapeX1 * -1;cloud4.position.y = cloudsLandscapeY1;
-						}
-						else
-						{
-						// UPDATING THE CLOUDS POSITIONS FOR PORTRAIT ORIENTATION
-						cloud1.position.x = cloudsPortraitX1;cloud1.position.y = cloudsPortraitY1;
-						cloud2.position.x = cloudsPortraitX2;cloud2.position.y = cloudsPortraitY2;
-						cloud3.position.x = cloudsPortraitX2 * -1;cloud3.position.y = cloudsPortraitY2;
-						cloud4.position.x = cloudsPortraitX1 * -1;cloud4.position.y = cloudsPortraitY1;
-						}
-					}
-					catch(err)
-					{
-					}
-				}
-
 			function resizeCanvasToFitWindow()
 				{
 				try
@@ -1125,9 +1102,6 @@
 
 					// UPDATING THE RENDERING SIZE
 					renderer.setSize(window.innerWidth, window.innerHeight);
-
-					// UPDATING THE CLOUDS POSITIONS
-					updateCloudsPositions();
 					}
 					catch(err)
 					{
