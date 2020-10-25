@@ -903,6 +903,7 @@
 						audioContextMusicPlayer = audioContextMusic.createBufferSource();
 						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
 						audioContextMusicPlayer.connect(audioContextMusic.destination);
+						audioContextMusicPlayer.loop = true;
 						audioContextMusicPlayer.start(0);
 						}
 					}
@@ -922,6 +923,7 @@
 						audioContextMusicPlayer = audioContextMusic.createBufferSource();
 						audioContextMusicPlayer.buffer = audioContextMusicBuffer;
 						audioContextMusicPlayer.connect(audioContextMusic.destination);
+						audioContextMusicPlayer.loop = true;
 						audioContextMusicPlayer.start(0);
 						}
 					}
