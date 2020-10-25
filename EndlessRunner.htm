@@ -488,26 +488,37 @@
 				backgroundEnemy = new THREE.ColladaLoader().parse(robotnikModel);
 				backgroundEnemy.scene.traverse(function(node)
 					{
+					// CHECKING IF THE NODE HAS A MATERIAL
 					if (node.material)
 						{
+						// CHECKING IF THAT MATERIAL IS AN ARRAY
 						if (node.material[0])
 								{
+								// HIDING THE WIREFRAME
 								if (node.material[0].name=="edge_color1989494255")
 									{
 									node.material[0].visible = false;
 									}
+								// PULLING DOWN THE PANEL THAT THE MODEL HAS (AN HORIZONTAL LINE CAN BE SEEN OTHERWISE)
+								else if (node.material[0].name=="__LightGray_")
+									{
+									node.position.y = node.position.y - 100;
+									}
 								}
+							// HIDING THE WIREFRAME
 							else if(node.material.name=="edge_color1989494255")
 								{
 								node.material.visible = false;
 								}
-							if (node.material.name=="edge_color000255")
+							// HIDING THE WIREFRAME
+							else if (node.material.name=="edge_color000255")
 								{
 								node.material.visible = false
 								}
-							if(node.material.name=="Translucent_Glass_Blue")
+							// FIXING THE GLASS
+							else if(node.material.name=="Translucent_Glass_Blue")
 								{
-								//node.material.visible = false;
+								node.material.depthTest = false;
 								}
 							}
 						});
