@@ -20,27 +20,44 @@
 		<style>
 			*{outline:none;font-family:Arial;cursor:default}
 			html,body{min-height:100%;margin:0;padding:0;background-color:black;-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent;touch-action:none}
+
 			.endlessrunner-container{position:fixed;left:0;top:0;right:0;bottom:0;width:100%;height:100%;display:none}
 			.endlessrunner-canvas{position:fixed;left:0;top:0;right:0;bottom:0}
-			.endlessrunner-soundhandler-container{position:fixed;right:10px;top:10px;background-color:rgba(0,0,0,0.5);width:58px;height:58px;z-index:998;padding:5px;border-radius:58px;display:none;background:linear-gradient(to bottom, #5cbbee, #0046a9);cursor:pointer}
+
+			.endlessrunner-soundhandler-container{position:fixed;right:10px;top:10px;width:58px;height:58px;z-index:998;padding:5px;border-radius:58px;display:none;background:linear-gradient(to bottom, #5cbbee, #0046a9);cursor:pointer}
 			.endlessrunner-soundhandler-wrapper{background:linear-gradient(to bottom, #3681D7, #2467C3);border-radius:58px;cursor:pointer}
-			.endlessrunner-soundhandler-off{width:58px;height:58px;background-repeat:no-repeat;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AoeEzoScwd5IQAAAkNJREFUaN7tmctqFEEUhr/TXra+hKAJrsWgG925cKkYIQuJIaDxRkTiJeow8YaoMSGIUYSsBnThMu7UF8jCp1FG+d0MGMZqUp3q6fS051t2n5ruf/5Tp05Vg+M4juM4juOUi6RM0gVJzyUdbqpIk/Ref/kp6VATha7oX2Z34l2yAYp8BlwM3NrTGKGSWsCNOmVXNgCRN4F7dZtGWckiZ4CndawXWYkiJ4GluhbGrCSR54BVwOoqdHekkDHgMnAQ2BsIOZD6p0kaB44DX8ysEznmPDAGrJvZp1S3piX9VnnMBZ4x0RfTjniv5b4xp1JE7pfUVbmEhK4F4toFRErSq5Q5ejY2vRP5Frh2NyRW0jIwE/kb0Y6+UfnM5TzrZU58ewsno1J9K7d2VVUVzey6JIBrAWcN2Jfj5IKZzacWondVORrh7LacHHhTn+IssBgRWsjJ2gmNFFs4XWspdKj2o4m1YTFQlPoL1MJQC+0t/FcjQu9IejiUQiUtAVcCt1o5c/a2pEdlPHi1woYhrxl4ELH0PE4VOl+FUElTObGtAuvs6ZTU7QDdCrL2WOBa28zuF1h6jqa6OlXBNm18G9u0fmdPJm28zeytpO/AJWA0Z8xoyjGmmXUkdYETwFcz+xDZG28AR4DPZrZeRbU8I+lXGb1urRuGngOTgBrfGZnZWi+9m98CmtlrYLbxQntiX9D0k/pNYtvAk/9i92Jmtwif3HdpGr0PwZv75R+SRnZkM1+FWGACGAE+mtkGjuM4juM4jjN4/gAHvpaZHSK93AAAAABJRU5ErkJggg==");cursor:pointer}
-			.endlessrunner-soundhandler-on{width:58px;height:58px;background-repeat:no-repeat;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AoeFAAole1obwAAAuJJREFUaN7tmV1oj1Ecxz+/MaU2KTIXSBLb4gKlvFwok+KOGq3QvC1vNyxxQe1CLiQSUyPahShJSsqFG2tKRNSSt6upzcXyVkObfd2c5e84m//2f/5v63xunvOc7znneb7POf/feflDJBKJRCKRSCSSLJJKJO2UdFrS0rFq0iRd0R9+SlowFo1e0L8cyse7lGTR5Clgb0AqHTNGJTUBjQm0M0tSjaSyQhyuhzU8R9Jsp1ZSn6vTKWluIZncr/+TrtEOr957SVPzPnQl7QDOJfjdfnj3c4Brkkry2ZN1kn4pPdLt0dVuOvLZM5p3HJ/mQ5cBB4BKYEKgyPxMR4eklcAa4Clw18weSKoHrnlFT0i6YWafku6thhH01qh6VNJaSQMpZZpStJZAG8eTNjk3JfJl0+jVQLkNTpssqcfTuiSVJhmMNqc7vDPkTSCvWVK5mX0GznjadGBVkkZn5iienQXavLyKlJXVZUCevi5Jo+Ny4dLMvgObgK+etN3p3cBjT1teEGvdUZjtAi562fMkzXbpR55WLcmKzqjjTiBvobu+9fLLgEnFajQUlCrctSegFa3R0PsMBiEbRis6o5WBvG53DS3ovxSr0Y2BvBcpy8y/TJrZt6Iz6qLrbi+7w8w+uPQKX0tyehnIkcly4BYw0ZMuO30msMTT2pM02pmjDm0EFgee3eLSDYE695I0eh3oy4HRGYFousvMeiVNc1tE/yO0JWbUzN4B+3IwhFuB/pT7Q2Z236XPBObL82b2K9GNt5ldkvTSGa4eok41GRxjmtlDSYuAGuCJmbUP7oWBOq/4R6A5XxGzVlJ/wkcp64doc2u+p4dt3ilBpkafB+reHslCPivzqJm1uuGdLV4B9WYmCgFJBxMcur2uzmtJsyg0JB3L1KhrZ4qkxSM9H8q12ZOZGs32tiip3+xRwif3fYw13B/BqeeyPyRV5eWoJhdmgS1AFXDTzJ4RiUQikUgkEolkn9+IjKNpTHVMIQAAAABJRU5ErkJggg==");cursor:pointer}
-			.endlessrunner-score{position:fixed;left:0px;top:10px;border-bottom-right-radius:15px;border-top-right-radius:15px;font-size:30px;color:white;min-width:120px;text-align:left;z-index:999;display:none;background:linear-gradient(to bottom, #008ae2, #023a7b);padding:3px 0px 3px 0px}
+			.endlessrunner-soundhandler-off{width:58px;height:58px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AoeEzoScwd5IQAAAkNJREFUaN7tmctqFEEUhr/TXra+hKAJrsWgG925cKkYIQuJIaDxRkTiJeow8YaoMSGIUYSsBnThMu7UF8jCp1FG+d0MGMZqUp3q6fS051t2n5ruf/5Tp05Vg+M4juM4juOUi6RM0gVJzyUdbqpIk/Ref/kp6VATha7oX2Z34l2yAYp8BlwM3NrTGKGSWsCNOmVXNgCRN4F7dZtGWckiZ4CndawXWYkiJ4GluhbGrCSR54BVwOoqdHekkDHgMnAQ2BsIOZD6p0kaB44DX8ysEznmPDAGrJvZp1S3piX9VnnMBZ4x0RfTjniv5b4xp1JE7pfUVbmEhK4F4toFRErSq5Q5ejY2vRP5Frh2NyRW0jIwE/kb0Y6+UfnM5TzrZU58ewsno1J9K7d2VVUVzey6JIBrAWcN2Jfj5IKZzacWondVORrh7LacHHhTn+IssBgRWsjJ2gmNFFs4XWspdKj2o4m1YTFQlPoL1MJQC+0t/FcjQu9IejiUQiUtAVcCt1o5c/a2pEdlPHi1woYhrxl4ELH0PE4VOl+FUElTObGtAuvs6ZTU7QDdCrL2WOBa28zuF1h6jqa6OlXBNm18G9u0fmdPJm28zeytpO/AJWA0Z8xoyjGmmXUkdYETwFcz+xDZG28AR4DPZrZeRbU8I+lXGb1urRuGngOTgBrfGZnZWi+9m98CmtlrYLbxQntiX9D0k/pNYtvAk/9i92Jmtwif3HdpGr0PwZv75R+SRnZkM1+FWGACGAE+mtkGjuM4juM4jjN4/gAHvpaZHSK93AAAAABJRU5ErkJggg==");background-repeat:no-repeat;cursor:pointer}
+			.endlessrunner-soundhandler-on{width:58px;height:58px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADoAAAA6CAYAAADhu0ooAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AoeFAAole1obwAAAuJJREFUaN7tmV1oj1Ecxz+/MaU2KTIXSBLb4gKlvFwok+KOGq3QvC1vNyxxQe1CLiQSUyPahShJSsqFG2tKRNSSt6upzcXyVkObfd2c5e84m//2f/5v63xunvOc7znneb7POf/feflDJBKJRCKRSCSSLJJKJO2UdFrS0rFq0iRd0R9+SlowFo1e0L8cyse7lGTR5Clgb0AqHTNGJTUBjQm0M0tSjaSyQhyuhzU8R9Jsp1ZSn6vTKWluIZncr/+TrtEOr957SVPzPnQl7QDOJfjdfnj3c4Brkkry2ZN1kn4pPdLt0dVuOvLZM5p3HJ/mQ5cBB4BKYEKgyPxMR4eklcAa4Clw18weSKoHrnlFT0i6YWafku6thhH01qh6VNJaSQMpZZpStJZAG8eTNjk3JfJl0+jVQLkNTpssqcfTuiSVJhmMNqc7vDPkTSCvWVK5mX0GznjadGBVkkZn5iienQXavLyKlJXVZUCevi5Jo+Ny4dLMvgObgK+etN3p3cBjT1teEGvdUZjtAi562fMkzXbpR55WLcmKzqjjTiBvobu+9fLLgEnFajQUlCrctSegFa3R0PsMBiEbRis6o5WBvG53DS3ovxSr0Y2BvBcpy8y/TJrZt6Iz6qLrbi+7w8w+uPQKX0tyehnIkcly4BYw0ZMuO30msMTT2pM02pmjDm0EFgee3eLSDYE695I0eh3oy4HRGYFousvMeiVNc1tE/yO0JWbUzN4B+3IwhFuB/pT7Q2Z236XPBObL82b2K9GNt5ldkvTSGa4eok41GRxjmtlDSYuAGuCJmbUP7oWBOq/4R6A5XxGzVlJ/wkcp64doc2u+p4dt3ilBpkafB+reHslCPivzqJm1uuGdLV4B9WYmCgFJBxMcur2uzmtJsyg0JB3L1KhrZ4qkxSM9H8q12ZOZGs32tiip3+xRwif3fYw13B/BqeeyPyRV5eWoJhdmgS1AFXDTzJ4RiUQikUgkEolkn9+IjKNpTHVMIQAAAABJRU5ErkJggg==");background-repeat:no-repeat;cursor:pointer}
+
+			.endlessrunner-score{position:fixed;left:0px;top:10px;border-bottom-right-radius:15px;border-top-right-radius:15px;font-size:30px;color:white;min-width:120px;text-align:left;z-index:999;display:none;background:linear-gradient(to bottom, #008ae2, #0046a9);padding:3px 0px 3px 0px}
 			.endlessrunner-score-wrapper{background-color:#022c5c;border-top-right-radius:15px;border-bottom-right-radius:15px;margin-right:3px;padding:7px 5px 7px 7px}
 			.endlessrunner-score-wrapper-ring{position:fixed;width:35px;height:35px;background:url("data:image/png;base64,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");background-repeat:no-repeat}
 			.endlessrunner-score-wrapper-value{margin-left:44px}
+
 			.endlessrunner-gameover-background{position:fixed;left:0;top:0;right:0;bottom:0;text-align:center;background-color:rgba(0,0,0,0.875);display:none}
 			.endlessrunner-gameover-container{position:relative;top:50%;transform:translateY(-50%);text-align:center;color:white;margin-top:-50px}
+
 			#endlessrunner-gameover-label{color:#ffffff;font-size:50px;opacity:0}
 			#endlessrunner-gameover-score{color:#ffffff;font-size:35px;padding-bottom:25px;opacity:0}
 			#endlessrunner-gameover-high{color:#ffffff;font-size:35px;padding-bottom:25px;opacity:0}
-			#endlessrunner-gameover-restart-wrapper{background:linear-gradient(to bottom, #5cbbee, #0046a9);border-radius:58px;display:inline-block;}
-			#endlessrunner-gameover-restart-button{font-size:30px;color:white;border-radius:58px;padding:10px 40px;margin:5px;background-color:#3681D7;border-color:transparent;cursor:pointer;opacity:0}
+
+			#endlessrunner-gameover-facebook-container{display:inline-block;text-align:center;width:68px;height:68px;padding:5px;border-radius:68px;background:linear-gradient(to bottom, #5cbbee, #0046a9);cursor:pointer;margin-right:30px}
+			#endlessrunner-gameover-facebook-wrapper{background:linear-gradient(to bottom, #3681D7, #2467C3);border-radius:68px;cursor:pointer}
+			#endlessrunner-gameover-facebook-button{width:68px;height:68px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAYAAAA4E5OyAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AofASAd9IuOEAAAAoVJREFUeNrtmr9qFFEUh78zWXddgqkkpYUiaBHsrRQEfQVfQSysBEHwBbTQwtbCUvAtLCzsFAUNKFExSkyirlnN7v4scodcVndnVnMzO+v5YJg/d2fOzG/OPefcuwOO4ziO4ziO4zhO7bEqjUvKzGwQto8CF4DzwBKwCBwEvgKfgY2wPAXumNlyfH7tkWRhPSfpkqQ3KscXSefCuY29vq9GVWKYmSS1gJvA5QnvOZlnZ1WJEXZvTCBGfs52tF1/QXKbwe2vhGP9aYl3WQXekT/8RaAdxJib4DILKbt6owLv6EtaAk6PeSmKPKITMk03ZJ21sD87ggAngRMjukIuRge4DdwD3gYvykL7FoCZ9eouSB4MF0vEiqtmdrdkcK5tUB1EcWBc+yPgQVyv/KZaAjH2XZCoqmwXeNALM/tURY1URdotQ7cqw9MqiLkgU0ISQUYFwoitsl1mVPAsYWM60m40cFsAjgcb8UP9BI4VdJUjkk4BzeiYwrXWgWUz267LsL4R1mckrUjqStqQtBkt3YIh/o+h329KWg9t9yXN5/MpdSrMmqEAawKtgvJ8+HgzLH/iu5l1htJ0LYLqIIoFmiCTWEHR9jqfWJqFSvVfSv58HPPe0+6uh30E3qXqLvspiO2RIB+AlboKYmMCY5mHj8knkNbCVEAyUmSZPPi9BK4D80A8b9Fj5++Gs2Myz2PgIbsTyn3gEPAkzzCpRrupahEraL82ov7ohfWtmSrdS7y9dkF7638b3FnZ9lRjFh/tuiAuiAvigrggLogL4oK4IC6IC+KCpLObVf2iqjI86ttSFbQnp1GR3VfAM+AAcJid70W+AatBlOfeeR3HcRzHcRzHcZy/5hcU+WHjIMQTRgAAAABJRU5ErkJggg==");background-repeat:no-repeat;cursor:pointer}
+
+			#endlessrunner-gameover-restart-container{display:inline-block;text-align:center;width:68px;height:68px;padding:5px;border-radius:68px;background:linear-gradient(to bottom, #ad84d6, #442167);cursor:pointer}
+			#endlessrunner-gameover-restart-wrapper{background:linear-gradient(to bottom, #7f3fbe, #67339a);border-radius:68px;cursor:pointer}
+			#endlessrunner-gameover-restart-button{width:68px;height:68px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAYAAAA4E5OyAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AofAAMbooM2cwAAA8tJREFUeNrtmktoXFUYx38nL0xMa6lIWqorW2uVRBciNbRWBVHEFwi+EASl+IC4EhVxU0SlLgQFQQRdKS5cWJVuxCoqLlQUxIZYRInFtGgSK9UmTWPm52IOWCQzcyczmbnXOT8IgTn3nO/c/z2P73zfgUQikUgkEolEIpFIJP5vhFYZUruAPqAf2AlcDVwEbATWAiXgGPAzcBDYD3wHLIUQFjK2/xDwWgjhZK5VV89X71P3qYtm55j6hnqjOlSl/R71WXVSXZNnITaoT6jf2zgfqg+o65ax83R85hd1MK9i3K+Oq0s2j0X1gDpymp0X1FIsP5xLQdS96pyrx7R6vfrKf37PlyDqGvVV20fDgvQ0UYw+4Blgd8YqM8A0MAfMxx3vjLjjDMX/LaeniW09CoxleO4T4CPgK2ACmAkh/BVFHQTOBYaBy4BbgK2Fc2bilvp3jeE8od6pbqyj3c3q4+pCq6ZMM8RYr87U6Oj76iY1rNDGiHq8KGvIHmBdpXcB3gbuCSEsNmDjXmCgCFNlJH6VSnyq9jbQfm90ukqFmDLqniqdO1LPerHc2UR9rs5td6ptU0Y9B9he5ZFHQghHG+jbGHAXMBUPfrXoBg7Hadr60656KfBxhfXjc+C6EMKJBtrvjx+snhcUmAsh2NIREneLkSqL6ZvR2Vr5lwphvh3LQNcK6/UCoxXK5oEvQgglCshKBekGtlQoGwdmixox62qg3oYqZ5S5ThMkVDl8/d6JglBl9e9psN1CCiJwvELZ+kK42U0WpARUcrqGgDM7TZAl4IcKZcOUUwsdJcgi8FmV8l1qD52EekkM9i7H5HLpgibaHlWvjTHcrrwIcra6v8rJ88lVsjuovhdtjKsPqlvU7jyI8lQVQebV0VWwuXuZXM9PMT+zq63CqFtjZyrxo7q5ifZ2qH9WsfdyjP63dZTsrRFg/la9oAl2roijrhIL6s48TJsB9WiNSNakun0l4UQ1xHWiFq+rA3lZYG9TT2bo9IvqcJYMfVy0r1TfydDuhLqtGe8SmiBGCCGojgEvZagyCxzg30TVLOV7IQJnAedRTk7tAK7KcAw4BdwRQtiXN7+kO97RqIeZGCk/FP8m1T/qbOP2PDtr/erzLUxu31wUL/axGttjo0yp1xTNtb9V/bqOvGwWTkTveFvRxAinudkPq182KERJ/UC9e7UPjaFFAm0CLgduAG6KMZMs/Aa8BbwLHAwhTK92X0OLR04f5UsxF1K+lnkx5WD12rh9/kr5Es03lO+RHAFONZgoTyQSiUQikUgkEolEosP5B8C+GgF1NudDAAAAAElFTkSuQmCC");background-repeat:no-repeat;cursor:pointer}
+
+			#endlessrunner-gameover-twitter-container{display:inline-block;text-align:center;width:68px;height:68px;padding:5px;border-radius:68px;background:linear-gradient(to bottom, #5cbbee, #0046a9);cursor:pointer;margin-left:30px}
+			#endlessrunner-gameover-twitter-wrapper{background:linear-gradient(to bottom, #3681D7, #2467C3);border-radius:68px;cursor:pointer}
+			#endlessrunner-gameover-twitter-button{width:68px;height:68px;background-image:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEQAAABECAYAAAA4E5OyAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH5AofARop8Jak3AAAA5BJREFUeNrtml2IFlUYx39n91VCW4NQ+jCJqEAoXUskKKOEPq6Cgi7qLhKii6AEb4SMAi+CEPKigkioiOhCCoQgIaOIvkSqm8KMXkmk9ML8WmV1391fN+elw/DuurszszPB+cEwMxfvmTP/+T/neeaZFzKZTCaTyWQymUwmk8lkMpnMf4SyA6ghhGDxuIrx4vlVwBpgOTAOHA4hdGf6TVVzqQQ1lPjtUHK8Wn1TPaKeVM+pp9W/1H3qo9OMsUrdpC5t4uaH4v5hdUNVQqrPqWe8PB+qN6gj6nr1FfUfdUuTjhhRD6i/qddVMN5W58ZB9St1Kp5/r17ZpCB3Rzurfq1eX2KsTeqk8+cbdSSOtXE+cxiqQJNrgP4T2QjsVe+c57qyrcScjgL7gJfU74Brm3LIE/HppE/2uPr0XERRb1MvlXDHafViPN7VZMg8kkxqqjDJvcXFVu2oQ0WB1GdLiJFed3vTafYO9dgAl/S5qO4clIUKmWWH5bigbq4i/VchykdxUhMzTPhsTJPPqKMDxthWUpCfq7iXTkkhOiGEHvAO8HgczwEVsMAI8GTcuuph4A/gd6ALrCx5L8OtqkrV52cR59M5aCym7qkSDvmpcYeEEFQfANYCHwPrgKdmeG+a7npVlNnHqxCkijpkBbATOADcAow1ZNgjjTsk0gXORmFWNBjBv7bFIQeB/fF4okFBfmhcEHU4hDAJ7I6ZZFHcLzRHgV/a4JCpuLh+CryYLJ69BRbmkxDChVa03Aqpd7vNcH+r+pAFUe5TP0jK+bro1yxfVNn/qGJRJemp3gXcDhwCTtQYNmk1vDuEMEYbUUeTJ3ipRnf0K9796hLajPpaMvHJGkPlfH/tUDttFCLE/WJ1T02ipO86O1rxqj9LUZaqr9cYMp+pV7RajESU9NvKg+rb6qFo8Sroqjfxf0IdLpyvUt+oIEyOxUzWXjfEHmlHXTRocVPXqO/FFt9c6aUdsbTT1vpQKTSRb1UfU9+/TFtxts7Yk37vqVOMUPLmNwD3JoXS1bEnMgqsrmB+Z4CXgV0L9eG6bP4+FavdF6bpiTpP0XvAu8BbIYQf+65oxdf8WTplpbpZ/bJEiKj+qb6qrk/DI81cdVM2ZAb9L2Mt8BBwD3AzsAxYAiyOburFbRw4B/wdm0yfA982/RofanZOAG6M4bQshug4cB44CXRDCBNkMplMJpPJZDKZTCaTyWQa418QsHmFfQ0v1AAAAABJRU5ErkJggg==");background-repeat:no-repeat;cursor:pointer}
+
 			.endlessrunner-gameover-fadein{animation:fadeIn 1.5s;animation-fill-mode:forwards}
 
 			.endlessrunner-about-label{position:fixed;left:50%;transform:translateX(-50%);white-space:nowrap;bottom:0;z-index:399;margin-bottom:20px;padding:10px;border-radius:10px;text-shadow: 0 0 3px #000000,0 0 7px #000000;font-size:25px;font-weight:bold;color:white;background-color:rgba(0,0,0,0.5);display:none}
 			.endlessrunner-about-hidden{animation:fadeOut 1.5s;animation-fill-mode:forwards}
+
 			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 			@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
@@ -50,7 +67,6 @@
 				#endlessrunner-gameover-label{font-size:40px}
 				#endlessrunner-gameover-score{font-size:27px;padding-bottom:20px}
 				#endlessrunner-gameover-high{font-size:27px;padding-bottom:20px}
-				#endlessrunner-gameover-restart-button{padding:10px 20px}
 				.endlessrunner-about-label{font-size:18px;margin-bottom:10px}
 				}
 
@@ -93,14 +109,33 @@
 				<p class="endlessrunner-gameover-label" id="endlessrunner-gameover-label"></p>
 				<p class="endlessrunner-gameover-score" id="endlessrunner-gameover-score"></p>
 				<p class="endlessrunner-gameover-high" id="endlessrunner-gameover-high"></p>
-				<div id="endlessrunner-gameover-restart-wrapper">
-					<button id="endlessrunner-gameover-restart-button"></button>
+
+				<div id="endlessrunner-gameover-facebook-container">
+					<div id="endlessrunner-gameover-facebook-wrapper">
+						<div id="endlessrunner-gameover-facebook-button"></div>
+					</div>
 				</div>
+
+				<div id="endlessrunner-gameover-restart-container">
+					<div id="endlessrunner-gameover-restart-wrapper">
+						<div id="endlessrunner-gameover-restart-button"></div>
+					</div>
+				</div>
+
+				<div id="endlessrunner-gameover-twitter-container">
+					<div id="endlessrunner-gameover-twitter-wrapper">
+						<div id="endlessrunner-gameover-twitter-button"></div>
+					</div>
+				</div>
+
 			</div>
 		</div>
 		<div class="endlessrunner-pleasewait"><div class="endlessrunner-pleasewait-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div></div>
 		<script src="EndlessRunner.js"></script>
 		<script>
+
+			var URL_TO_SHARE = "https://lrusso.github.io/EndlessRunner/EndlessRunner.htm";
+
 			var PLANE_WIDTH = 20;
 			var PLANE_LENGTH = 1000;
 			var PADDING = PLANE_WIDTH / 5 * 2;
@@ -753,8 +788,9 @@
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label";
 				document.getElementById("endlessrunner-gameover-score").className = "endlessrunner-gameover-score";
 				document.getElementById("endlessrunner-gameover-high").className = "endlessrunner-gameover-high";
-				document.getElementById("endlessrunner-gameover-restart-wrapper").className = "";
-				document.getElementById("endlessrunner-gameover-restart-button").className = "";
+				document.getElementById("endlessrunner-gameover-facebook-container").className = "";
+				document.getElementById("endlessrunner-gameover-restart-container").className = "";
+				document.getElementById("endlessrunner-gameover-twitter-container").className = "";
 
 				// SETTING THE INITIAL OBSTACLES COUNT
 				OBSTACLES_COUNT = 5;
@@ -1003,8 +1039,9 @@
 				document.getElementById("endlessrunner-gameover-label").className = "endlessrunner-gameover-label endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-score").className = "endlessrunner-gameover-score endlessrunner-gameover-fadein";
 				document.getElementById("endlessrunner-gameover-high").className = "endlessrunner-gameover-high endlessrunner-gameover-fadein";
-				document.getElementById("endlessrunner-gameover-restart-wrapper").className = "endlessrunner-gameover-fadein";
-				document.getElementById("endlessrunner-gameover-restart-button").className = "endlessrunner-gameover-fadein";
+				document.getElementById("endlessrunner-gameover-facebook-container").className = "endlessrunner-gameover-fadein";
+				document.getElementById("endlessrunner-gameover-restart-container").className = "endlessrunner-gameover-fadein";
+				document.getElementById("endlessrunner-gameover-twitter-container").className = "endlessrunner-gameover-fadein";
 				}
 
 			function playRing()
@@ -1323,19 +1360,31 @@
 				// CHECKING IF IT IS AN ANDROID DEVICE AND NOT AN IOS DEVICE (BECAUSE IN IOS THE TOUCHSTART EVENT DOES NOT WORK TO RESUME THE AUDIO CONTEXT)
 				if (isMobileDevice()==true && usingiOS()==false)
 					{
-					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE RESTART BUTTON
-					document.getElementById("endlessrunner-gameover-restart-button").addEventListener("touchstart",function(event){startGame();});
-
-					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE SOUND BUTTON
+					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE SOUND BUTTON CONTAINER
 					document.getElementsByClassName("endlessrunner-soundhandler-container")[0].addEventListener("touchstart",function(event){soundToggle();});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE FACEBOOK BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-facebook-container").addEventListener("touchstart",function(event){window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(URL_TO_SHARE));});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE RESTART BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-restart-container").addEventListener("touchstart",function(event){startGame();});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER TOUCHES THE TWITTER BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-twitter-container").addEventListener("touchstart",function(event){window.open("https://www.twitter.com/share?url=" + encodeURIComponent(URL_TO_SHARE));});
 					}
 					else
 					{
-					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE RESTART BUTTON
-					document.getElementById("endlessrunner-gameover-restart-button").addEventListener("click",function(event){startGame();});
-
-					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE SOUND BUTTON
+					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE SOUND BUTTON CONTAINER
 					document.getElementsByClassName("endlessrunner-soundhandler-container")[0].addEventListener("click",function(event){soundToggle();});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE FACEBOOK BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-facebook-container").addEventListener("click",function(event){window.open("https://www.facebook.com/sharer/sharer.php?u=" + encodeURIComponent(URL_TO_SHARE));});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE RESTART BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-restart-container").addEventListener("click",function(event){startGame();});
+
+					// SETTING WHAT WILL HAPPEN WHEN THE USER CLICKS THE TWITTER BUTTON CONTAINER
+					document.getElementById("endlessrunner-gameover-twitter-container").addEventListener("click",function(event){window.open("https://www.twitter.com/share?url=" + encodeURIComponent(URL_TO_SHARE));});
 					}
 
 				// HANDLING THE KEY EVENTS
@@ -1368,7 +1417,6 @@
 
 				// UPDATING THE LABEL VALUES
 				document.getElementsByClassName("endlessrunner-gameover-label")[0].innerHTML = STRING_GAMEOVER;
-				document.getElementById("endlessrunner-gameover-restart-button").innerHTML = STRING_PLAYAGAIN;
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// HIDING THE LOADING SPLASH
