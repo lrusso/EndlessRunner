@@ -1042,8 +1042,6 @@
 				document.getElementsByClassName("endlessrunner-score")[0].style.display = "none";
 
 				// UPDATING THE GAME OVER SCORE LABEL
-				document.getElementsByClassName("endlessrunner-gameover-score")[0].innerHTML = STRING_SCORE;
-
 				document.getElementsByClassName("endlessrunner-gameover-score-value")[0].innerHTML = (score * 50);
 
 				// CHECKING IF THE USER SET A HIGH SCORE
@@ -1054,8 +1052,6 @@
 					}
 
 				// UPDATING THE HIGH SCORE LABEL
-				document.getElementsByClassName("endlessrunner-gameover-high")[0].innerHTML = STRING_HIGH;
-
 				document.getElementsByClassName("endlessrunner-gameover-high-value")[0].innerHTML = getHighscore();
 
 				// SHOWING THE GAME OVER CONTAINER
@@ -1445,6 +1441,8 @@
 
 				// UPDATING THE LABEL VALUES
 				document.getElementsByClassName("endlessrunner-gameover-label")[0].innerHTML = STRING_GAMEOVER;
+				document.getElementsByClassName("endlessrunner-gameover-score")[0].innerHTML = STRING_SCORE;
+				document.getElementsByClassName("endlessrunner-gameover-high")[0].innerHTML = STRING_HIGH;
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// HIDING THE LOADING SPLASH
