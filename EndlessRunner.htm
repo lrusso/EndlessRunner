@@ -1440,9 +1440,9 @@
 				document.getElementsByClassName("endlessrunner-container")[0].addEventListener("touchend",function(e){try{touchendX=e.changedTouches[0].screenX;if(touchendX<touchstartX){moveLeft();}else if(touchendX>touchstartX){moveRight();}}catch(err){}});
 
 				// UPDATING THE LABEL VALUES
-				document.getElementsByClassName("endlessrunner-gameover-label")[0].innerHTML = STRING_GAMEOVER;
-				document.getElementsByClassName("endlessrunner-gameover-score")[0].innerHTML = STRING_SCORE;
 				document.getElementsByClassName("endlessrunner-gameover-high")[0].innerHTML = STRING_HIGH;
+				document.getElementsByClassName("endlessrunner-gameover-score")[0].innerHTML = STRING_SCORE;
+				document.getElementsByClassName("endlessrunner-gameover-label")[0].innerHTML = STRING_GAMEOVER;
 				document.getElementById("about").innerHTML = STRING_ABOUT;
 
 				// HIDING THE LOADING SPLASH
