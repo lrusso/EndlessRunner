@@ -37,7 +37,7 @@
 			.endlessrunner-gameover-background{position:fixed;left:0;top:0;right:0;bottom:0;text-align:center;background-color:rgba(0,0,0,0.875);display:none}
 			.endlessrunner-gameover-container{position:relative;top:50%;transform:translateY(-50%);text-align:center;color:white}
 
-			#endlessrunner-gameover-label{color:#ffffff;font-size:50px;opacity:0;padding-bottom:50px}
+			#endlessrunner-gameover-label{color:#ffffff;font-size:50px;opacity:0;margin-bottom:50px}
 
 			.endlessrunner-gameover-container1{width:300px;display:inline-block;text-align:left;margin-bottom:30px}
 			#endlessrunner-gameover-high{color:#ffffff;font-size:30px;opacity:0;text-align:right;width:180px;display:inline-block;vertical-align:center}
@@ -68,14 +68,21 @@
 			@keyframes fadeOut{0%{opacity:1}99%{opacity:0.01}100%{opacity:0}}
 			@keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 
+			@media only screen and (orientation:portrait)
+				{
+				#endlessrunner-gameover-label{margin-bottom:100px}
+				.endlessrunner-gameover-container2{margin-bottom:100px}
+				}
+
 			/* iPods and other very small devices (portrait and landscape)(very small) */
 			@media screen and (min-width: 0) and (max-width: 320px)
 				{
-				#endlessrunner-gameover-label{font-size:40px}
+				#endlessrunner-gameover-label{font-size:40px;margin-bottom:50px}
 				#endlessrunner-gameover-high{font-size:27px;padding-bottom:20px}
 				#endlessrunner-gameover-score{font-size:27px;padding-bottom:20px}
 				#endlessrunner-gameover-facebook-container{margin-right:7px}
 				#endlessrunner-gameover-twitter-container{margin-left:7px}
+				.endlessrunner-gameover-container2{margin-bottom:50px}
 				.endlessrunner-about-label{font-size:18px;margin-bottom:10px}
 				}
 
