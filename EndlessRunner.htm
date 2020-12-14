@@ -1417,12 +1417,12 @@
 				// HANDLING THE KEY EVENTS
 				window.addEventListener("keydown", function ()
 					{
-					if (event.keyCode === 37)
+					if (event.keyCode === 37 || event.keyCode === 65) // LEFT KEY OR A
 						{
 						// MOVING THE HERO TO THE LEFT
 						moveLeft();
 						}
-					else if (event.keyCode === 39)
+					else if (event.keyCode === 39 || event.keyCode === 68) // RIGHT KEY OR D
 						{
 						// MOVING THE HERO TO THE RIGHT
 						moveRight();
