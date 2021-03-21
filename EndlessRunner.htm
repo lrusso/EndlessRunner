@@ -175,8 +175,8 @@
 			var soundEnabled = false;
 
 			var camera;
-			var containerWidth = 0;
-			var containerHeight = 0;
+			var containerWidth;
+			var containerHeight;
 			var directionalLight;
 			var globalRenderID;
 			var hemisphereLight;
@@ -189,20 +189,21 @@
 			var heroLoader;
 
 			var grassLeft;
-			var grassLeftGeometry;
-			var grassLeftMaterial;
 			var grassRight;
+			var grassMaterial;
+			var grassGeometry;
 			var grassTexture;
 			var grassLoader;
 
 			var stoneRoad;
-			var stoneGeometry;
 			var stoneMaterial;
+			var stoneGeometry;
 			var stoneTexture;
 			var stoneLoader;
 
 			var oceanFloor;
 			var oceanMaterial;
+			var oceanGeometry;
 			var oceanTexture;
 			var oceanLoader;
 
@@ -537,9 +538,9 @@
 					grassTexture.offset.set( 0, 0 );
 					grassTexture.repeat.set( 1, 20 );
 					});
-				grassLeftMaterial = new THREE.MeshPhongMaterial( { map: grassTexture } );
-				grassLeftGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
-				grassLeft = new THREE.Mesh(grassLeftGeometry, grassLeftMaterial);
+				grassMaterial = new THREE.MeshPhongMaterial( { map: grassTexture } );
+				grassGeometry = new THREE.BoxGeometry(PLANE_WIDTH, PLANE_LENGTH + PLANE_LENGTH / 10, 1);
+				grassLeft = new THREE.Mesh(grassGeometry, grassMaterial);
 				grassLeft.receiveShadow = true;
 				grassLeft.rotation.x = 1.570;
 				grassLeft.position.x = -PLANE_WIDTH;
