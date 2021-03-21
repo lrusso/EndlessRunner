@@ -278,147 +278,155 @@
 
 			function render()
 				{
-				// SETTING A VARIABLE TO THE REQUEST ANIMATION EVENT
-				globalRenderID = requestAnimationFrame(render);
-
-				// CHECKING IF THE GAME IS RUNNING
-				if (game_running==true)
+				// CHECKING IF THE GAME IS NOT OVER
+				if (document.getElementsByClassName("endlessrunner-gameover-background")[0].style.display!=="block")
 					{
-					// CHECKING IF THE INTRO IS DONE
-					if (cameraIntroDone==false)
+					// SETTING A DELAY FOR PREVENTING A FASTER GAME EXPERIENCE USING NEWER DEVICES
+					setTimeout(function()
 						{
-						// CHECKING IF A INITIAL INTRO TIMESTAMP WAS SET
-						if (cameraInitialTimestamp==null)
+						// SETTING A VARIABLE TO THE REQUEST ANIMATION EVENT
+						globalRenderID = requestAnimationFrame(render);
+						},1000/90);
+
+					// CHECKING IF THE GAME IS RUNNING
+					if (game_running==true)
+						{
+						// CHECKING IF THE INTRO IS DONE
+						if (cameraIntroDone==false)
 							{
-							// SETTING THE INITIAL INTRO TIMESTAMP
-							cameraInitialTimestamp = Date.now()
+							// CHECKING IF A INITIAL INTRO TIMESTAMP WAS SET
+							if (cameraInitialTimestamp==null)
+								{
+								// SETTING THE INITIAL INTRO TIMESTAMP
+								cameraInitialTimestamp = Date.now()
+								}
+
+							// CHECKING IF 4 SECONDS PASSED SINCE THE INTRO STARTED
+							if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
+								{
+								// CHECKING IF IT IS NECCESARY TO ROTATE THE CAMERA
+								if (cameraDegreesStart!=cameraDegreesEnd)
+									{
+									// UPDATING THE CURRENT CAMERA ROTATION VALUE
+									cameraDegreesStart = cameraDegreesStart + 2;
+
+									// ROTATING THE CAMERA
+									camera.rotation.y = cameraDegreesStart * Math.PI/180;
+									}
+
+								// CHECKING IF IT IS NECCESARY TO MOVE THE CAMERA X POSITION
+								if (cameraPositionXStart!=cameraPositionXEnd)
+									{
+									// UPDATING THE CURRENT CAMERA X VALUE
+									cameraPositionXStart = cameraPositionXStart + 1;
+
+									// MOVING THE CAMERA
+									camera.position.x = camera.position.x + 1;
+									}
+
+								// CHECKING IF IS NECESSARY TO MOVE THE CAMERA Z POSITION
+								if (cameraPositionZStart!=cameraPositionZEnd)
+									{
+									// UPDATING THE CURRENT CAMERA Z VALUE
+									cameraPositionZStart = cameraPositionZStart - 1;
+
+									// MOVING THE CAMERA
+									camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZStart;
+									}
+
+								// CHECKING IF THERE IS NO NEED TO MOVE THE CAMERA AT ALL
+								if (cameraDegreesStart==cameraDegreesEnd && cameraPositionXStart==cameraPositionXEnd && cameraPositionZStart==cameraPositionZEnd)
+									{
+									// SETTING THAT THE INTRO IS DONE
+									cameraIntroDone = true;
+
+									// ADDING AN OBSTACLE
+									addObstacle();
+									}
+								}
 							}
 
-						// CHECKING IF 4 SECONDS PASSED SINCE THE INTRO STARTED
-						if (Date.now()>cameraInitialTimestamp+cameraIntroTime)
+						// MAKING THE HERO TO MOVE (IN THIS CASE, USING THE RUNNING ANIMATION)
+						heroActions.update(clock.getDelta());
+
+						// MOVING THE GRASS, ROAD AND OCEAN TEXTURES TO GIVE THE ILLUSION OF AN ENDLESS ROAD
+						grassTexture.offset.y -= .05;
+						stoneTexture.offset.y -= .05;
+						oceanTexture.offset.y -= .0002;
+
+						// CHECKING EVERY OBSTACLE
+						obstacles.forEach(function (element, index)
 							{
-							// CHECKING IF IT IS NECCESARY TO ROTATE THE CAMERA
-							if (cameraDegreesStart!=cameraDegreesEnd)
-								{
-								// UPDATING THE CURRENT CAMERA ROTATION VALUE
-								cameraDegreesStart = cameraDegreesStart + 2;
+							// GETTING AN OBSTACLE
+							var obstacle = obstacles[index];
 
-								// ROTATING THE CAMERA
-								camera.rotation.y = cameraDegreesStart * Math.PI/180;
+							// CHECKING IF THE OBSTACLE IS COMING TO THE SCREEN
+							if (obstacle.position.z < PLANE_LENGTH / 2 + PLANE_LENGTH / 10)
+								{
+								// PULLING CLOSER THE OBSTACLE
+								obstacle.position.z += 10;
+								}
+								else
+								{
+								// OTHERWISE, THE OBSTACLE IS BEHIND THE SCREEN (NOT VISIBLE)
+								// AND IT WILL BE GOING BACK TO THE END OF THE ROAD ONCE MORE
+
+								// UPDATING THE OBSTACLE POSITION
+								obstacle.position.x = getRandomPositionX();
+								obstacle.position.z = OBSTACLES_POSITION_Z;
+
+								// MAKING THE OBSTACLE VISIBLE (IF IT IS A RING THAT THE USER GOT, IT WILL BE INVISIBLE AT THIS POINT)
+								obstacle.visible = true;
 								}
 
-							// CHECKING IF IT IS NECCESARY TO MOVE THE CAMERA X POSITION
-							if (cameraPositionXStart!=cameraPositionXEnd)
+							// CHECKING IF THE OBSTACLE IS A RING
+							if (obstacle.name=="ring")
 								{
-								// UPDATING THE CURRENT CAMERA X VALUE
-								cameraPositionXStart = cameraPositionXStart + 1;
-
-								// MOVING THE CAMERA
-								camera.position.x = camera.position.x + 1;
+								// ROTATION THE RING
+								obstacle.rotation.y = obstacle.rotation.y + 0.12;
 								}
+							});
 
-							// CHECKING IF IS NECESSARY TO MOVE THE CAMERA Z POSITION
-							if (cameraPositionZStart!=cameraPositionZEnd)
+						// CHECKING IF THE HERO MUST BE MOVING
+						if (movingDestinyX!=null)
+							{
+							// CHECKING IF THE HERO HASN'T ARRIVE TO THE DESTINATION
+							if (hero.position.x != movingDestinyX)
 								{
-								// UPDATING THE CURRENT CAMERA Z VALUE
-								cameraPositionZStart = cameraPositionZStart - 1;
-
-								// MOVING THE CAMERA
-								camera.position.z = PLANE_LENGTH / 2 + PLANE_LENGTH / 25 - cameraPositionZStart;
+								// CHECKING IF THE HERO MUST BE MOVING TO THE LEFT
+								if (movingLeft==true)
+									{
+									// MOVING THE HERO TO THE LEFT
+									hero.position.x = hero.position.x - 0.5;
+									}
+								// CHECKING IF THE HERO MUST BE MOVING TO THE RIGHT
+								else if (movingRight==true)
+									{
+									// MOVING THE HERO TO THE RIGHT
+									hero.position.x = hero.position.x + 0.5;
+									}
 								}
-
-							// CHECKING IF THERE IS NO NEED TO MOVE THE CAMERA AT ALL
-							if (cameraDegreesStart==cameraDegreesEnd && cameraPositionXStart==cameraPositionXEnd && cameraPositionZStart==cameraPositionZEnd)
+								else
 								{
-								// SETTING THAT THE INTRO IS DONE
-								cameraIntroDone = true;
-
-								// ADDING AN OBSTACLE
-								addObstacle();
+								// OTHERWISE, THE HERO ARRIVES TO THE DESTINATION
+								// AND ALL THE MOVING VARIABLES WILL BE CLEARED
+								movingDestinyX = null;
+								movingLeft = false;
+								movingRight = false;
 								}
+							}
+
+						// CHECKING IF THERE IS A COLLISION BETWEEN THE HERO AND AN OBSTACLE
+						if (detectCollisions() === true)
+							{
+							// DISPLAYING THE GAME OVER MESSAGE
+							gameOver();
 							}
 						}
 
-					// MAKING THE HERO TO MOVE (IN THIS CASE, USING THE RUNNING ANIMATION)
-					heroActions.update(clock.getDelta());
-
-					// MOVING THE GRASS, ROAD AND OCEAN TEXTURES TO GIVE THE ILLUSION OF AN ENDLESS ROAD
-					grassTexture.offset.y -= .05;
-					stoneTexture.offset.y -= .05;
-					oceanTexture.offset.y -= .0002;
-
-					// CHECKING EVERY OBSTACLE
-					obstacles.forEach(function (element, index)
-						{
-						// GETTING AN OBSTACLE
-						var obstacle = obstacles[index];
-
-						// CHECKING IF THE OBSTACLE IS COMING TO THE SCREEN
-						if (obstacle.position.z < PLANE_LENGTH / 2 + PLANE_LENGTH / 10)
-							{
-							// PULLING CLOSER THE OBSTACLE
-							obstacle.position.z += 10;
-							}
-							else
-							{
-							// OTHERWISE, THE OBSTACLE IS BEHIND THE SCREEN (NOT VISIBLE)
-							// AND IT WILL BE GOING BACK TO THE END OF THE ROAD ONCE MORE
-
-							// UPDATING THE OBSTACLE POSITION
-							obstacle.position.x = getRandomPositionX();
-							obstacle.position.z = OBSTACLES_POSITION_Z;
-
-							// MAKING THE OBSTACLE VISIBLE (IF IT IS A RING THAT THE USER GOT, IT WILL BE INVISIBLE AT THIS POINT)
-							obstacle.visible = true;
-							}
-
-						// CHECKING IF THE OBSTACLE IS A RING
-						if (obstacle.name=="ring")
-							{
-							// ROTATION THE RING
-							obstacle.rotation.y = obstacle.rotation.y + 0.12;
-							}
-						});
-
-					// CHECKING IF THE HERO MUST BE MOVING
-					if (movingDestinyX!=null)
-						{
-						// CHECKING IF THE HERO HASN'T ARRIVE TO THE DESTINATION
-						if (hero.position.x != movingDestinyX)
-							{
-							// CHECKING IF THE HERO MUST BE MOVING TO THE LEFT
-							if (movingLeft==true)
-								{
-								// MOVING THE HERO TO THE LEFT
-								hero.position.x = hero.position.x - 0.5;
-								}
-							// CHECKING IF THE HERO MUST BE MOVING TO THE RIGHT
-							else if (movingRight==true)
-								{
-								// MOVING THE HERO TO THE RIGHT
-								hero.position.x = hero.position.x + 0.5;
-								}
-							}
-							else
-							{
-							// OTHERWISE, THE HERO ARRIVES TO THE DESTINATION
-							// AND ALL THE MOVING VARIABLES WILL BE CLEARED
-							movingDestinyX = null;
-							movingLeft = false;
-							movingRight = false;
-							}
-						}
-
-					// CHECKING IF THERE IS A COLLISION BETWEEN THE HERO AND AN OBSTACLE
-					if (detectCollisions() === true)
-						{
-						// DISPLAYING THE GAME OVER MESSAGE
-						gameOver();
-						}
+					// RENDERING THE SCENE
+					renderer.render(scene, camera);
 					}
-
-				// RENDERING THE SCENE
-				renderer.render(scene, camera);
 				}
 
 			function getRandomPositionX()
