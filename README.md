@@ -19,4 +19,3 @@ https://www.github.com/lrusso/EndlessRunnerPhaser
 ## Disclaimer
 
 The Sonic The Hedgehog resources (images, music and sounds) are provided for educational purposes ONLY. This demo is not affiliated with or endorsed by their respective copyright holders.
-
